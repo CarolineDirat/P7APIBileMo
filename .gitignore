@@ -10,3 +10,5 @@
 ###< symfony/framework-bundle ###
 
 /phpstan.neon
+/.php_cs.dist
+/php-cs-fixer.phar
