@@ -121,14 +121,21 @@ class Phone
     private ?UuidInterface $uuid;
 
     /**
-     * @ORM\OneToOne(targetEntity=Size::class, mappedBy="phone", cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity=Size::class, mappedBy="phone", cascade={"persist", "remove"}, orphanRemoval=true)
      *
      * @var Size|null phone dimensions
      */
     private ?Size $size;
 
     /**
-     * __construct.
+     * @ORM\OneToOne(targetEntity=Screen::class, mappedBy="phone", cascade={"persist", "remove"}, orphanRemoval=true)
+     *
+     * @var Screen|null screen corresponding to the phone
+     */
+    private ?Screen $screen;
+
+    /**
+     * __construct : define $createdAt and $updatedAt
      */
     public function __construct()
     {
@@ -476,7 +483,7 @@ class Phone
     }
     
     /**
-     * getSize
+     * get Size corresponding to the phone
      *
      * @return Size|null
      */
@@ -486,7 +493,7 @@ class Phone
     }
     
     /**
-     * setSize
+     * set Size corresponding to the phone
      *
      * @param  Size $size
      * @return self
@@ -498,6 +505,34 @@ class Phone
         // set the owning side of the relation if necessary
         if ($size->getPhone() !== $this) {
             $size->setPhone($this);
+        }
+
+        return $this;
+    }
+    
+    /**
+     * get Screen corresponding to the phone
+     *
+     * @return Screen|null
+     */
+    public function getScreen(): ?Screen
+    {
+        return $this->screen;
+    }
+    
+    /**
+     * set Screen corresponding to the phone
+     *
+     * @param  Screen|null $screen
+     * @return self
+     */
+    public function setScreen(?Screen $screen): self
+    {
+        $this->screen = $screen;
+
+        // set the owning side of the relation if necessary
+        if ($screen->getPhone() !== $this) {
+            $screen->setPhone($this);
         }
 
         return $this;
