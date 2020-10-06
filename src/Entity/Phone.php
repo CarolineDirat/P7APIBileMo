@@ -121,6 +121,13 @@ class Phone
     private ?UuidInterface $uuid;
 
     /**
+     * @ORM\OneToOne(targetEntity=Size::class, mappedBy="phone", cascade={"persist", "remove"})
+     *
+     * @var Size|null phone dimensions
+     */
+    private ?Size $size;
+
+    /**
      * __construct.
      */
     public function __construct()
@@ -464,6 +471,34 @@ class Phone
     public function setUuid(UuidInterface $uuid): self
     {
         $this->uuid = $uuid;
+
+        return $this;
+    }
+    
+    /**
+     * getSize
+     *
+     * @return Size|null
+     */
+    public function getSize(): ?Size
+    {
+        return $this->size;
+    }
+    
+    /**
+     * setSize
+     *
+     * @param  Size $size
+     * @return self
+     */
+    public function setSize(Size $size): self
+    {
+        $this->size = $size;
+
+        // set the owning side of the relation if necessary
+        if ($size->getPhone() !== $this) {
+            $size->setPhone($this);
+        }
 
         return $this;
     }
