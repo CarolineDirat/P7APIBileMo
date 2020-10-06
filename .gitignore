@@ -9,6 +9,7 @@
 /vendor/
 ###< symfony/framework-bundle ###
 
-/phpstan.neon
-/.php_cs.dist
-/php-cs-fixer.phar
+phpstan.neon
+.php_cs.dist
+.php_cs.cache
+php-cs-fixer.phar
