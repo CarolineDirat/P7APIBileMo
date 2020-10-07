@@ -9,7 +9,6 @@ use Ramsey\Uuid\UuidInterface;
 
 /**
  * @ORM\Entity(repositoryClass=PhoneRepository::class)
- * @ORM\Table(name="phones")
  */
 class Phone
 {
