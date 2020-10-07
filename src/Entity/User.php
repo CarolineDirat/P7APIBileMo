@@ -69,6 +69,14 @@ class User
      * @var DateTimeImmutable updatedAt
      */
     private DateTimeImmutable $updatedAt;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Client::class, inversedBy="users", cascade={"persist"})
+     * @ORM\JoinColumn(nullable=false)
+     *
+     * @var Client client corresponding to the User
+     */
+    private Client $client;
     
     /**
      * __construct : define $createdAt and $updatedAt
@@ -248,6 +256,18 @@ class User
     public function setUpdatedAt(DateTimeImmutable $updatedAt): self
     {
         $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    public function getClient(): ?Client
+    {
+        return $this->client;
+    }
+
+    public function setClient(?Client $client): self
+    {
+        $this->client = $client;
 
         return $this;
     }

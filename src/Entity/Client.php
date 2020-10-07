@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use App\Repository\ClientRepository;
 use DateTimeImmutable;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\UuidInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -70,6 +72,18 @@ class Client implements UserInterface
      * @ORM\Column(type="datetime_immutable", name="bm_updatedAt")
      */
     private DateTimeImmutable $updatedAt;
+
+    /**
+     * @var Collection<int, User>|null $users users linked by the client
+     * 
+     * @ORM\OneToMany(targetEntity=User::class, mappedBy="client", cascade={"persist", "remove"}, orphanRemoval=true)
+     */
+    private ?Collection $users;
+
+    public function __construct()
+    {
+        $this->users = new ArrayCollection();
+    }
     
     /**
      * getId
@@ -275,6 +289,52 @@ class Client implements UserInterface
     public function setUpdatedAt(DateTimeImmutable $updatedAt): self
     {
         $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    /**
+     * get collection of Users linked by the Client
+     * 
+     * @return Collection<int, User>|User[]
+     *
+     */
+    public function getUsers(): Collection
+    {
+        return $this->users;
+    }
+    
+    /**
+     * add a User to the Client
+     *
+     * @param  User $user
+     * @return self
+     */
+    public function addUser(User $user): self
+    {
+        if (!$this->users->contains($user)) {
+            $this->users[] = $user;
+            $user->setClient($this);
+        }
+
+        return $this;
+    }
+    
+    /**
+     * remove a User to the Client
+     *
+     * @param  User $user
+     * @return self
+     */
+    public function removeUser(User $user): self
+    {
+        if ($this->users->contains($user)) {
+            $this->users->removeElement($user);
+            // set the owning side to null (unless already changed)
+            if ($user->getClient() === $this) {
+                $user->setClient(null);
+            }
+        }
 
         return $this;
     }
