@@ -56,7 +56,7 @@ class Screen
 
     /**
      * @ORM\OneToOne(targetEntity=Phone::class, inversedBy="screen", cascade={"persist"})
-     * @ORM\JoinColumn(nullable=false, referencedColumnName="bm_id")
+     * @ORM\JoinColumn(nullable=false, referencedColumnName="bm_id", name="phone_bm_id")
      *
      * @var Phone phone corresponding to this screen
      */

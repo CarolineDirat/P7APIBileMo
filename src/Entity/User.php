@@ -72,7 +72,7 @@ class User
 
     /**
      * @ORM\ManyToOne(targetEntity=Client::class, inversedBy="users", cascade={"persist"})
-     * @ORM\JoinColumn(nullable=false, referencedColumnName="bm_id")
+     * @ORM\JoinColumn(nullable=false, referencedColumnName="bm_id", name="client_bm_id")
      *
      * @var Client client corresponding to the User
      */

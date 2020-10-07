@@ -121,7 +121,7 @@ class Phone
 
     /**
      * @ORM\OneToOne(targetEntity=Size::class, mappedBy="phone", cascade={"persist", "remove"}, orphanRemoval=true)
-     * @ORM\JoinColumn(referencedColumnName="bm_id")
+     * @ORM\JoinColumn(referencedColumnName="bm_id", name="size_bm_id")
      *
      * @var null|Size phone dimensions
      */
@@ -129,7 +129,7 @@ class Phone
 
     /**
      * @ORM\OneToOne(targetEntity=Screen::class, mappedBy="phone", cascade={"persist", "remove"}, orphanRemoval=true)
-     * @ORM\JoinColumn(referencedColumnName="bm_id")
+     * @ORM\JoinColumn(referencedColumnName="bm_id", name="screen_bm_id")
      *
      * @var null|Screen screen corresponding to the phone
      */

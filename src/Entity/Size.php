@@ -7,7 +7,6 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass=SizeRepository::class)
- * @ORM\Table(name="sizes")
  */
 class Size
 {
@@ -43,7 +42,7 @@ class Size
 
     /**
      * @ORM\OneToOne(targetEntity=Phone::class, inversedBy="size", cascade={"persist"})
-     * @ORM\JoinColumn(nullable=false, referencedColumnName="bm_id")
+     * @ORM\JoinColumn(nullable=false, referencedColumnName="bm_id", name="phone_bm_id")
      *
      * @var Phone phone corresponding to the size
      */
