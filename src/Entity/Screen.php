@@ -61,6 +61,36 @@ class Screen
      * @var Phone phone corresponding to this screen
      */
     private Phone $phone;
+    
+    /**
+     * hydrate screen entity
+     * 
+     * @param string $size 
+     * @param string $technology
+     * @param string $definition
+     * @param string $resolution
+     * @param string $refreshRate
+     * @param Phone $phone
+     *
+     * @return self
+     */
+    public function hydrate(
+        string $size,
+        string $technology,
+        string $definition,
+        string $resolution,
+        string $refreshRate,
+        Phone $phone
+    ): self {
+        $this->setSize($size);
+        $this->setTechnology($technology);
+        $this->setDefinition($definition);
+        $this->setResolution($resolution);
+        $this->setRefreshRate($refreshRate);
+        $this->setPhone($phone);
+
+        return $this;
+    }
 
     /**
      * getId.
