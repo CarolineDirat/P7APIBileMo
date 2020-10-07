@@ -107,11 +107,11 @@ class Phone
     private ?string $batteryCapacity;
 
     /**
-     * @var bool if the battery can wireless charging
+     * @var null|bool if the battery can wireless charging
      *
      * @ORM\Column(type="boolean", nullable=true, name="bm_wireless_charging")
      */
-    private bool $wirelessCharging;
+    private ?bool $wirelessCharging;
 
     /**
      * @var null|string weight of the phone
@@ -155,36 +155,36 @@ class Phone
     /**
      * hydrate
      *
-     * @param  string $constructor
-     * @param  string $name
-     * @param  float $priceEuro
-     * @param  string $system
-     * @param  string $userInterface
-     * @param  string $processor
-     * @param  string $ram
-     * @param  string $capacity
-     * @param  string $das
-     * @param  string $batteryCapacity
-     * @param  bool $wirelessCharging
-     * @param  string $weight
+     * @param  null|string $constructor
+     * @param  null|string $name
+     * @param  null|float $priceEuro
+     * @param  null|string $system
+     * @param  null|string $userInterface
+     * @param  null|string $processor
+     * @param  null|string $ram
+     * @param  null|string $capacity
+     * @param  null|string $das
+     * @param  null|string $batteryCapacity
+     * @param  null|bool $wirelessCharging
+     * @param  null|string $weight
      * @param  Size $size
      * @param  Screen $screen
      * 
      * @return self
      */
     public function hydrate(
-        string $constructor,
-        string $name,
-        float $priceEuro,
-        string $system,
-        string $userInterface,
-        string $processor,
-        string $ram,
-        string $capacity,
-        string $das,
-        string $batteryCapacity,
-        bool $wirelessCharging,
-        string $weight,
+        ?string $constructor,
+        ?string $name,
+        ?float $priceEuro,
+        ?string $system,
+        ?string $userInterface,
+        ?string $processor,
+        ?string $ram,
+        ?string $capacity,
+        ?string $das,
+        ?string $batteryCapacity,
+        ?bool $wirelessCharging,
+        ?string $weight,
         Size $size,
         Screen $screen
     ): self {

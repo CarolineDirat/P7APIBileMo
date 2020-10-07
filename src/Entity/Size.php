@@ -53,12 +53,12 @@ class Size
      *
      * @param string  $width
      * @param string  $height
-     * @param string  $thickness
+     * @param null|string  $thickness
      * @param Phone $phone
      * 
      * @return self
      */
-    public function hydrate(string $width, string $height, string $thickness, Phone $phone): self
+    public function hydrate(?string $width, ?string $height, ?string $thickness, Phone $phone): self
     {
         $this->setWidth($width);
         $this->setHeight($height);
