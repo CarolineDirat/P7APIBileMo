@@ -7,40 +7,85 @@ use App\Entity\Screen;
 use App\Entity\Size;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 class PhoneFixtures extends Fixture
-{
+{    
+    /**
+     * parameterBag
+     * 
+     * @var ParameterBagInterface
+     */
+    private ParameterBagInterface $parameterBag;
+    
+    /**
+     * __construct
+     *
+     * @param ParameterBagInterface  $parameterBag
+     * @return void
+     */
+    public function __construct(ParameterBagInterface $parameterBag)
+    {
+        $this->parameterBag = $parameterBag;
+    }
+    
     public function load(ObjectManager $manager): void
     {
-        // One Plus 8 Pro
+        // Initial data list of 10 phones, contained in the phones.ini file at the root of the application.
+        $phones = parse_ini_file(
+            $this->parameterBag->get('app.phones_ini'),
+            true,
+            INI_SCANNER_TYPED
+        );
+        // Create phones entities from $phones data, and persist them in database
+        foreach ($phones as $value) {
+            $phone = $this->phoneCreation($value);
+            $manager->persist($phone);
+        }
+        
+        $manager->flush();
+    }
+    
+    /**
+     * phoneCreation
+     *
+     * @param  array<mixed, mixed> $data
+     * @return Phone
+     */
+    public function phoneCreation(array $data): Phone
+    {
         $phone = new Phone();
 
         $screen = new Screen();
-        $screen->hydrate('6.78 "', 'AMOLED', '3168 x 1440 px', '513 ppp', '120 Hz', $phone);
+        $screen->hydrate(
+            $data['screen_size'],
+            $data['screen_technology'],
+            $data['screen_definition'],
+            $data['screen_resolution'],
+            $data['screen_refresh_rate'],
+            $phone
+        );
 
         $size = new Size();
-        $size->hydrate('2.46 cm', '16.53 cm', '0.85 cm', $phone);
+        $size->hydrate($data['size_width'], $data['size_height'], $data['size_thickness'], $phone);
         
         $phone->hydrate(
-            'One Plus',
-            '8 Pro',
-            750.00,
-            'Android 10',
-            'OxygenOS',
-            'Qualcomm Snapdragon 865',
-            '12 Go',
-            '256 Go',
-            '0.95 W/kg',
-            '4510 mAh',
-            true,
-            '199 g',
+            $data['constructor'],
+            $data['name'],
+            $data['price_euro'],
+            $data['system'],
+            $data['user_interface'],
+            $data['processor'],
+            $data['ram'],
+            $data['capacity'],
+            $data['das'],
+            $data['battery_capacity'],
+            $data['wireless_charging'],
+            $data['weight'],
             $size,
             $screen
         );     
 
-        $manager->persist($phone);
-        $manager->flush();
-
-        //
+        return $phone;
     }
 }
