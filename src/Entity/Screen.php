@@ -13,14 +13,14 @@ class Screen
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", name="bm_id")
      *
      * @var int id
      */
     private int $id;
 
     /**
-     * @ORM\Column(type="string", length=8, nullable=true, name="bm_id")
+     * @ORM\Column(type="string", length=8, nullable=true, name="bm_size")
      *
      * @var null|string screen size (diagonal)
      */
@@ -56,7 +56,7 @@ class Screen
 
     /**
      * @ORM\OneToOne(targetEntity=Phone::class, inversedBy="screen", cascade={"persist"})
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=false, referencedColumnName="bm_id")
      *
      * @var Phone phone corresponding to this screen
      */

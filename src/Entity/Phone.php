@@ -115,12 +115,13 @@ class Phone
     /**
      * @var null|UuidInterface
      *
-     * @ORM\Column(type="uuid_binary", unique=true)
+     * @ORM\Column(type="uuid_binary", unique=true, name="bm_uuid")
      */
     private ?UuidInterface $uuid;
 
     /**
      * @ORM\OneToOne(targetEntity=Size::class, mappedBy="phone", cascade={"persist", "remove"}, orphanRemoval=true)
+     * @ORM\JoinColumn(referencedColumnName="bm_id")
      *
      * @var null|Size phone dimensions
      */
@@ -128,6 +129,7 @@ class Phone
 
     /**
      * @ORM\OneToOne(targetEntity=Screen::class, mappedBy="phone", cascade={"persist", "remove"}, orphanRemoval=true)
+     * @ORM\JoinColumn(referencedColumnName="bm_id")
      *
      * @var null|Screen screen corresponding to the phone
      */

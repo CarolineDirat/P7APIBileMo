@@ -77,6 +77,7 @@ class Client implements UserInterface
      * @var null|Collection<int, User> users linked by the client
      *
      * @ORM\OneToMany(targetEntity=User::class, mappedBy="client", cascade={"persist", "remove"}, orphanRemoval=true)
+     * @ORM\JoinColumn(referencedColumnName="bm_id")
      */
     private ?Collection $users;
 

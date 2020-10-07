@@ -43,7 +43,7 @@ class Size
 
     /**
      * @ORM\OneToOne(targetEntity=Phone::class, inversedBy="size", cascade={"persist"})
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=false, referencedColumnName="bm_id")
      *
      * @var Phone phone corresponding to the size
      */
