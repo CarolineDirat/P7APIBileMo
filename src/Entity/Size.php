@@ -36,9 +36,9 @@ class Size
     /**
      * @ORM\Column(type="string", length=10, name="bm_thickness")
      *
-     * @var null|string thikness
+     * @var null|string thickness
      */
-    private ?string $thikness;
+    private ?string $thickness;
 
     /**
      * @ORM\OneToOne(targetEntity=Phone::class, inversedBy="size", cascade={"persist"})
@@ -107,25 +107,25 @@ class Size
     }
 
     /**
-     * getThikness.
+     * getThickness.
      *
      * @return null|string
      */
-    public function getThikness(): ?string
+    public function getThickness(): ?string
     {
-        return $this->thikness;
+        return $this->thickness;
     }
 
     /**
-     * setThikness.
+     * setThickness.
      *
-     * @param null|string $thikness
+     * @param null|string $thickness
      *
      * @return self
      */
-    public function setThikness(?string $thikness): self
+    public function setThickness(?string $thickness): self
     {
-        $this->thikness = $thikness;
+        $this->thickness = $thickness;
 
         return $this;
     }
