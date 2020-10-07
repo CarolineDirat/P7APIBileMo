@@ -51,49 +51,49 @@ class Phone
     private float $priceEuro;
 
     /**
-     * @var string|null system
+     * @var null|string system
      *
      * @ORM\Column(type="string", length=45, nullable=true, name="bm_system")
      */
     private ?string $system;
 
     /**
-     * @var string|null user interface
+     * @var null|string user interface
      *
      * @ORM\Column(type="string", length=45, nullable=true, name="bm_user_interface")
      */
     private ?string $userInterface;
 
     /**
-     * @var string|null processor
+     * @var null|string processor
      *
      * @ORM\Column(type="string", length=45, nullable=true, name="bm_processor")
      */
     private ?string $processor;
 
     /**
-     * @var string|null RAM
+     * @var null|string RAM
      *
      * @ORM\Column(type="string", length=6, nullable=true, name="bm_ram")
      */
     private ?string $ram;
 
     /**
-     * @var string|null capacity
+     * @var null|string capacity
      *
      * @ORM\Column(type="string", length=10, nullable=true, name="bm_capacity")
      */
     private ?string $capacity;
 
     /**
-     * @var string|null DAS indice
+     * @var null|string DAS indice
      *
      * @ORM\Column(type="string", length=15, nullable=true, name="bm_das")
      */
     private ?string $das;
 
     /**
-     * @var string|null capacity of the battery
+     * @var null|string capacity of the battery
      *
      * @ORM\Column(type="string", length=10, nullable=true, name="bm_battery_capacity")
      */
@@ -107,15 +107,15 @@ class Phone
     private bool $wirelessCharging;
 
     /**
-     * @var string|null weight of the phone
+     * @var null|string weight of the phone
      *
      * @ORM\Column(type="string", length=10, nullable=true, name="bm_weight")
      */
     private ?string $weight;
 
     /**
-     * @var UuidInterface|null $uuid
-     * 
+     * @var null|UuidInterface
+     *
      * @ORM\Column(type="uuid_binary", unique=true)
      */
     private ?UuidInterface $uuid;
@@ -123,19 +123,19 @@ class Phone
     /**
      * @ORM\OneToOne(targetEntity=Size::class, mappedBy="phone", cascade={"persist", "remove"}, orphanRemoval=true)
      *
-     * @var Size|null phone dimensions
+     * @var null|Size phone dimensions
      */
     private ?Size $size;
 
     /**
      * @ORM\OneToOne(targetEntity=Screen::class, mappedBy="phone", cascade={"persist", "remove"}, orphanRemoval=true)
      *
-     * @var Screen|null screen corresponding to the phone
+     * @var null|Screen screen corresponding to the phone
      */
     private ?Screen $screen;
 
     /**
-     * __construct : define $createdAt and $updatedAt
+     * __construct : define $createdAt and $updatedAt.
      */
     public function __construct()
     {
@@ -180,7 +180,7 @@ class Phone
     /**
      * getUpdatedAt.
      *
-     * @return DateTimeImmutable|null
+     * @return null|DateTimeImmutable
      */
     public function getUpdatedAt(): ?DateTimeImmutable
     {
@@ -228,7 +228,7 @@ class Phone
     /**
      * getPriceEuro.
      *
-     * @return float|null
+     * @return null|float
      */
     public function getPriceEuro(): ?float
     {
@@ -252,7 +252,7 @@ class Phone
     /**
      * getSystem.
      *
-     * @return string|null
+     * @return null|string
      */
     public function getSystem(): ?string
     {
@@ -262,7 +262,7 @@ class Phone
     /**
      * setSystem.
      *
-     * @param string|null $system
+     * @param null|string $system
      *
      * @return self
      */
@@ -276,7 +276,7 @@ class Phone
     /**
      * getUserInterface.
      *
-     * @return string|null
+     * @return null|string
      */
     public function getUserInterface(): ?string
     {
@@ -286,7 +286,7 @@ class Phone
     /**
      * setUserInterface.
      *
-     * @param string|null $userInterface
+     * @param null|string $userInterface
      *
      * @return self
      */
@@ -300,7 +300,7 @@ class Phone
     /**
      * getProcessor.
      *
-     * @return string|null
+     * @return null|string
      */
     public function getProcessor(): ?string
     {
@@ -310,7 +310,7 @@ class Phone
     /**
      * setProcessor.
      *
-     * @param string|null $processor
+     * @param null|string $processor
      *
      * @return self
      */
@@ -320,21 +320,22 @@ class Phone
 
         return $this;
     }
-    
+
     /**
-     * getRam
+     * getRam.
      *
-     * @return string|null
+     * @return null|string
      */
     public function getRam(): ?string
     {
         return $this->ram;
     }
-    
+
     /**
-     * setRam
+     * setRam.
      *
-     * @param string|null $ram
+     * @param null|string $ram
+     *
      * @return self
      */
     public function setRam(?string $ram): self
@@ -343,21 +344,22 @@ class Phone
 
         return $this;
     }
-    
+
     /**
-     * getCapacity
+     * getCapacity.
      *
-     * @return string|null
+     * @return null|string
      */
     public function getCapacity(): ?string
     {
         return $this->capacity;
     }
-    
+
     /**
-     * setCapacity
+     * setCapacity.
      *
-     * @param string|null  $capacity
+     * @param null|string $capacity
+     *
      * @return self
      */
     public function setCapacity(?string $capacity): self
@@ -366,21 +368,22 @@ class Phone
 
         return $this;
     }
-    
+
     /**
-     * getDas
+     * getDas.
      *
-     * @return string|null
+     * @return null|string
      */
     public function getDas(): ?string
     {
         return $this->das;
     }
-    
+
     /**
-     * setDas
+     * setDas.
      *
-     * @param string|null $das
+     * @param null|string $das
+     *
      * @return self
      */
     public function setDas(?string $das): self
@@ -389,21 +392,22 @@ class Phone
 
         return $this;
     }
-    
+
     /**
-     * getBatteryCapacity
+     * getBatteryCapacity.
      *
-     * @return string|null
+     * @return null|string
      */
     public function getBatteryCapacity(): ?string
     {
         return $this->batteryCapacity;
     }
-    
+
     /**
-     * setBatteryCapacity
+     * setBatteryCapacity.
      *
-     * @param  string|null $batteryCapacity
+     * @param null|string $batteryCapacity
+     *
      * @return self
      */
     public function setBatteryCapacity(?string $batteryCapacity): self
@@ -412,21 +416,22 @@ class Phone
 
         return $this;
     }
-    
+
     /**
-     * getWirelessCharging
+     * getWirelessCharging.
      *
-     * @return bool|null
+     * @return null|bool
      */
     public function getWirelessCharging(): ?bool
     {
         return $this->wirelessCharging;
     }
-    
+
     /**
-     * setWirelessCharging
+     * setWirelessCharging.
      *
-     * @param  bool|null $wirelessCharging
+     * @param null|bool $wirelessCharging
+     *
      * @return self
      */
     public function setWirelessCharging(?bool $wirelessCharging): self
@@ -435,21 +440,22 @@ class Phone
 
         return $this;
     }
-    
+
     /**
-     * getWeight
+     * getWeight.
      *
-     * @return string|null
+     * @return null|string
      */
     public function getWeight(): ?string
     {
         return $this->weight;
     }
-    
+
     /**
-     * setWeight
+     * setWeight.
      *
-     * @param  string|null $weight
+     * @param null|string $weight
+     *
      * @return self
      */
     public function setWeight(?string $weight): self
@@ -458,21 +464,22 @@ class Phone
 
         return $this;
     }
-    
+
     /**
-     * getUuid
+     * getUuid.
      *
-     * @return UuidInterface|null
+     * @return null|UuidInterface
      */
     public function getUuid(): ?UuidInterface
     {
         return $this->uuid;
     }
-    
+
     /**
-     * setUuid
+     * setUuid.
      *
-     * @param  UuidInterface $uuid
+     * @param UuidInterface $uuid
+     *
      * @return self
      */
     public function setUuid(UuidInterface $uuid): self
@@ -481,21 +488,22 @@ class Phone
 
         return $this;
     }
-    
+
     /**
-     * get Size corresponding to the phone
+     * get Size corresponding to the phone.
      *
-     * @return Size|null
+     * @return null|Size
      */
     public function getSize(): ?Size
     {
         return $this->size;
     }
-    
+
     /**
-     * set Size corresponding to the phone
+     * set Size corresponding to the phone.
      *
-     * @param  Size $size
+     * @param Size $size
+     *
      * @return self
      */
     public function setSize(Size $size): self
@@ -509,21 +517,22 @@ class Phone
 
         return $this;
     }
-    
+
     /**
-     * get Screen corresponding to the phone
+     * get Screen corresponding to the phone.
      *
-     * @return Screen|null
+     * @return null|Screen
      */
     public function getScreen(): ?Screen
     {
         return $this->screen;
     }
-    
+
     /**
-     * set Screen corresponding to the phone
+     * set Screen corresponding to the phone.
      *
-     * @param  Screen|null $screen
+     * @param null|Screen $screen
+     *
      * @return self
      */
     public function setScreen(?Screen $screen): self

@@ -77,30 +77,28 @@ class User
      * @var Client client corresponding to the User
      */
     private Client $client;
-    
+
     /**
-     * __construct : define $createdAt and $updatedAt
-     *
-     * @return void
+     * __construct : define $createdAt and $updatedAt.
      */
     public function __construct()
     {
         $this->createdAt = new DateTimeImmutable();
         $this->updatedAt = new DateTimeImmutable();
     }
-    
+
     /**
-     * getId
+     * getId.
      *
-     * @return int|null
+     * @return null|int
      */
     public function getId(): ?int
     {
         return $this->id;
     }
-    
+
     /**
-     * getUuid
+     * getUuid.
      *
      * @return UuidInterface
      */
@@ -108,11 +106,12 @@ class User
     {
         return $this->uuid;
     }
-    
+
     /**
-     * setUuid
+     * setUuid.
      *
-     * @param  UuidInterface $uuid
+     * @param UuidInterface $uuid
+     *
      * @return self
      */
     public function setUuid(UuidInterface $uuid): self
@@ -121,21 +120,22 @@ class User
 
         return $this;
     }
-    
+
     /**
-     * getEmail
+     * getEmail.
      *
-     * @return string|null
+     * @return null|string
      */
     public function getEmail(): ?string
     {
         return $this->email;
     }
-    
+
     /**
-     * setEmail
+     * setEmail.
      *
-     * @param  string $email
+     * @param string $email
+     *
      * @return self
      */
     public function setEmail(string $email): self
@@ -144,21 +144,22 @@ class User
 
         return $this;
     }
-    
+
     /**
-     * getPassword
+     * getPassword.
      *
-     * @return string|null
+     * @return null|string
      */
     public function getPassword(): ?string
     {
         return $this->password;
     }
-    
+
     /**
-     * setPassword
+     * setPassword.
      *
-     * @param  string $password
+     * @param string $password
+     *
      * @return self
      */
     public function setPassword(string $password): self
@@ -167,21 +168,22 @@ class User
 
         return $this;
     }
-    
+
     /**
-     * getFirstname
+     * getFirstname.
      *
-     * @return string|null
+     * @return null|string
      */
     public function getFirstname(): ?string
     {
         return $this->firstname;
     }
-    
+
     /**
-     * setFirstname
+     * setFirstname.
      *
-     * @param  string $firstname
+     * @param string $firstname
+     *
      * @return self
      */
     public function setFirstname(string $firstname): self
@@ -190,21 +192,22 @@ class User
 
         return $this;
     }
-    
+
     /**
-     * getLastname
+     * getLastname.
      *
-     * @return string|null
+     * @return null|string
      */
     public function getLastname(): ?string
     {
         return $this->lastname;
     }
-    
+
     /**
-     * setLastname
+     * setLastname.
      *
-     * @param  string $lastname
+     * @param string $lastname
+     *
      * @return self
      */
     public function setLastname(string $lastname): self
@@ -213,21 +216,22 @@ class User
 
         return $this;
     }
-    
+
     /**
-     * getCreatedAt
+     * getCreatedAt.
      *
-     * @return DateTimeImmutable|null
+     * @return null|DateTimeImmutable
      */
     public function getCreatedAt(): ?DateTimeImmutable
     {
         return $this->createdAt;
     }
-    
+
     /**
-     * setCreatedAt
+     * setCreatedAt.
      *
-     * @param DateTimeImmutable  $createdAt
+     * @param DateTimeImmutable $createdAt
+     *
      * @return self
      */
     public function setCreatedAt(DateTimeImmutable $createdAt): self
@@ -236,21 +240,22 @@ class User
 
         return $this;
     }
-    
+
     /**
-     * getUpdatedAt
+     * getUpdatedAt.
      *
-     * @return DateTimeImmutable|null
+     * @return null|DateTimeImmutable
      */
     public function getUpdatedAt(): ?DateTimeImmutable
     {
         return $this->updatedAt;
     }
-    
+
     /**
-     * setUpdatedAt
+     * setUpdatedAt.
      *
-     * @param  DateTimeImmutable  $updatedAt
+     * @param DateTimeImmutable $updatedAt
+     *
      * @return self
      */
     public function setUpdatedAt(DateTimeImmutable $updatedAt): self

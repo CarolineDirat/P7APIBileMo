@@ -17,7 +17,7 @@ class Client implements UserInterface
 {
     /**
      * @var int id
-     * 
+     *
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer", name="bm_id")
@@ -26,56 +26,56 @@ class Client implements UserInterface
 
     /**
      * @var string property name that will be the unique "display" name for the user
-     * 
+     *
      * @ORM\Column(type="string", length=180, unique=true, name="bm_username")
      */
     private string $username;
 
     /**
      * @var string[] roles
-     * 
+     *
      * @ORM\Column(type="json", name="bm_roles")
      */
     private array $roles = [];
 
     /**
      * @var string The hashed password
-     * 
+     *
      * @ORM\Column(type="string", name="bm_password")
      */
     private string $password;
 
     /**
      * @var UuidInterface uuid
-     * 
+     *
      * @ORM\Column(type="uuid_binary", unique=true, name="bm_uuid")
      */
     private UuidInterface $uuid;
 
     /**
      * @var string email
-     * 
+     *
      * @ORM\Column(type="string", length=200, unique=true, name="bm_email")
      */
     private string $email;
 
     /**
      * @var DateTimeImmutable creation date
-     * 
+     *
      * @ORM\Column(type="datetime_immutable", name="bm_createdAt")
      */
     private DateTimeImmutable $createdAt;
 
     /**
      * @var DateTimeImmutable updating date
-     * 
+     *
      * @ORM\Column(type="datetime_immutable", name="bm_updatedAt")
      */
     private DateTimeImmutable $updatedAt;
 
     /**
-     * @var Collection<int, User>|null $users users linked by the client
-     * 
+     * @var null|Collection<int, User> users linked by the client
+     *
      * @ORM\OneToMany(targetEntity=User::class, mappedBy="client", cascade={"persist", "remove"}, orphanRemoval=true)
      */
     private ?Collection $users;
@@ -84,11 +84,11 @@ class Client implements UserInterface
     {
         $this->users = new ArrayCollection();
     }
-    
+
     /**
-     * getId
+     * getId.
      *
-     * @return int|null
+     * @return null|int
      */
     public function getId(): ?int
     {
@@ -99,17 +99,19 @@ class Client implements UserInterface
      * A visual identifier that represents this user.
      *
      * @see UserInterface
+     *
      * @return string
      */
     public function getUsername(): string
     {
         return (string) $this->username;
     }
-    
+
     /**
-     * setUsername
+     * setUsername.
      *
-     * @param  string $username
+     * @param string $username
+     *
      * @return self
      */
     public function setUsername(string $username): self
@@ -120,9 +122,10 @@ class Client implements UserInterface
     }
 
     /**
-     * getRoles
-     * 
+     * getRoles.
+     *
      * @see UserInterface
+     *
      * @return string[]
      */
     public function getRoles(): array
@@ -133,11 +136,12 @@ class Client implements UserInterface
 
         return array_unique($roles);
     }
-    
+
     /**
-     * setRoles
+     * setRoles.
      *
-     * @param  string[] $roles
+     * @param string[] $roles
+     *
      * @return self
      */
     public function setRoles(array $roles): self
@@ -148,20 +152,22 @@ class Client implements UserInterface
     }
 
     /**
-     * getPassword
-     * 
+     * getPassword.
+     *
      * @see UserInterface
+     *
      * @return string
      */
     public function getPassword(): string
     {
         return (string) $this->password;
     }
-    
+
     /**
-     * setPassword
+     * setPassword.
      *
-     * @param  string $password
+     * @param string $password
+     *
      * @return self
      */
     public function setPassword(string $password): self
@@ -172,13 +178,14 @@ class Client implements UserInterface
     }
 
     /**
-     * getSalt
-     * 
+     * getSalt.
+     *
      * Returns the salt that was originally used to encode the password.
      * This can return null if the password was not encoded using a salt.
-     * 
+     *
      * @see UserInterface
-     * @return string|null
+     *
+     * @return null|string
      */
     public function getSalt(): ?string
     {
@@ -192,7 +199,7 @@ class Client implements UserInterface
      *
      * This is important if, at any given point, sensitive information like
      * the plain-text password is stored on this object.
-     * 
+     *
      * @see UserInterface
      */
     public function eraseCredentials(): void
@@ -200,21 +207,22 @@ class Client implements UserInterface
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
     }
-    
+
     /**
-     * getUuid
+     * getUuid.
      *
-     * @return UuidInterface|null
+     * @return null|UuidInterface
      */
     public function getUuid(): ?UuidInterface
     {
         return $this->uuid;
     }
-    
+
     /**
-     * setUuid
+     * setUuid.
      *
-     * @param  UuidInterface $uuid
+     * @param UuidInterface $uuid
+     *
      * @return self
      */
     public function setUuid(UuidInterface $uuid): self
@@ -223,21 +231,22 @@ class Client implements UserInterface
 
         return $this;
     }
-    
+
     /**
-     * getEmail
+     * getEmail.
      *
-     * @return string|null
+     * @return null|string
      */
     public function getEmail(): ?string
     {
         return $this->email;
     }
-    
+
     /**
-     * setEmail
+     * setEmail.
      *
-     * @param  string $email
+     * @param string $email
+     *
      * @return self
      */
     public function setEmail(string $email): self
@@ -246,21 +255,22 @@ class Client implements UserInterface
 
         return $this;
     }
-    
+
     /**
-     * getCreatedAt
+     * getCreatedAt.
      *
-     * @return DateTimeImmutable|null
+     * @return null|DateTimeImmutable
      */
     public function getCreatedAt(): ?DateTimeImmutable
     {
         return $this->createdAt;
     }
-    
+
     /**
-     * setCreatedAt
+     * setCreatedAt.
      *
-     * @param  DateTimeImmutable $createdAt
+     * @param DateTimeImmutable $createdAt
+     *
      * @return self
      */
     public function setCreatedAt(DateTimeImmutable $createdAt): self
@@ -269,21 +279,22 @@ class Client implements UserInterface
 
         return $this;
     }
-    
+
     /**
-     * getUpdatedAt
+     * getUpdatedAt.
      *
-     * @return DateTimeImmutable|null
+     * @return null|DateTimeImmutable
      */
     public function getUpdatedAt(): ?DateTimeImmutable
     {
         return $this->updatedAt;
     }
-    
+
     /**
-     * setUpdatedAt
+     * setUpdatedAt.
      *
-     * @param  DateTimeImmutable $updatedAt
+     * @param DateTimeImmutable $updatedAt
+     *
      * @return self
      */
     public function setUpdatedAt(DateTimeImmutable $updatedAt): self
@@ -294,20 +305,20 @@ class Client implements UserInterface
     }
 
     /**
-     * get collection of Users linked by the Client
-     * 
-     * @return Collection<int, User>|User[]
+     * get collection of Users linked by the Client.
      *
+     * @return Collection<int, User>|User[]
      */
     public function getUsers(): Collection
     {
         return $this->users;
     }
-    
+
     /**
-     * add a User to the Client
+     * add a User to the Client.
      *
-     * @param  User $user
+     * @param User $user
+     *
      * @return self
      */
     public function addUser(User $user): self
@@ -319,11 +330,12 @@ class Client implements UserInterface
 
         return $this;
     }
-    
+
     /**
-     * remove a User to the Client
+     * remove a User to the Client.
      *
-     * @param  User $user
+     * @param User $user
+     *
      * @return self
      */
     public function removeUser(User $user): self

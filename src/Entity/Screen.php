@@ -22,35 +22,35 @@ class Screen
     /**
      * @ORM\Column(type="string", length=8, nullable=true, name="bm_id")
      *
-     * @var string|null screen size (diagonal)
+     * @var null|string screen size (diagonal)
      */
     private ?string $size;
 
     /**
      * @ORM\Column(type="string", length=45, nullable=true, name="bm_technology")
      *
-     * @var string|null sreen technology
+     * @var null|string sreen technology
      */
-    private  $technology;
+    private $technology;
 
     /**
      * @ORM\Column(type="string", length=15, nullable=true, name="bm_definition")
      *
-     * @var string|null screen definition (x*y px)
+     * @var null|string screen definition (x*y px)
      */
     private ?string $definition;
 
     /**
      * @ORM\Column(type="string", length=8, nullable=true, name="bm_resolution")
      *
-     * @var string|null screen resolution (ppp)
+     * @var null|string screen resolution (ppp)
      */
     private ?string $resolution;
 
     /**
      * @ORM\Column(type="string", length=7, nullable=true, name="bm_refresh_rate")
      *
-     * @var string|null screen refresh rate (Hz)
+     * @var null|string screen refresh rate (Hz)
      */
     private ?string $refreshRate;
 
@@ -63,9 +63,9 @@ class Screen
     private Phone $phone;
 
     /**
-     * getId
+     * getId.
      *
-     * @return int|null
+     * @return null|int
      */
     public function getId(): ?int
     {
@@ -73,9 +73,9 @@ class Screen
     }
 
     /**
-     * getSize
+     * getSize.
      *
-     * @return string|null
+     * @return null|string
      */
     public function getSize(): ?string
     {
@@ -83,9 +83,10 @@ class Screen
     }
 
     /**
-     * setSize
+     * setSize.
      *
-     * @param string|null $size
+     * @param null|string $size
+     *
      * @return self
      */
     public function setSize(?string $size): self
@@ -96,9 +97,9 @@ class Screen
     }
 
     /**
-     * getTechnology
+     * getTechnology.
      *
-     * @return string|null
+     * @return null|string
      */
     public function getTechnology(): ?string
     {
@@ -106,9 +107,10 @@ class Screen
     }
 
     /**
-     * setTechnology
+     * setTechnology.
      *
-     * @param string|null $technology
+     * @param null|string $technology
+     *
      * @return self
      */
     public function setTechnology(?string $technology): self
@@ -119,19 +121,20 @@ class Screen
     }
 
     /**
-     * getDefinition
+     * getDefinition.
      *
-     * @return string|null
+     * @return null|string
      */
     public function getDefinition(): ?string
     {
         return $this->definition;
     }
-    
+
     /**
-     * setDefinition
+     * setDefinition.
      *
-     * @param string|null $definition
+     * @param null|string $definition
+     *
      * @return self
      */
     public function setDefinition(?string $definition): self
@@ -140,21 +143,22 @@ class Screen
 
         return $this;
     }
-    
+
     /**
-     * getResolution
+     * getResolution.
      *
-     * @return string|null
+     * @return null|string
      */
     public function getResolution(): ?string
     {
         return $this->resolution;
     }
-    
+
     /**
-     * setResolution
+     * setResolution.
      *
-     * @param  string|null $resolution
+     * @param null|string $resolution
+     *
      * @return self
      */
     public function setResolution(?string $resolution): self
@@ -163,21 +167,22 @@ class Screen
 
         return $this;
     }
-    
+
     /**
-     * getRefreshRate
+     * getRefreshRate.
      *
-     * @return string|null
+     * @return null|string
      */
     public function getRefreshRate(): ?string
     {
         return $this->refreshRate;
     }
-    
+
     /**
-     * setRefreshRate
+     * setRefreshRate.
      *
-     * @param  string|null $refreshRate
+     * @param null|string $refreshRate
+     *
      * @return self
      */
     public function setRefreshRate(?string $refreshRate): self
@@ -186,21 +191,22 @@ class Screen
 
         return $this;
     }
-    
+
     /**
-     * get Phone corresponding to the screen
+     * get Phone corresponding to the screen.
      *
-     * @return Phone|null
+     * @return null|Phone
      */
     public function getPhone(): ?Phone
     {
         return $this->phone;
     }
-    
+
     /**
-     * set Phone corresponding to the screen
+     * set Phone corresponding to the screen.
      *
      * @param Phone $phone
+     *
      * @return self
      */
     public function setPhone(Phone $phone): self
