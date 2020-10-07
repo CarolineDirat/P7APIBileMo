@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\PhoneRepository;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
+use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
 
 /**
@@ -41,6 +42,13 @@ class Phone
      * @ORM\Column(type="string", length=55, name="bm_constructor")
      */
     private string $constructor;
+
+    /**
+     * @var string name of the phone
+     *
+     * @ORM\Column(type="string", length=55, name="bm_name")
+     */
+    private string $name;
 
     /**
      * @var float price of the phone, in euros
@@ -121,7 +129,7 @@ class Phone
 
     /**
      * @ORM\OneToOne(targetEntity=Size::class, mappedBy="phone", cascade={"persist", "remove"}, orphanRemoval=true)
-     * @ORM\JoinColumn(referencedColumnName="bm_id", name="size_bm_id")
+     * @ORM\JoinColumn(referencedColumnName="bm_id", name="size_bm_id", onDelete="SET NULL")
      *
      * @var null|Size phone dimensions
      */
@@ -129,7 +137,7 @@ class Phone
 
     /**
      * @ORM\OneToOne(targetEntity=Screen::class, mappedBy="phone", cascade={"persist", "remove"}, orphanRemoval=true)
-     * @ORM\JoinColumn(referencedColumnName="bm_id", name="screen_bm_id")
+     * @ORM\JoinColumn(referencedColumnName="bm_id", name="screen_bm_id", onDelete="SET NULL")
      *
      * @var null|Screen screen corresponding to the phone
      */
@@ -142,6 +150,61 @@ class Phone
     {
         $this->createdAt = new DateTimeImmutable();
         $this->updatedAt = new DateTimeImmutable();
+    }
+    
+    /**
+     * hydrate
+     *
+     * @param  string $constructor
+     * @param  string $name
+     * @param  float $priceEuro
+     * @param  string $system
+     * @param  string $userInterface
+     * @param  string $processor
+     * @param  string $ram
+     * @param  string $capacity
+     * @param  string $das
+     * @param  string $batteryCapacity
+     * @param  bool $wirelessCharging
+     * @param  string $weight
+     * @param  Size $size
+     * @param  Screen $screen
+     * 
+     * @return self
+     */
+    public function hydrate(
+        string $constructor,
+        string $name,
+        float $priceEuro,
+        string $system,
+        string $userInterface,
+        string $processor,
+        string $ram,
+        string $capacity,
+        string $das,
+        string $batteryCapacity,
+        bool $wirelessCharging,
+        string $weight,
+        Size $size,
+        Screen $screen
+    ): self {
+        $this->setConstructor($constructor);
+        $this->setName($name);
+        $this->setPriceEuro($priceEuro);
+        $this->setSystem($system);
+        $this->setUserInterface($userInterface);
+        $this->setProcessor($processor);
+        $this->setRam($ram);
+        $this->setCapacity($capacity);
+        $this->setDas($das);
+        $this->setBatteryCapacity($batteryCapacity);
+        $this->setWirelessCharging($wirelessCharging);
+        $this->setWeight($weight);
+        $this->setUuid(Uuid::uuid4());
+        $this->setSize($size);
+        $this->setScreen($screen);
+
+        return $this;
     }
 
     /**
@@ -205,7 +268,7 @@ class Phone
     /**
      * getConstructor.
      *
-     * @return string
+     * @return null|string
      */
     public function getConstructor(): ?string
     {
@@ -222,6 +285,30 @@ class Phone
     public function setConstructor(string $constructor): self
     {
         $this->constructor = $constructor;
+
+        return $this;
+    }
+
+    /**
+     * Get name of the phone
+     *
+     * @return  null|string
+     */ 
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    /**
+     * Set name of the phone
+     *
+     * @param  string  $name  name of the phone
+     *
+     * @return  self
+     */ 
+    public function setName(string $name): self
+    {
+        $this->name = $name;
 
         return $this;
     }
