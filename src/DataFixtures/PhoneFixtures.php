@@ -9,6 +9,12 @@ use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
+/**
+ * GuestFixtures
+ * 
+ * Fixture class to load 10 phones in database
+ * 
+ */
 class PhoneFixtures extends Fixture
 {    
     /**
@@ -28,7 +34,13 @@ class PhoneFixtures extends Fixture
     {
         $this->parameterBag = $parameterBag;
     }
-    
+        
+    /**
+     * load data fixtures (10 phones) with the passed EntityManager
+     *
+     * @param  ObjectManager $manager
+     * @return void
+     */
     public function load(ObjectManager $manager): void
     {
         // Recovery in $phones initial data list of 10 phones, contained in the phones.ini file at the root of the application.
