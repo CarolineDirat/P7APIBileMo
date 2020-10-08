@@ -51,18 +51,16 @@ class Size
     /**
      * hydrate size entity.
      *
-     * @param string      $width
-     * @param string      $height
-     * @param null|string $thickness
-     * @param Phone       $phone
+     * @param string[] $data  keys of $data are corresponding to Size properties (except $phone)
+     * @param Phone    $phone
      *
      * @return self
      */
-    public function hydrate(?string $width, ?string $height, ?string $thickness, Phone $phone): self
+    public function hydrate(array $data, Phone $phone): self
     {
-        $this->setWidth($width);
-        $this->setHeight($height);
-        $this->setThickness($thickness);
+        $this->setWidth($data['size_width']);
+        $this->setHeight($data['size_height']);
+        $this->setThickness($data['size_thickness']);
         $this->setPhone($phone);
 
         return $this;

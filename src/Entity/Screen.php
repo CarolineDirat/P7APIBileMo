@@ -65,28 +65,18 @@ class Screen
     /**
      * hydrate screen entity.
      *
-     * @param null|string $size
-     * @param null|string $technology
-     * @param null|string $definition
-     * @param null|string $resolution
-     * @param null|string $refreshRate
-     * @param Phone       $phone
+     * @param string[] $data  keys of $data are corresponding to Screen properties (except $phone)
+     * @param Phone    $phone
      *
      * @return self
      */
-    public function hydrate(
-        ?string $size,
-        ?string $technology,
-        ?string $definition,
-        ?string $resolution,
-        ?string $refreshRate,
-        ?Phone $phone
-    ): self {
-        $this->setSize($size);
-        $this->setTechnology($technology);
-        $this->setDefinition($definition);
-        $this->setResolution($resolution);
-        $this->setRefreshRate($refreshRate);
+    public function hydrate(array $data, Phone $phone): self
+    {
+        $this->setSize($data['screen_size']);
+        $this->setTechnology($data['screen_technology']);
+        $this->setDefinition($data['screen_definition']);
+        $this->setResolution($data['screen_resolution']);
+        $this->setRefreshRate($data['screen_refresh_rate']);
         $this->setPhone($phone);
 
         return $this;

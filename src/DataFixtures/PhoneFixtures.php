@@ -68,34 +68,12 @@ class PhoneFixtures extends Fixture
         $phone = new Phone();
 
         $screen = new Screen();
-        $screen->hydrate(
-            $data['screen_size'],
-            $data['screen_technology'],
-            $data['screen_definition'],
-            $data['screen_resolution'],
-            $data['screen_refresh_rate'],
-            $phone
-        );
+        $screen->hydrate($data, $phone);
 
         $size = new Size();
-        $size->hydrate($data['size_width'], $data['size_height'], $data['size_thickness'], $phone);
+        $size->hydrate($data, $phone);
 
-        $phone->hydrate(
-            $data['constructor'],
-            $data['name'],
-            $data['price_euro'],
-            $data['system'],
-            $data['user_interface'],
-            $data['processor'],
-            $data['ram'],
-            $data['capacity'],
-            $data['das'],
-            $data['battery_capacity'],
-            $data['wireless_charging'],
-            $data['weight'],
-            $size,
-            $screen
-        );
+        $phone->hydrate($data, $size, $screen);
 
         return $phone;
     }

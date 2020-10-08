@@ -155,51 +155,27 @@ class Phone
     /**
      * hydrate the Phone entity.
      *
-     * @param null|string $constructor
-     * @param null|string $name
-     * @param null|float  $priceEuro
-     * @param null|string $system
-     * @param null|string $userInterface
-     * @param null|string $processor
-     * @param null|string $ram
-     * @param null|string $capacity
-     * @param null|string $das
-     * @param null|string $batteryCapacity
-     * @param null|bool   $wirelessCharging
-     * @param null|string $weight
-     * @param Size        $size
-     * @param Screen      $screen
+     * @param array<string, mixed> $data   keys of $data are corresponding
+     *                                     to Phone properties (except $uuid, $size and $screen)
+     * @param Size                 $size
+     * @param Screen               $screen
      *
      * @return self
      */
-    public function hydrate(
-        ?string $constructor,
-        ?string $name,
-        ?float $priceEuro,
-        ?string $system,
-        ?string $userInterface,
-        ?string $processor,
-        ?string $ram,
-        ?string $capacity,
-        ?string $das,
-        ?string $batteryCapacity,
-        ?bool $wirelessCharging,
-        ?string $weight,
-        Size $size,
-        Screen $screen
-    ): self {
-        $this->setConstructor($constructor);
-        $this->setName($name);
-        $this->setPriceEuro($priceEuro);
-        $this->setSystem($system);
-        $this->setUserInterface($userInterface);
-        $this->setProcessor($processor);
-        $this->setRam($ram);
-        $this->setCapacity($capacity);
-        $this->setDas($das);
-        $this->setBatteryCapacity($batteryCapacity);
-        $this->setWirelessCharging($wirelessCharging);
-        $this->setWeight($weight);
+    public function hydrate(array $data, Size $size, Screen $screen): self
+    {
+        $this->setConstructor($data['constructor']);
+        $this->setName($data['name']);
+        $this->setPriceEuro($data['price_euro']);
+        $this->setSystem($data['system']);
+        $this->setUserInterface($data['user_interface']);
+        $this->setProcessor($data['processor']);
+        $this->setRam($data['ram']);
+        $this->setCapacity($data['capacity']);
+        $this->setDas($data['das']);
+        $this->setBatteryCapacity($data['battery_capacity']);
+        $this->setWirelessCharging($data['wireless_charging']);
+        $this->setWeight($data['weight']);
         $this->setUuid(Uuid::uuid4());
         $this->setSize($size);
         $this->setScreen($screen);
