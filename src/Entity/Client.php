@@ -84,6 +84,8 @@ class Client implements UserInterface
     public function __construct()
     {
         $this->users = new ArrayCollection();
+        $this->createdAt = new DateTimeImmutable();
+        $this->updatedAt = new DateTimeImmutable();
     }
 
     /**
