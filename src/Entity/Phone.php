@@ -153,7 +153,7 @@ class Phone
     }
     
     /**
-     * hydrate
+     * hydrate the Phone entity
      *
      * @param  null|string $constructor
      * @param  null|string $name

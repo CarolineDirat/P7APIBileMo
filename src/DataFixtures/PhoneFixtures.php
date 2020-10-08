@@ -31,7 +31,7 @@ class PhoneFixtures extends Fixture
     
     public function load(ObjectManager $manager): void
     {
-        // Initial data list of 10 phones, contained in the phones.ini file at the root of the application.
+        // Recovery in $phones initial data list of 10 phones, contained in the phones.ini file at the root of the application.
         $phones = parse_ini_file(
             $this->parameterBag->get('app.phones_ini'),
             true,
@@ -48,6 +48,7 @@ class PhoneFixtures extends Fixture
     
     /**
      * phoneCreation
+     * Create a phone entity from the $data array
      *
      * @param  array<mixed, mixed> $data
      * @return Phone
