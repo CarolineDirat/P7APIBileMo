@@ -48,8 +48,7 @@ class PhoneFixtures extends Fixture
         );
         // Create phones entities from $phones data, and persist them in database
         foreach ($phones as $value) {
-            $phone = $this->phoneCreation($value);
-            $manager->persist($phone);
+            $manager->persist($this->phoneCreation($value));
         }
 
         $manager->flush();
