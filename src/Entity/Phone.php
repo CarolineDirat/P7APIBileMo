@@ -151,25 +151,25 @@ class Phone
         $this->createdAt = new DateTimeImmutable();
         $this->updatedAt = new DateTimeImmutable();
     }
-    
+
     /**
-     * hydrate the Phone entity
+     * hydrate the Phone entity.
      *
-     * @param  null|string $constructor
-     * @param  null|string $name
-     * @param  null|float $priceEuro
-     * @param  null|string $system
-     * @param  null|string $userInterface
-     * @param  null|string $processor
-     * @param  null|string $ram
-     * @param  null|string $capacity
-     * @param  null|string $das
-     * @param  null|string $batteryCapacity
-     * @param  null|bool $wirelessCharging
-     * @param  null|string $weight
-     * @param  Size $size
-     * @param  Screen $screen
-     * 
+     * @param null|string $constructor
+     * @param null|string $name
+     * @param null|float  $priceEuro
+     * @param null|string $system
+     * @param null|string $userInterface
+     * @param null|string $processor
+     * @param null|string $ram
+     * @param null|string $capacity
+     * @param null|string $das
+     * @param null|string $batteryCapacity
+     * @param null|bool   $wirelessCharging
+     * @param null|string $weight
+     * @param Size        $size
+     * @param Screen      $screen
+     *
      * @return self
      */
     public function hydrate(
@@ -290,22 +290,22 @@ class Phone
     }
 
     /**
-     * Get name of the phone
+     * Get name of the phone.
      *
-     * @return  null|string
-     */ 
+     * @return null|string
+     */
     public function getName(): ?string
     {
         return $this->name;
     }
 
     /**
-     * Set name of the phone
+     * Set name of the phone.
      *
-     * @param  string  $name  name of the phone
+     * @param string $name name of the phone
      *
-     * @return  self
-     */ 
+     * @return self
+     */
     public function setName(string $name): self
     {
         $this->name = $name;

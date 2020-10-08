@@ -10,36 +10,33 @@ use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 /**
- * GuestFixtures
- * 
+ * GuestFixtures.
+ *
  * Fixture class to load 10 phones in database
- * 
  */
 class PhoneFixtures extends Fixture
-{    
+{
     /**
-     * parameterBag
-     * 
+     * parameterBag.
+     *
      * @var ParameterBagInterface
      */
     private ParameterBagInterface $parameterBag;
-    
+
     /**
-     * __construct
+     * __construct.
      *
-     * @param ParameterBagInterface  $parameterBag
-     * @return void
+     * @param ParameterBagInterface $parameterBag
      */
     public function __construct(ParameterBagInterface $parameterBag)
     {
         $this->parameterBag = $parameterBag;
     }
-        
+
     /**
-     * load data fixtures (10 phones) with the passed EntityManager
+     * load data fixtures (10 phones) with the passed EntityManager.
      *
-     * @param  ObjectManager $manager
-     * @return void
+     * @param ObjectManager $manager
      */
     public function load(ObjectManager $manager): void
     {
@@ -54,15 +51,16 @@ class PhoneFixtures extends Fixture
             $phone = $this->phoneCreation($value);
             $manager->persist($phone);
         }
-        
+
         $manager->flush();
     }
-    
+
     /**
      * phoneCreation
-     * Create a phone entity from the $data array
+     * Create a phone entity from the $data array.
      *
-     * @param  array<mixed, mixed> $data
+     * @param array<mixed, mixed> $data
+     *
      * @return Phone
      */
     public function phoneCreation(array $data): Phone
@@ -81,7 +79,7 @@ class PhoneFixtures extends Fixture
 
         $size = new Size();
         $size->hydrate($data['size_width'], $data['size_height'], $data['size_thickness'], $phone);
-        
+
         $phone->hydrate(
             $data['constructor'],
             $data['name'],
@@ -97,7 +95,7 @@ class PhoneFixtures extends Fixture
             $data['weight'],
             $size,
             $screen
-        );     
+        );
 
         return $phone;
     }

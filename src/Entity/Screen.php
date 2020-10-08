@@ -61,16 +61,16 @@ class Screen
      * @var Phone phone corresponding to this screen
      */
     private Phone $phone;
-    
+
     /**
-     * hydrate screen entity
-     * 
-     * @param null|string $size 
+     * hydrate screen entity.
+     *
+     * @param null|string $size
      * @param null|string $technology
      * @param null|string $definition
      * @param null|string $resolution
      * @param null|string $refreshRate
-     * @param Phone $phone
+     * @param Phone       $phone
      *
      * @return self
      */

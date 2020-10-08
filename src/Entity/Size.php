@@ -47,15 +47,15 @@ class Size
      * @var Phone phone corresponding to the size
      */
     private Phone $phone;
-    
+
     /**
-     * hydrate size entity
+     * hydrate size entity.
      *
-     * @param string  $width
-     * @param string  $height
-     * @param null|string  $thickness
-     * @param Phone $phone
-     * 
+     * @param string      $width
+     * @param string      $height
+     * @param null|string $thickness
+     * @param Phone       $phone
+     *
      * @return self
      */
     public function hydrate(?string $width, ?string $height, ?string $thickness, Phone $phone): self
