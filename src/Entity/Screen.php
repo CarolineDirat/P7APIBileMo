@@ -63,6 +63,26 @@ class Screen
     private Phone $phone;
 
     /**
+     * hydrate screen entity.
+     *
+     * @param string[] $data  keys of $data are corresponding to Screen properties (except $phone)
+     * @param Phone    $phone
+     *
+     * @return self
+     */
+    public function hydrate(array $data, Phone $phone): self
+    {
+        $this->setSize($data['screen_size']);
+        $this->setTechnology($data['screen_technology']);
+        $this->setDefinition($data['screen_definition']);
+        $this->setResolution($data['screen_resolution']);
+        $this->setRefreshRate($data['screen_refresh_rate']);
+        $this->setPhone($phone);
+
+        return $this;
+    }
+
+    /**
      * getId.
      *
      * @return null|int

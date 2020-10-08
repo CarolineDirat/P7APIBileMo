@@ -36,9 +36,9 @@ class Size
     /**
      * @ORM\Column(type="string", length=10, name="bm_thickness")
      *
-     * @var null|string thikness
+     * @var null|string thickness
      */
-    private ?string $thikness;
+    private ?string $thickness;
 
     /**
      * @ORM\OneToOne(targetEntity=Phone::class, inversedBy="size", cascade={"persist"})
@@ -47,6 +47,24 @@ class Size
      * @var Phone phone corresponding to the size
      */
     private Phone $phone;
+
+    /**
+     * hydrate size entity.
+     *
+     * @param string[] $data  keys of $data are corresponding to Size properties (except $phone)
+     * @param Phone    $phone
+     *
+     * @return self
+     */
+    public function hydrate(array $data, Phone $phone): self
+    {
+        $this->setWidth($data['size_width']);
+        $this->setHeight($data['size_height']);
+        $this->setThickness($data['size_thickness']);
+        $this->setPhone($phone);
+
+        return $this;
+    }
 
     /**
      * getId.
@@ -107,25 +125,25 @@ class Size
     }
 
     /**
-     * getThikness.
+     * getThickness.
      *
      * @return null|string
      */
-    public function getThikness(): ?string
+    public function getThickness(): ?string
     {
-        return $this->thikness;
+        return $this->thickness;
     }
 
     /**
-     * setThikness.
+     * setThickness.
      *
-     * @param null|string $thikness
+     * @param null|string $thickness
      *
      * @return self
      */
-    public function setThikness(?string $thikness): self
+    public function setThickness(?string $thickness): self
     {
-        $this->thikness = $thikness;
+        $this->thickness = $thickness;
 
         return $this;
     }
