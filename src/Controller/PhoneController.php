@@ -9,25 +9,25 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
 
 /**
- * PhoneController
- * 
- * @package App\Controller
+ * PhoneController.
+ *
  * @Route("/phones", name="phones_")
  */
 class PhoneController extends AbstractController
 {
     /**
-     * item
-     * 
+     * item.
+     *
      * @Route(
-     *      "/{uuid}",
-     *      name="item_get",
-     *      methods={"GET"},
-     *      stateless=true
+     *     "/{uuid}",
+     *     name="item_get",
+     *     methods={"GET"},
+     *     stateless=true
      * )
      *
-     * @param  Phone $phone
-     * @param  SerializerInterface $serializer
+     * @param Phone               $phone
+     * @param SerializerInterface $serializer
+     *
      * @return JsonResponse
      */
     public function item(Phone $phone, SerializerInterface $serializer): JsonResponse
@@ -36,9 +36,9 @@ class PhoneController extends AbstractController
             $phone,
             'json',
             [
-                'circular_reference_handler' => function(Object $object) {
+                'circular_reference_handler' => function (object $object) {
                     return $object->getId();
-                }
+                },
             ]
         );
 
@@ -56,15 +56,15 @@ class PhoneController extends AbstractController
 
         return new JsonResponse($phone, 200, [], true);
     }
-    
+
     /**
-     * collection
-     * 
-     *  @Route(
-     *      "/",
-     *      name="collection_get",
-     *      methods={"GET"},
-     *      stateless=true
+     * collection.
+     *
+     * @Route(
+     *     "/",
+     *     name="collection_get",
+     *     methods={"GET"},
+     *     stateless=true
      * )
      *
      * @return JsonResponse

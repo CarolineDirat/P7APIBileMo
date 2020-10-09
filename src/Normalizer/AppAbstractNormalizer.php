@@ -5,12 +5,10 @@ namespace App\Normalizer;
 use Throwable;
 
 /**
- * AppAbstractNormalizer
- * 
- * @package App\Normalizer
+ * AppAbstractNormalizer.
  */
 abstract class AppAbstractNormalizer implements AppNormalizerInterface
-{    
+{
     /**
      * exceptionTypes
      * Types of exceptions supported by the normalizer.
@@ -18,11 +16,11 @@ abstract class AppAbstractNormalizer implements AppNormalizerInterface
      * @var string[]
      */
     protected array $exceptionTypes;
-    
+
     /**
-     * __construct
+     * __construct.
      *
-     * @param  string[] $exceptionTypes
+     * @param string[] $exceptionTypes
      * @return void
      */
     public function __construct(array $exceptionTypes)

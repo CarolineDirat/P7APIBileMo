@@ -3,32 +3,30 @@
 namespace App\EventSubscriber;
 
 use App\Normalizer\AppNormalizerInterface;
-use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
+use Symfony\Component\Serializer\SerializerInterface;
 
 /**
  * ExceptionSubscriber
  * Run the right service (tagged app.normalizer) depending on the type of the exception.
- * 
- * @package App\EventSubscriber
  */
 class ExceptionSubscriber implements EventSubscriberInterface
-{    
+{
     /**
-     * serializer
+     * serializer.
      *
-     * @var SerializerInterface $serializer
+     * @var SerializerInterface
      */
     private SerializerInterface $serializer;
-        
+
     /**
-     * normalizers
+     * normalizers.
      *
-     * @var AppNormalizerInterface[] $normalizers
+     * @var AppNormalizerInterface[]
      */
     private array $normalizers = [];
 
@@ -36,7 +34,7 @@ class ExceptionSubscriber implements EventSubscriberInterface
     {
         $this->serializer = $serializer;
     }
-    
+
     /**
      * processException
      * Define the JSON response with the code and its message
@@ -52,17 +50,17 @@ class ExceptionSubscriber implements EventSubscriberInterface
         foreach ($this->normalizers as $normalizer) {
             if ($normalizer->supports($event->getThrowable())) {
                 $result = $normalizer->normalize($event->getThrowable());
-                
+
                 break;
             }
         }
-        
+
         if (null === $result) {
             $result['code'] = Response::HTTP_BAD_REQUEST;
 
             $result['body'] = [
                 'code' => Response::HTTP_BAD_REQUEST,
-                'message' => $event->getThrowable()->getMessage()
+                'message' => $event->getThrowable()->getMessage(),
             ];
         }
 
@@ -70,10 +68,10 @@ class ExceptionSubscriber implements EventSubscriberInterface
 
         $event->setResponse(new JsonResponse($body, $result['code'], [], true));
     }
-    
+
     /**
      * addNormalizer
-     * Method in charge of adding normalizers to ExceptionSubscriber
+     * Method in charge of adding normalizers to ExceptionSubscriber.
      *
      * @param AppNormalizerInterface $normalizer
      * @return void
@@ -82,9 +80,10 @@ class ExceptionSubscriber implements EventSubscriberInterface
     {
         $this->normalizers[] = $normalizer;
     }
-        
+
     /**
-     * getSubscribedEvents
+     * getSubscribedEvents.
+     *
      * @see EventSubscriberInterface
      *
      * @return array<string, mixed>
@@ -92,7 +91,7 @@ class ExceptionSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents(): array
     {
         return [
-            KernelEvents::EXCEPTION => [['processException', 255]]
+            KernelEvents::EXCEPTION => [['processException', 255]],
         ];
     }
 }

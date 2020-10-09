@@ -7,9 +7,7 @@ use Throwable;
 
 /**
  * NotFoundHttpExceptionNormalizer
- * Normalize a error 404
- * 
- * @package App\Normalizer
+ * Normalize a error 404.
  */
 class NotFoundHttpExceptionNormalizer extends AppAbstractNormalizer
 {
@@ -18,16 +16,16 @@ class NotFoundHttpExceptionNormalizer extends AppAbstractNormalizer
         $result['code'] = Response::HTTP_NOT_FOUND;
 
         $message = $exception->getMessage();
-        if ("App\\Entity\\Phone object not found by the @ParamConverter annotation." === $message) {
-            $message = "Phone not found";
+        if ('App\\Entity\\Phone object not found by the @ParamConverter annotation.' === $message) {
+            $message = 'Phone not found';
         }
-        if ("App\\Entity\\User object not found by the @ParamConverter annotation." === $message) {
-            $message = "User not found";
+        if ('App\\Entity\\User object not found by the @ParamConverter annotation.' === $message) {
+            $message = 'User not found';
         }
-        
+
         $result['body'] = [
             'code' => Response::HTTP_NOT_FOUND,
-            'message' => $message
+            'message' => $message,
         ];
 
         return $result;

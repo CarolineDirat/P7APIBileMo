@@ -37,13 +37,12 @@ class Kernel extends BaseKernel
             (require $path)($routes->withPath($path), $this);
         }
     }
-    
+
     /**
      * build
-     * To register compiler passes and manipulate the container during the building process
+     * To register compiler passes and manipulate the container during the building process.
      *
      * @param ContainerBuilder $container
-     * @return void
      */
     protected function build(ContainerBuilder $container): void
     {

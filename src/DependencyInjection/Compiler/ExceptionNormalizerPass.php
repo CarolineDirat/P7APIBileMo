@@ -8,9 +8,7 @@ use Symfony\Component\DependencyInjection\Reference;
 
 /**
  * ExceptionNormalizerPass
- * Add normalizers to App/EventSubscriber/ExceptionSubscriber
- * 
- * @package App\DependencyInjection\Compiler
+ * Add normalizers to App/EventSubscriber/ExceptionSubscriber.
  */
 class ExceptionNormalizerPass implements CompilerPassInterface
 {
