@@ -14,11 +14,11 @@ class ExceptionNormalizerPass implements CompilerPassInterface
 {
     public function process(ContainerBuilder $container): void
     {
-        $exceptionListenerDefinition = $container->findDefinition('app.exception_subscriber');
+        $exceptionSubscriberDefinition = $container->findDefinition('app.exception_subscriber');
         $normalizers = $container->findTaggedServiceIds('app.normalizer');
 
-        foreach ($normalizers as $id => $tags) {
-            $exceptionListenerDefinition->addMethodCall('addNormalizer', [new Reference($id)]);
+        foreach (array_keys($normalizers) as $id) {
+            $exceptionSubscriberDefinition->addMethodCall('addNormalizer', [new Reference($id)]);
         }
     }
 }
