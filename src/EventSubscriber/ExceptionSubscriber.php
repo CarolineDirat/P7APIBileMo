@@ -41,7 +41,6 @@ class ExceptionSubscriber implements EventSubscriberInterface
      * corresponding to the exception event.
      *
      * @param ExceptionEvent $event
-     * @return void
      */
     public function processException(ExceptionEvent $event): void
     {
@@ -74,7 +73,6 @@ class ExceptionSubscriber implements EventSubscriberInterface
      * Method in charge of adding normalizers to ExceptionSubscriber.
      *
      * @param AppNormalizerInterface $normalizer
-     * @return void
      */
     public function addNormalizer(AppNormalizerInterface $normalizer): void
     {

@@ -73,12 +73,13 @@ class PhoneController extends AbstractController
      * @return JsonResponse
      */
     public function collection(PhoneRepository $phoneRepository, SerializerInterface $serializer): JsonResponse
-    {        
+    {
         return new JsonResponse(
             $serializer->serialize(
                 $phoneRepository->findAll(),
                 'json',
-                ['groups' => 'collection_get']),
+                ['groups' => 'collection_get']
+            ),
             Response::HTTP_OK,
             [],
             true
