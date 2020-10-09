@@ -7,6 +7,7 @@ use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=PhoneRepository::class)
@@ -19,6 +20,7 @@ class Phone
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer", name="bm_id")
+     * @Groups("collection_get")
      */
     private int $id;
 
@@ -40,6 +42,7 @@ class Phone
      * @var string constructor of the phone
      *
      * @ORM\Column(type="string", length=55, name="bm_constructor")
+     * @Groups("collection_get")
      */
     private string $constructor;
 
@@ -47,6 +50,7 @@ class Phone
      * @var string name of the phone
      *
      * @ORM\Column(type="string", length=55, name="bm_name")
+     * @Groups("collection_get")
      */
     private string $name;
 
@@ -54,6 +58,7 @@ class Phone
      * @var float price of the phone, in euros
      *
      * @ORM\Column(type="float", name="bm_priceEuro")
+     * @Groups("collection_get")
      */
     private float $priceEuro;
 
@@ -124,6 +129,7 @@ class Phone
      * @var null|UuidInterface
      *
      * @ORM\Column(type="uuid_binary", unique=true, name="bm_uuid")
+     * @Groups("collection_get")
      */
     private ?UuidInterface $uuid;
 
