@@ -3,8 +3,10 @@
 namespace App\Controller;
 
 use App\Entity\Phone;
+use App\Repository\PhoneRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
 
@@ -42,6 +44,7 @@ class PhoneController extends AbstractController
             ]
         );
 
+        // after circular reference handling, there are some useless elements in linked objects
         $phone = json_decode($phone, true);
         foreach ($phone as $key => $value) {
             if (is_array($value)) {
@@ -69,8 +72,17 @@ class PhoneController extends AbstractController
      *
      * @return JsonResponse
      */
-    public function collection(): JsonResponse
+    public function collection(PhoneRepository $phoneRepository, SerializerInterface $serializer): JsonResponse
     {
-        return new JsonResponse([]);
+        return new JsonResponse(
+            $serializer->serialize(
+                $phoneRepository->findAll(),
+                'json',
+                ['groups' => 'collection_get']
+            ),
+            Response::HTTP_OK,
+            [],
+            true
+        );
     }
 }

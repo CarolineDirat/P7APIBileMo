@@ -21,7 +21,6 @@ abstract class AppAbstractNormalizer implements AppNormalizerInterface
      * __construct.
      *
      * @param string[] $exceptionTypes
-     * @return void
      */
     public function __construct(array $exceptionTypes)
     {
