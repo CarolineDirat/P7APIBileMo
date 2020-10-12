@@ -78,7 +78,7 @@ class PhoneController extends AbstractController
             $serializer->serialize(
                 $phoneRepository->findAll(),
                 'json',
-                ['groups' => 'collection_get']
+                ['groups' => 'collection']
             ),
             Response::HTTP_OK,
             [],
