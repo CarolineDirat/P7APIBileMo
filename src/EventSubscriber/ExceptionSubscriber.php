@@ -55,10 +55,11 @@ class ExceptionSubscriber implements EventSubscriberInterface
         }
 
         if (null === $result) {
-            $result['code'] = $event->getThrowable()->getCode();
+            $code = $event->getThrowable()->getCode();
+            $result['code'] = empty($code) ? Response::HTTP_BAD_REQUEST : $code;
 
             $result['body'] = [
-                'code' => $event->getThrowable()->getCode(),
+                'code' => empty($code) ? Response::HTTP_BAD_REQUEST : $code,
                 'message' => $event->getThrowable()->getMessage(),
             ];
         }
