@@ -6,6 +6,7 @@ use App\Repository\UserRepository;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\UuidInterface;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
@@ -16,6 +17,8 @@ class User
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer", name="bm_id")
+     * 
+     * @Groups({"collection"})
      *
      * @var int id
      */
@@ -23,6 +26,8 @@ class User
 
     /**
      * @ORM\Column(type="uuid_binary", unique=true, name="bm_uuid")
+     * 
+     * @Groups({"collection"})
      *
      * @var UuidInterface uuid
      */
@@ -30,6 +35,8 @@ class User
 
     /**
      * @ORM\Column(type="string", length=200, name="bm_email", unique=true)
+     * 
+     * @Groups({"collection"})
      *
      * @var string email
      */
@@ -37,6 +44,8 @@ class User
 
     /**
      * @ORM\Column(type="string", length=255, name="bm_password")
+     * 
+     * @Groups({"collection"})
      *
      * @var string password
      */
@@ -44,6 +53,8 @@ class User
 
     /**
      * @ORM\Column(type="string", length=45, name="bm_firstname")
+     * 
+     * @Groups({"collection"})
      *
      * @var string firstname
      */
@@ -51,6 +62,8 @@ class User
 
     /**
      * @ORM\Column(type="string", length=45, name="bm_lastname")
+     * 
+     * @Groups({"collection"})
      *
      * @var string lastname
      */
@@ -58,6 +71,8 @@ class User
 
     /**
      * @ORM\Column(type="datetime_immutable", name="bm_created_at")
+     * 
+     * @Groups({"collection"})
      *
      * @var DateTimeImmutable createdAt
      */
@@ -65,6 +80,8 @@ class User
 
     /**
      * @ORM\Column(type="datetime_immutable", name="bm_updated_at")
+     * 
+     * @Groups({"collection"})
      *
      * @var DateTimeImmutable updatedAt
      */
