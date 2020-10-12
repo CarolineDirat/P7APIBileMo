@@ -18,7 +18,7 @@ class User
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer", name="bm_id")
      *
-     * @Groups({"collection"})
+     * @Groups({"get"})
      *
      * @var int id
      */
@@ -27,7 +27,7 @@ class User
     /**
      * @ORM\Column(type="uuid_binary", unique=true, name="bm_uuid")
      *
-     * @Groups({"collection"})
+     * @Groups({"get"})
      *
      * @var UuidInterface uuid
      */
@@ -36,7 +36,7 @@ class User
     /**
      * @ORM\Column(type="string", length=200, name="bm_email", unique=true)
      *
-     * @Groups({"collection"})
+     * @Groups({"get"})
      *
      * @var string email
      */
@@ -45,7 +45,7 @@ class User
     /**
      * @ORM\Column(type="string", length=255, name="bm_password")
      *
-     * @Groups({"collection"})
+     * @Groups({"get"})
      *
      * @var string password
      */
@@ -54,7 +54,7 @@ class User
     /**
      * @ORM\Column(type="string", length=45, name="bm_firstname")
      *
-     * @Groups({"collection"})
+     * @Groups({"get"})
      *
      * @var string firstname
      */
@@ -63,7 +63,7 @@ class User
     /**
      * @ORM\Column(type="string", length=45, name="bm_lastname")
      *
-     * @Groups({"collection"})
+     * @Groups({"get"})
      *
      * @var string lastname
      */
@@ -72,7 +72,7 @@ class User
     /**
      * @ORM\Column(type="datetime_immutable", name="bm_created_at")
      *
-     * @Groups({"collection"})
+     * @Groups({"get"})
      *
      * @var DateTimeImmutable createdAt
      */
@@ -81,7 +81,7 @@ class User
     /**
      * @ORM\Column(type="datetime_immutable", name="bm_updated_at")
      *
-     * @Groups({"collection"})
+     * @Groups({"get"})
      *
      * @var DateTimeImmutable updatedAt
      */

@@ -70,6 +70,9 @@ class PhoneController extends AbstractController
      *     stateless=true
      * )
      *
+     * @param PhoneRepository     $phoneRepository
+     * @param SerializerInterface $serializer
+     *
      * @return JsonResponse
      */
     public function collection(PhoneRepository $phoneRepository, SerializerInterface $serializer): JsonResponse
