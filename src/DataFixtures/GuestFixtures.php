@@ -29,18 +29,18 @@ class GuestFixtures extends Fixture
     }
 
     /**
-     * load data fixtures (1 client and his 10 linked users) with the passed EntityManager.
+     * load data fixtures (1 client and his 10 linked users and 1 client without users ) with the passed EntityManager.
      *
      * @param ObjectManager $manager
      */
     public function load(ObjectManager $manager): void
     {
-        // create the client
+        // create first client
         $client = new Client();
         $client->setUsername('FirstClient');
         $client->setPassword($this->encoder->encodePassword($client, 'password'));
         $client->setUuid(Uuid::uuid4());
-        $client->setEmail('firstClient@mail.com');
+        $client->setEmail('first.client@mail.com');
 
         $manager->persist($client);
 
@@ -57,6 +57,16 @@ class GuestFixtures extends Fixture
             $manager->persist($user);
         }
 
+        // create a second client, without users
+        $client = new Client();
+        $client->setUsername('SecondClient');
+        $client->setPassword($this->encoder->encodePassword($client, 'password'));
+        $client->setUuid(Uuid::uuid4());
+        $client->setEmail('second.client@mail.com');
+
+        $manager->persist($client);
+
+        
         $manager->flush();
     }
 }
