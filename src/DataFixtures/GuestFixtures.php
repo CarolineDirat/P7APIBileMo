@@ -66,7 +66,6 @@ class GuestFixtures extends Fixture
 
         $manager->persist($client);
 
-        
         $manager->flush();
     }
 }

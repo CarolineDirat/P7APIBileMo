@@ -5,13 +5,13 @@ namespace App\Controller;
 use App\Entity\Client;
 use App\Entity\User;
 use App\Repository\UserRepository;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 /**
  * UserByClientController.
@@ -27,6 +27,12 @@ class UserByClientController extends AbstractController
      *     methods={"GET"},
      *     stateless=true
      * )
+     *
+     * @param Client              $client
+     * @param UserRepository      $userRepository
+     * @param SerializerInterface $serializer
+     *
+     * @return JsonResponse
      */
     public function collection(
         Client $client,
@@ -49,19 +55,19 @@ class UserByClientController extends AbstractController
 
     /**
      * item
-     * Get details of one user linked by a client
-     * 
+     * Get details of one user linked by a client.
+     *
      * @Route(
-     *  "/{user_uuid}",
-     *  name="item_get",
-     *  methods={"GET"},
-     *  stateless=true
+     *     "/{user_uuid}",
+     *     name="item_get",
+     *     methods={"GET"},
+     *     stateless=true
      * )
-     * 
+     *
      * @ParamConverter("user", options={"mapping": {"user_uuid": "uuid"}})
-     * 
-     * @param Client $client
-     * @param User $user
+     *
+     * @param Client              $client
+     * @param User                $user
      * @param SerializerInterface $serializer
      *
      * @return JsonResponse
@@ -71,17 +77,16 @@ class UserByClientController extends AbstractController
         User $user,
         SerializerInterface $serializer
     ): JsonResponse {
-
         if ($user->getClient() !== $client) {
             throw new AccessDeniedHttpException(
-                "You cannot access to the user by this client.",
+                'You cannot access to the user by this client.',
                 null,
                 Response::HTTP_FORBIDDEN
             );
         }
 
         return new JsonResponse(
-            $serializer->serialize($user, 'json', ['groups' => "get"]),
+            $serializer->serialize($user, 'json', ['groups' => 'get']),
             Response::HTTP_OK,
             [],
             true
