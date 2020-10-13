@@ -5,7 +5,7 @@ namespace App\Service;
 use App\Entity\Client;
 use App\Repository\UserRepository;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Serializer\SerializerInterface;
 
@@ -28,9 +28,9 @@ class UserService implements UserServiceInterface
     /**
      * constantsIni.
      *
-     * @var ConstantsIni
+     * @var PaginationServiceInterface
      */
-    private ConstantsIni $constantsIni;
+    private PaginationServiceInterface $paginationService;
 
     /**
      * __construct.
@@ -42,11 +42,11 @@ class UserService implements UserServiceInterface
     public function __construct(
         UserRepository $userRepository,
         SerializerInterface $serializer,
-        ConstantsIni $constantsIni
+        PaginationServiceInterface $paginationService
     ) {
         $this->userRepository = $userRepository;
         $this->serializer = $serializer;
-        $this->constantsIni = $constantsIni;
+        $this->paginationService = $paginationService;
     }
     
     /**
@@ -61,18 +61,9 @@ class UserService implements UserServiceInterface
      */
     public function getSerializedPaginatedUsersByClient(Client $client, Request $request): string
     {
-        $constants = $this->constantsIni->getConstantsIni();
-        $page = $request->query->getInt('page', 1);
-        $limit = $request->query->getInt('limit', $constants['users']['number_per_page']);
-
-        if (empty($page) || empty($limit)) {
-            throw new BadRequestHttpException("The query parameters 'page' and 'limit' must be integers and not null.");
-        }
-
-        $max = $constants['users']['limit_max'];
-        if ($limit > $max) {
-            $limit = $max;
-        }
+        $params = $this->paginationService->getQueryParameters($request, 'users');
+        $page = $params['page'];
+        $limit = $params['limit'];
 
         $users = $this->userRepository->getPaginatedUsersByClient($client, $page, $limit);
         

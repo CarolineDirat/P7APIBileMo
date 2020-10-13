@@ -6,7 +6,6 @@ use App\Entity\Phone;
 use App\Repository\PhoneRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Serializer\SerializerInterface;
 
@@ -29,9 +28,9 @@ class PhoneService implements PhoneServiceInterface
     /**
      * constantsIni.
      *
-     * @var ConstantsIni
+     * @var PaginationServiceInterface
      */
-    private ConstantsIni $constantsIni;
+    private PaginationServiceInterface $paginationService;
 
     /**
      * __construct.
@@ -43,11 +42,11 @@ class PhoneService implements PhoneServiceInterface
     public function __construct(
         PhoneRepository $phoneRepository,
         SerializerInterface $serializer,
-        ConstantsIni $constantsIni
+        PaginationServiceInterface $paginationService
     ) {
         $this->phoneRepository = $phoneRepository;
         $this->serializer = $serializer;
-        $this->constantsIni = $constantsIni;
+        $this->paginationService = $paginationService;
     }
 
     /**
@@ -97,18 +96,9 @@ class PhoneService implements PhoneServiceInterface
      */
     public function getSerializedPaginatedPhones(Request $request): string
     {
-        $constants = $this->constantsIni->getConstantsIni();
-        $page = $request->query->getInt('page', 1);
-        $limit = $request->query->getInt('limit', $constants['phones']['number_per_page']);
-
-        if (empty($page) || empty($limit)) {
-            throw new BadRequestHttpException("The query parameters 'page' and 'limit' must be integers and not null.");
-        }
-
-        $max = $constants['phones']['limit_max'];
-        if ($limit > $max) {
-            $limit = $max;
-        }
+        $params = $this->paginationService->getQueryParameters($request, 'phones');
+        $page = $params['page'];
+        $limit = $params['limit'];
 
         $phones = $this->phoneRepository->getPaginatedPhones($page, $limit);
 
