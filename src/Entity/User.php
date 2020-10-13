@@ -18,8 +18,6 @@ class User
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer", name="bm_id")
      *
-     * @Groups({"get"})
-     *
      * @var int id
      */
     private int $id;
@@ -44,8 +42,6 @@ class User
 
     /**
      * @ORM\Column(type="string", length=255, name="bm_password")
-     *
-     * @Groups({"get"})
      *
      * @var string password
      */
