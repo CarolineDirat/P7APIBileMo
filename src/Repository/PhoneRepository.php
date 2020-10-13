@@ -32,13 +32,13 @@ class PhoneRepository extends ServiceEntityRepository
     {
         return new Paginator(
             $this
-            ->createQueryBuilder('p')
-            ->addSelect('screen')
-            ->leftJoin('p.screen', 'screen')
-            ->addSelect('size')
-            ->leftJoin('p.size', 'size')
-            ->setMaxResults($limit)
-            ->setFirstResult(($page - 1) * $limit)
+                ->createQueryBuilder('p')
+                ->addSelect('screen')
+                ->leftJoin('p.screen', 'screen')
+                ->addSelect('size')
+                ->leftJoin('p.size', 'size')
+                ->setMaxResults($limit)
+                ->setFirstResult(($page - 1) * $limit)
         );
     }
 

@@ -18,12 +18,12 @@ interface PhoneServiceInterface
      */
     public function getSerializedPaginatedPhones(Request $request): string;
 
-    
     /**
      * getSerializedPhone
-     * Return a serialize data in json format corresponding to an object phone
+     * Return a serialize data in json format corresponding to an object phone.
      *
-     * @param  Phone $phone
+     * @param Phone $phone
+     *
      * @return string
      */
     public function getSerializedPhone(Phone $phone): string;

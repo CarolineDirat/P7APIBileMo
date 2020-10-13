@@ -28,7 +28,7 @@ class PhoneController extends AbstractController
      *     stateless=true
      * )
      *
-     * @param Phone $phone
+     * @param Phone        $phone
      * @param PhoneService $phoneService
      *
      * @return JsonResponse

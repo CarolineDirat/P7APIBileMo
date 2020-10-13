@@ -49,11 +49,12 @@ class PhoneService implements PhoneServiceInterface
         $this->serializer = $serializer;
         $this->constantsIni = $constantsIni;
     }
-    
+
     /**
-     * getSerializedPhone
+     * getSerializedPhone.
      *
-     * @param  Phone $phone
+     * @param Phone $phone
+     *
      * @return string
      */
     public function getSerializedPhone(Phone $phone): string
@@ -79,7 +80,7 @@ class PhoneService implements PhoneServiceInterface
                 $phone[$key] = $value;
             }
         }
-        
+
         return json_encode($phone);
     }
 
@@ -99,7 +100,7 @@ class PhoneService implements PhoneServiceInterface
         if (empty($page) || empty($limit)) {
             throw new BadRequestHttpException("The query parameters 'page' and 'limit' must be integers and not null.");
         }
-        
+
         $max = $constants['phones']['limit_max'];
         if ($limit > $max) {
             $limit = $max;
