@@ -5,8 +5,6 @@ namespace App\Service;
 use App\Entity\Client;
 use App\Repository\UserRepository;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Serializer\SerializerInterface;
 
 class UserService implements UserServiceInterface
@@ -67,19 +65,6 @@ class UserService implements UserServiceInterface
 
         $users = $this->userRepository->getPaginatedUsersByClient($client, $page, $limit);
         
-        $pages = ceil($users->count() / $limit);
-
-        if ($page > $pages) {
-            throw new NotFoundHttpException('The asked page n°'.$page." doesn't exist. The maximum number of pages is ".$pages.'.', null, Response::HTTP_BAD_REQUEST);
-        }
-
-        $result['data'] = $users;
-        $result['meta'] = ['current_page' => $page, 'number_per_page' => $limit, 'total_pages' => $pages];
-        
-        return $this->serializer->serialize(
-            $result,
-            'json',
-            ['groups' => 'get']
-        );
+        return $this->paginationService->getSerializedPaginatedData($users, $page, $limit, ['groups' => 'get']);
     }
 }

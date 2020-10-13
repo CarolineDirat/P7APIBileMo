@@ -2,8 +2,12 @@
 
 namespace App\Service;
 
+use Doctrine\ORM\Tools\Pagination\Paginator;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Serializer\SerializerInterface;
 
 class PaginationService implements PaginationServiceInterface
 {
@@ -15,14 +19,23 @@ class PaginationService implements PaginationServiceInterface
     private ConstantsIni $constantsIni;
 
     /**
+     * serializer.
+     *
+     * @var SerializerInterface;
+     */
+    private SerializerInterface $serializer;
+
+    /**
      * __construct.
      *
      * @param ConstantsIni        $constantsIni
      */
     public function __construct(
-        ConstantsIni $constantsIni
+        ConstantsIni $constantsIni,
+        SerializerInterface $serializer
     ) {
         $this->constantsIni = $constantsIni;
+        $this->serializer = $serializer;
     }
 
     /**
@@ -48,5 +61,37 @@ class PaginationService implements PaginationServiceInterface
         }
 
         return ['page' => $page, 'limit' => $limit];
+    }
+    
+    /**
+     * getSerializedPaginatedData
+     *
+     * @param Paginator $data
+     * @param int       $page
+     * @param int       $limit
+     * @param array     $context Options normalizer/encoders have to access
+     * 
+     * @return string
+     */
+    public function getSerializedPaginatedData(Paginator $data, int $page, int $limit, array $context): string
+    {
+        $pages = ceil($data->count() / $limit);
+
+        if ($page > $pages) {
+            throw new NotFoundHttpException(
+                'The asked page n°'.$page." doesn't exist. The maximum number of pages is ".$pages.'.',
+                null,
+                Response::HTTP_BAD_REQUEST
+            );
+        }
+
+        $result['data'] = $data;
+        $result['meta'] = ['current_page' => $page, 'number_per_page' => $limit, 'total_pages' => $pages];
+
+        return $this->serializer->serialize(
+            $result,
+            'json',
+            $context
+        );
     }
 }

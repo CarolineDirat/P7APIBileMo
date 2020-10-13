@@ -5,8 +5,6 @@ namespace App\Service;
 use App\Entity\Phone;
 use App\Repository\PhoneRepository;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Serializer\SerializerInterface;
 
 class PhoneService implements PhoneServiceInterface
@@ -102,19 +100,6 @@ class PhoneService implements PhoneServiceInterface
 
         $phones = $this->phoneRepository->getPaginatedPhones($page, $limit);
 
-        $pages = ceil($phones->count() / $limit);
-
-        if ($page > $pages) {
-            throw new NotFoundHttpException('The asked page n°'.$page." doesn't exist. The maximum number of pages is ".$pages.'.', null, Response::HTTP_BAD_REQUEST);
-        }
-
-        $result['data'] = $phones;
-        $result['meta'] = ['current_page' => $page, 'number_per_page' => $limit, 'total_pages' => $pages];
-
-        return $this->serializer->serialize(
-            $result,
-            'json',
-            ['groups' => 'collection']
-        );
+        return $this->paginationService->getSerializedPaginatedData($phones, $page, $limit, ['groups' => 'collection']);
     }
 }
