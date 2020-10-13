@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Normalizer;
+namespace App\Serializer\Normalizer;
 
 use Symfony\Component\HttpFoundation\Response;
 use Throwable;
@@ -9,7 +9,7 @@ use Throwable;
  * NotFoundHttpExceptionNormalizer
  * Normalize a error 404.
  */
-class NotFoundHttpExceptionNormalizer extends AppAbstractNormalizer
+class NotFoundHttpExceptionNormalizer extends AbstractExceptionNormalizer
 {
     public function normalize(Throwable $exception): array
     {

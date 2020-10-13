@@ -5,6 +5,7 @@
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
     app.phones_ini: '%kernel.project_dir%/phones.ini'
+    app.constants_ini: '%kernel.project_dir%/constants.ini'
 
 services:
     # default configuration for services in *this* file
@@ -39,7 +40,7 @@ services:
 
     App\EventSubscriber\ExceptionSubscriber: '@app.exception_subscriber'
 
-    App\Normalizer\NotFoundHttpExceptionNormalizer:
+    App\Serializer\Normalizer\NotFoundHttpExceptionNormalizer:
         arguments: 
             - { type: 'Symfony\Component\HttpKernel\Exception\NotFoundHttpException' }
         tags:

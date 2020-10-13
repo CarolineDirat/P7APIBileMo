@@ -25,6 +25,13 @@ class Client implements UserInterface
     private int $id;
 
     /**
+     * @var UuidInterface uuid
+     *
+     * @ORM\Column(type="uuid_binary", unique=true, name="bm_uuid")
+     */
+    private UuidInterface $uuid;
+
+    /**
      * @var string property name that will be the unique "display" name for the user
      *
      * @ORM\Column(type="string", length=180, unique=true, name="bm_username")
@@ -44,13 +51,6 @@ class Client implements UserInterface
      * @ORM\Column(type="string", name="bm_password")
      */
     private string $password;
-
-    /**
-     * @var UuidInterface uuid
-     *
-     * @ORM\Column(type="uuid_binary", unique=true, name="bm_uuid")
-     */
-    private UuidInterface $uuid;
 
     /**
      * @var string email
@@ -96,6 +96,30 @@ class Client implements UserInterface
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    /**
+     * getUuid.
+     *
+     * @return null|UuidInterface
+     */
+    public function getUuid(): ?UuidInterface
+    {
+        return $this->uuid;
+    }
+
+    /**
+     * setUuid.
+     *
+     * @param UuidInterface $uuid
+     *
+     * @return self
+     */
+    public function setUuid(UuidInterface $uuid): self
+    {
+        $this->uuid = $uuid;
+
+        return $this;
     }
 
     /**
@@ -209,30 +233,6 @@ class Client implements UserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
-    }
-
-    /**
-     * getUuid.
-     *
-     * @return null|UuidInterface
-     */
-    public function getUuid(): ?UuidInterface
-    {
-        return $this->uuid;
-    }
-
-    /**
-     * setUuid.
-     *
-     * @param UuidInterface $uuid
-     *
-     * @return self
-     */
-    public function setUuid(UuidInterface $uuid): self
-    {
-        $this->uuid = $uuid;
-
-        return $this;
     }
 
     /**

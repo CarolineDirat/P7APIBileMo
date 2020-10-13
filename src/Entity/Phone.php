@@ -20,9 +20,16 @@ class Phone
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer", name="bm_id")
-     * @Groups("collection")
      */
     private int $id;
+
+    /**
+     * @var null|UuidInterface
+     *
+     * @ORM\Column(type="uuid_binary", unique=true, name="bm_uuid")
+     * @Groups("collection")
+     */
+    private ?UuidInterface $uuid;
 
     /**
      * @var DateTimeImmutable date of creation of the phone
@@ -126,14 +133,6 @@ class Phone
     private ?string $weight;
 
     /**
-     * @var null|UuidInterface
-     *
-     * @ORM\Column(type="uuid_binary", unique=true, name="bm_uuid")
-     * @Groups("collection")
-     */
-    private ?UuidInterface $uuid;
-
-    /**
      * @ORM\OneToOne(targetEntity=Size::class, mappedBy="phone", cascade={"persist", "remove"}, orphanRemoval=true)
      * @ORM\JoinColumn(referencedColumnName="bm_id", name="size_bm_id", onDelete="SET NULL")
      *
@@ -197,6 +196,30 @@ class Phone
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    /**
+     * getUuid.
+     *
+     * @return null|UuidInterface
+     */
+    public function getUuid(): ?UuidInterface
+    {
+        return $this->uuid;
+    }
+
+    /**
+     * setUuid.
+     *
+     * @param UuidInterface $uuid
+     *
+     * @return self
+     */
+    public function setUuid(UuidInterface $uuid): self
+    {
+        $this->uuid = $uuid;
+
+        return $this;
     }
 
     /**
@@ -531,30 +554,6 @@ class Phone
     public function setWeight(?string $weight): self
     {
         $this->weight = $weight;
-
-        return $this;
-    }
-
-    /**
-     * getUuid.
-     *
-     * @return null|UuidInterface
-     */
-    public function getUuid(): ?UuidInterface
-    {
-        return $this->uuid;
-    }
-
-    /**
-     * setUuid.
-     *
-     * @param UuidInterface $uuid
-     *
-     * @return self
-     */
-    public function setUuid(UuidInterface $uuid): self
-    {
-        $this->uuid = $uuid;
 
         return $this;
     }

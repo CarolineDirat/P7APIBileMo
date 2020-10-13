@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Normalizer;
+namespace App\Serializer\Normalizer;
 
 use Throwable;
 
 /**
  * AppAbstractNormalizer.
  */
-abstract class AppAbstractNormalizer implements AppNormalizerInterface
+abstract class AbstractExceptionNormalizer implements ExceptionNormalizerInterface
 {
     /**
      * exceptionTypes
