@@ -31,7 +31,7 @@ class UserRepository extends ServiceEntityRepository
                 ->where('u.client = :client')
                 ->setMaxResults($limit)
                 ->setFirstResult(($page - 1) * $limit)
-                ->setParameter(':client', $client)
+                ->setParameter('client', $client)
         );
     }
 
