@@ -2,7 +2,7 @@
 
 namespace App\EventSubscriber;
 
-use App\Normalizer\AppNormalizerInterface;
+use App\Serializer\Normalizer\ExceptionNormalizerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -26,7 +26,7 @@ class ExceptionSubscriber implements EventSubscriberInterface
     /**
      * normalizers.
      *
-     * @var AppNormalizerInterface[]
+     * @var ExceptionNormalizerInterface[]
      */
     private array $normalizers = [];
 
@@ -73,9 +73,9 @@ class ExceptionSubscriber implements EventSubscriberInterface
      * addNormalizer
      * Method in charge of adding normalizers to ExceptionSubscriber.
      *
-     * @param AppNormalizerInterface $normalizer
+     * @param ExceptionNormalizerInterface $normalizer
      */
-    public function addNormalizer(AppNormalizerInterface $normalizer): void
+    public function addNormalizer(ExceptionNormalizerInterface $normalizer): void
     {
         $this->normalizers[] = $normalizer;
     }

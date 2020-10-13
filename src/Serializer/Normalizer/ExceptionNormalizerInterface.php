@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Normalizer;
+namespace App\Serializer\Normalizer;
 
 use Throwable;
 
-interface AppNormalizerInterface
+interface ExceptionNormalizerInterface
 {
     /**
      * normalize.

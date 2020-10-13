@@ -40,7 +40,7 @@ services:
 
     App\EventSubscriber\ExceptionSubscriber: '@app.exception_subscriber'
 
-    App\Normalizer\NotFoundHttpExceptionNormalizer:
+    App\Serializer\Normalizer\NotFoundHttpExceptionNormalizer:
         arguments: 
             - { type: 'Symfony\Component\HttpKernel\Exception\NotFoundHttpException' }
         tags:
