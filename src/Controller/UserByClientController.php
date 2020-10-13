@@ -5,9 +5,11 @@ namespace App\Controller;
 use App\Entity\Client;
 use App\Entity\User;
 use App\Repository\UserRepository;
+use App\Service\UserService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\Routing\Annotation\Route;
@@ -36,17 +38,12 @@ class UserByClientController extends AbstractController
      */
     public function collection(
         Client $client,
-        UserRepository $userRepository,
-        SerializerInterface $serializer
+        UserService $userService,
+        Request $request
     ): JsonResponse {
-        $users = $userRepository->findBy(['client' => $client]);
 
         return new JsonResponse(
-            $serializer->serialize(
-                $users,
-                'json',
-                ['groups' => 'get']
-            ),
+            $userService->getSerializedPaginatedUsersByClient($client, $request),
             Response::HTTP_OK,
             [],
             true
