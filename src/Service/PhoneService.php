@@ -2,9 +2,11 @@
 
 namespace App\Service;
 
+use App\Entity\Phone;
 use App\Repository\PhoneRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Serializer\SerializerInterface;
 
@@ -47,6 +49,39 @@ class PhoneService implements PhoneServiceInterface
         $this->serializer = $serializer;
         $this->constantsIni = $constantsIni;
     }
+    
+    /**
+     * getSerializedPhone
+     *
+     * @param  Phone $phone
+     * @return string
+     */
+    public function getSerializedPhone(Phone $phone): string
+    {
+        $phone = $this->serializer->serialize(
+            $phone,
+            'json',
+            [
+                'circular_reference_handler' => function (object $object) {
+                    return $object->getId();
+                },
+            ]
+        );
+
+        // after circular reference handling, there are some useless elements in linked objects
+        $phone = json_decode($phone, true);
+        foreach ($phone as $key => $value) {
+            if (is_array($value)) {
+                // delete useless id key (always first property)
+                array_shift($value);
+                // delete 4 last useless keys : "phone", "__initializer__", "__cloner__", "__isInitialized__"
+                array_splice($value, -4);
+                $phone[$key] = $value;
+            }
+        }
+        
+        return json_encode($phone);
+    }
 
     /**
      * getSerializedPaginatedPhones.
@@ -58,9 +93,13 @@ class PhoneService implements PhoneServiceInterface
     public function getSerializedPaginatedPhones(Request $request): string
     {
         $constants = $this->constantsIni->getConstantsIni();
-        $page = (int) $request->get('page', 1);
-        $limit = (int) $request->get('limit', $constants['phones']['number_per_page']);
+        $page = $request->query->getInt('page', 1);
+        $limit = $request->query->getInt('limit', $constants['phones']['number_per_page']);
 
+        if (empty($page) || empty($limit)) {
+            throw new BadRequestHttpException("The query parameters 'page' and 'limit' must be integers and not null.");
+        }
+        
         $max = $constants['phones']['limit_max'];
         if ($limit > $max) {
             $limit = $max;
