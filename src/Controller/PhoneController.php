@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Phone;
 use App\Repository\PhoneRepository;
 use App\Service\ConstantsIni;
+use App\Service\PhoneServiceInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -65,6 +66,7 @@ class PhoneController extends AbstractController
 
     /**
      * collection.
+     * Get a page of paginated phones.
      *
      * @Route(
      *     "/",
@@ -73,41 +75,15 @@ class PhoneController extends AbstractController
      *     stateless=true
      * )
      *
-     * @param PhoneRepository     $phoneRepository
-     * @param SerializerInterface $serializer
-     * @param ConstantsIni        $constantsIni
-     * @param Request             $request
+     * @param PhoneServiceInterface $phoneService
+     * @param Request               $request
      *
      * @return JsonResponse
      */
-    public function collection(PhoneRepository $phoneRepository, SerializerInterface $serializer, ConstantsIni $constantsIni, Request $request): JsonResponse
-    {
-        $constants = $constantsIni->getConstantsIni();
-        $page = $request->get("page", 1);
-        $limit = $request->get('limit', $constants['phones']['number_per_page']);
-
-        $max = $constants['phones']['limit_max'];
-        if ($limit > $max) {
-            $limit = $max;
-        }
-
-        $phones = $phoneRepository->getPaginatedPhones($page, $limit);
-
-        $pages = ceil($phones->count() / $limit);
-
-        if($page > $pages) {
-            throw new NotFoundHttpException("The asked page n°".$page." doesn't exist. The maximum number of pages is ". $pages, null, Response::HTTP_BAD_REQUEST);
-        }
-
-        $result['data'] = $phones;
-        $result['meta'] = ['current_page' => $page, 'number_per_page' => $limit, 'total_pages' => $pages];
-        
+    public function collection(PhoneServiceInterface $phoneService, Request $request): JsonResponse
+    {        
         return new JsonResponse(
-            $serializer->serialize(
-                $result,
-                'json',
-                ['groups' => 'collection']
-            ),
+            $phoneService->getSerializedPaginatedPhones($request),
             Response::HTTP_OK,
             [],
             true
