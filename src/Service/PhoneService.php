@@ -5,9 +5,6 @@ namespace App\Service;
 use App\Entity\Phone;
 use App\Repository\PhoneRepository;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Serializer\SerializerInterface;
 
 class PhoneService implements PhoneServiceInterface
@@ -29,9 +26,9 @@ class PhoneService implements PhoneServiceInterface
     /**
      * constantsIni.
      *
-     * @var ConstantsIni
+     * @var PaginationServiceInterface
      */
-    private ConstantsIni $constantsIni;
+    private PaginationServiceInterface $paginationService;
 
     /**
      * __construct.
@@ -43,11 +40,11 @@ class PhoneService implements PhoneServiceInterface
     public function __construct(
         PhoneRepository $phoneRepository,
         SerializerInterface $serializer,
-        ConstantsIni $constantsIni
+        PaginationServiceInterface $paginationService
     ) {
         $this->phoneRepository = $phoneRepository;
         $this->serializer = $serializer;
-        $this->constantsIni = $constantsIni;
+        $this->paginationService = $paginationService;
     }
 
     /**
@@ -97,34 +94,12 @@ class PhoneService implements PhoneServiceInterface
      */
     public function getSerializedPaginatedPhones(Request $request): string
     {
-        $constants = $this->constantsIni->getConstantsIni();
-        $page = $request->query->getInt('page', 1);
-        $limit = $request->query->getInt('limit', $constants['phones']['number_per_page']);
-
-        if (empty($page) || empty($limit)) {
-            throw new BadRequestHttpException("The query parameters 'page' and 'limit' must be integers and not null.");
-        }
-
-        $max = $constants['phones']['limit_max'];
-        if ($limit > $max) {
-            $limit = $max;
-        }
+        $params = $this->paginationService->getQueryParameters($request, 'phones');
+        $page = $params['page'];
+        $limit = $params['limit'];
 
         $phones = $this->phoneRepository->getPaginatedPhones($page, $limit);
 
-        $pages = ceil($phones->count() / $limit);
-
-        if ($page > $pages) {
-            throw new NotFoundHttpException('The asked page n°'.$page." doesn't exist. The maximum number of pages is ".$pages.'.', null, Response::HTTP_BAD_REQUEST);
-        }
-
-        $result['data'] = $phones;
-        $result['meta'] = ['current_page' => $page, 'number_per_page' => $limit, 'total_pages' => $pages];
-
-        return $this->serializer->serialize(
-            $result,
-            'json',
-            ['groups' => 'collection']
-        );
+        return $this->paginationService->getSerializedPaginatedData($phones, $page, $limit, ['groups' => 'collection']);
     }
 }
