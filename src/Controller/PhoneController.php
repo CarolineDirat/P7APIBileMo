@@ -86,8 +86,9 @@ class PhoneController extends AbstractController
         $page = $request->get("page", 1);
         $limit = $request->get('limit', $constants['phones']['number_per_page']);
 
-        if ($limit > $constants['phones']['limit_max']) {
-            $limit = $constants['phones']['limit_max'];
+        $max = $constants['phones']['limit_max'];
+        if ($limit > $max) {
+            $limit = $max;
         }
 
         $phones = $phoneRepository->getPaginatedPhones($page, $limit);
