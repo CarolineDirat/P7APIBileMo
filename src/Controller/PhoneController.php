@@ -4,9 +4,12 @@ namespace App\Controller;
 
 use App\Entity\Phone;
 use App\Repository\PhoneRepository;
+use App\Service\ConstantsIni;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
 
@@ -72,14 +75,35 @@ class PhoneController extends AbstractController
      *
      * @param PhoneRepository     $phoneRepository
      * @param SerializerInterface $serializer
+     * @param ConstantsIni        $constantsIni
+     * @param Request             $request
      *
      * @return JsonResponse
      */
-    public function collection(PhoneRepository $phoneRepository, SerializerInterface $serializer): JsonResponse
+    public function collection(PhoneRepository $phoneRepository, SerializerInterface $serializer, ConstantsIni $constantsIni, Request $request): JsonResponse
     {
+        $constants = $constantsIni->getConstantsIni();
+        $page = $request->get("page", 1);
+        $limit = $request->get('limit', $constants['phones']['number_per_page']);
+
+        if ($limit > $constants['phones']['limit_max']) {
+            $limit = $constants['phones']['limit_max'];
+        }
+
+        $phones = $phoneRepository->getPaginatedPhones($page, $limit);
+
+        $pages = ceil($phones->count() / $limit);
+
+        if($page > $pages) {
+            throw new NotFoundHttpException("The asked page n°".$page." doesn't exist. The maximum number of pages is ". $pages, null, Response::HTTP_BAD_REQUEST);
+        }
+
+        $result['data'] = $phones;
+        $result['meta'] = ['current_page' => $page, 'number_per_page' => $limit, 'total_pages' => $pages];
+        
         return new JsonResponse(
             $serializer->serialize(
-                $phoneRepository->findAll(),
+                $result,
                 'json',
                 ['groups' => 'collection']
             ),
