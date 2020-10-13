@@ -53,6 +53,8 @@ class PhoneService implements PhoneServiceInterface
     /**
      * getSerializedPhone.
      *
+     * @see PhoneServiceInterface
+     *
      * @param Phone $phone
      *
      * @return string
@@ -88,6 +90,8 @@ class PhoneService implements PhoneServiceInterface
      * getSerializedPaginatedPhones.
      *
      * @see PhoneServiceInterface
+     *
+     * @param Request $request it can contain as parameters the 'page' and the number of phones per pages ('limit')
      *
      * @return string
      */
