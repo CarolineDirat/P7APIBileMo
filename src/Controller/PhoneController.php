@@ -3,14 +3,11 @@
 namespace App\Controller;
 
 use App\Entity\Phone;
-use App\Repository\PhoneRepository;
-use App\Service\ConstantsIni;
 use App\Service\PhoneServiceInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
 
@@ -81,7 +78,7 @@ class PhoneController extends AbstractController
      * @return JsonResponse
      */
     public function collection(PhoneServiceInterface $phoneService, Request $request): JsonResponse
-    {        
+    {
         return new JsonResponse(
             $phoneService->getSerializedPaginatedPhones($request),
             Response::HTTP_OK,

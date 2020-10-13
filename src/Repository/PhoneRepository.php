@@ -19,18 +19,19 @@ class PhoneRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Phone::class);
     }
-    
+
     /**
-     * getPaginatedPhones
+     * getPaginatedPhones.
      *
-     * @param  int $page  page number
-     * @param  int $limit number of phones per page
-     * 
+     * @param int $page  page number
+     * @param int $limit number of phones per page
+     *
      * @return Paginator<Phone>
      */
     public function getPaginatedPhones(int $page, int $limit): Paginator
     {
-        return new Paginator($this
+        return new Paginator(
+            $this
             ->createQueryBuilder('p')
             ->addSelect('screen')
             ->leftJoin('p.screen', 'screen')

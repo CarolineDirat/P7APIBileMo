@@ -7,7 +7,7 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 class ConstantsIni
 {
     private ParameterBagInterface $parameterBag;
-    
+
     /**
      * constantsIni
      * Array of constants contained in the constants.ini file.
@@ -25,9 +25,9 @@ class ConstantsIni
             INI_SCANNER_TYPED
         );
     }
-    
+
     /**
-     * getConstantsIni
+     * getConstantsIni.
      *
      * @return array<string, mixed>
      */

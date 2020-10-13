@@ -9,32 +9,31 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Serializer\SerializerInterface;
 
 class PhoneService implements PhoneServiceInterface
-{    
-    
+{
     /**
-     * phoneRepository
+     * phoneRepository.
      *
      * @var PhoneRepository
      */
     private PhoneRepository $phoneRepository;
-    
+
     /**
-     * serializer
+     * serializer.
      *
      * @var SerializerInterface;
      */
     private SerializerInterface $serializer;
-    
+
     /**
-     * constantsIni
+     * constantsIni.
      *
      * @var ConstantsIni
      */
     private ConstantsIni $constantsIni;
-        
+
     /**
-     * __construct
-     * 
+     * __construct.
+     *
      * @param PhoneRepository     $phoneRepository
      * @param SerializerInterface $serializer
      * @param ConstantsIni        $constantsIni
@@ -50,8 +49,8 @@ class PhoneService implements PhoneServiceInterface
     }
 
     /**
-     * getSerializedPaginatedPhones
-     * 
+     * getSerializedPaginatedPhones.
+     *
      * @see PhoneServiceInterface
      *
      * @return string
@@ -71,8 +70,8 @@ class PhoneService implements PhoneServiceInterface
 
         $pages = ceil($phones->count() / $limit);
 
-        if($page > $pages) {
-            throw new NotFoundHttpException("The asked page n°".$page." doesn't exist. The maximum number of pages is ". $pages .".", null, Response::HTTP_BAD_REQUEST);
+        if ($page > $pages) {
+            throw new NotFoundHttpException('The asked page n°'.$page." doesn't exist. The maximum number of pages is ".$pages.'.', null, Response::HTTP_BAD_REQUEST);
         }
 
         $result['data'] = $phones;
@@ -85,4 +84,3 @@ class PhoneService implements PhoneServiceInterface
         );
     }
 }
-
