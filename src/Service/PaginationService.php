@@ -28,7 +28,7 @@ class PaginationService implements PaginationServiceInterface
     /**
      * __construct.
      *
-     * @param ConstantsIni        $constantsIni
+     * @param ConstantsIni $constantsIni
      */
     public function __construct(
         ConstantsIni $constantsIni,
@@ -39,10 +39,11 @@ class PaginationService implements PaginationServiceInterface
     }
 
     /**
-     * getQueryParameters
+     * getQueryParameters.
      *
      * @param Request $request
      * @param string  $entities keys from constants.ini file
+     *
      * @return array<string,string>
      */
     public function getQueryParameters(Request $request, string $entities): array
@@ -62,15 +63,15 @@ class PaginationService implements PaginationServiceInterface
 
         return ['page' => $page, 'limit' => $limit];
     }
-    
+
     /**
-     * getSerializedPaginatedData
+     * getSerializedPaginatedData.
      *
      * @param Paginator $data
      * @param int       $page
      * @param int       $limit
      * @param array     $context Options normalizer/encoders have to access
-     * 
+     *
      * @return string
      */
     public function getSerializedPaginatedData(Paginator $data, int $page, int $limit, array $context): string

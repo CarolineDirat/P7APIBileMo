@@ -6,7 +6,7 @@ use App\Entity\Client;
 use Symfony\Component\HttpFoundation\Request;
 
 interface UserServiceInterface
-{    
+{
     /**
      * getSerializedPaginatedUsersByClient
      * Return a page of serialized users (in json format), linked by a client.
@@ -14,7 +14,7 @@ interface UserServiceInterface
      *
      * @param Client  $client
      * @param Request $request it can contain as parameters the 'page' and the number of users per pages ('limit')
-     * 
+     *
      * @return string
      */
     public function getSerializedPaginatedUsersByClient(Client $client, Request $request): string;
