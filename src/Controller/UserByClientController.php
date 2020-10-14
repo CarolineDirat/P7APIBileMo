@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use App\Entity\Client;
 use App\Entity\User;
-use App\Repository\UserRepository;
 use App\Service\UserService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -30,9 +29,9 @@ class UserByClientController extends AbstractController
      *     stateless=true
      * )
      *
-     * @param Client              $client
-     * @param UserRepository      $userRepository
-     * @param SerializerInterface $serializer
+     * @param Client      $client
+     * @param UserService $userService,
+     * @param Request     $request
      *
      * @return JsonResponse
      */
