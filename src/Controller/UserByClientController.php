@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Client;
 use App\Entity\User;
+use App\Form\AppFormFactoryInterface;
 use App\Service\UserService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -12,7 +13,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Serializer\Encoder\DecoderInterface;
 use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
  * UserByClientController.
@@ -23,7 +26,7 @@ class UserByClientController extends AbstractController
 {
     /**
      * @Route(
-     *     "/",
+     *     path="",
      *     name="collection_get",
      *     methods={"GET"},
      *     stateless=true
@@ -53,7 +56,7 @@ class UserByClientController extends AbstractController
      * Get details of one user linked by a client.
      *
      * @Route(
-     *     "/{user_uuid}",
+     *     path="/{user_uuid}",
      *     name="item_get",
      *     methods={"GET"},
      *     stateless=true
@@ -83,6 +86,110 @@ class UserByClientController extends AbstractController
         return new JsonResponse(
             $serializer->serialize($user, 'json', ['groups' => 'get']),
             Response::HTTP_OK,
+            [],
+            true
+        );
+    }
+
+        
+    /**
+     * post
+     * To add a user linked by a client
+     * 
+     * @Route(
+     *      path="",
+     *      name="collection_post",
+     *      methods={"POST"},
+     * )
+     *
+     * @param Client $client
+     * 
+     * @return JsonResponse
+     */
+    public function post(
+        Client $client,
+        Request $request,
+        AppFormFactoryInterface $appFormFactory,
+        SerializerInterface $serializer,
+        ValidatorInterface $validator,
+        DecoderInterface $decoder
+    ): JsonResponse {
+        // check data body
+        $data =  $decoder->decode($request->getContent(), 'json');
+        $validProperties = ['email', 'lastname', 'firstname', 'password'];
+        $dataProperties = array_keys($data);
+        $result['code'] = 0;
+        foreach ($dataProperties as $value) {
+            if (!in_array($value, $validProperties, true)) {
+                $result['code'] = JsonResponse::HTTP_BAD_REQUEST;
+                $result['messages'][] = 'Bad Request : The data name {' . $value . '} is not valid.';
+            }
+        }
+        
+        $missingProperties = array_diff($validProperties, $dataProperties);
+        if (!empty($missingProperties)) {
+            $result['code'] = JsonResponse::HTTP_BAD_REQUEST;
+            foreach ($missingProperties as $value) {
+                $result['messages'][] = 'Bad Request : The data name {' . $value . '} is missing';
+            }
+        }
+
+        if ($result['code'] === JsonResponse::HTTP_BAD_REQUEST) {
+            $result['valid_properties'] = $validProperties;
+
+            return new JsonResponse(
+                $serializer->serialize($result, 'json'),
+                JsonResponse::HTTP_BAD_REQUEST,
+                [],
+                true
+            );
+        }
+
+        // process data body
+        $user = $serializer->deserialize($request->getContent(), User::class, 'json');
+
+        $form = $appFormFactory->create('post-user', $user, ['csrf_protection' => false]);
+        $form->submit($user);
+
+        if (!($user instanceof User)) {
+            $result['code'] = JsonResponse::HTTP_INTERNAL_SERVER_ERROR;
+            $result['message'] = 'Internal Server Error. You can join us by email : bilemo@email.com';
+            return new JsonResponse(
+                $serializer->serialize($result, 'json'),
+                JsonResponse::HTTP_INTERNAL_SERVER_ERROR,
+                [],
+                true
+            );            
+        }
+        $user->setClient($client);
+        $user->setPassword(password_hash($user->getPassword(), PASSWORD_BCRYPT));
+
+        $errors = $validator->validate($user);
+
+        if (count($errors) > 0) {
+            /*
+            * Uses a __toString method on the $errors variable which is a
+            * ConstraintViolationList object. This gives us a nice string
+            * for debugging.
+            */
+            // $errorsString = (string) $errors;
+    
+            return new JsonResponse(
+                $serializer->serialize($errors, 'json'),
+                JsonResponse::HTTP_BAD_REQUEST,
+                [],
+                true
+            );
+            
+        }
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($user);
+        $em->flush();
+
+        return new JsonResponse(
+            $serializer->serialize($user, 'json', ['groups' => 'get']), 
+            JsonResponse::HTTP_CREATED,
             [],
             true
         );
