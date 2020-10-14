@@ -39,7 +39,6 @@ class GuestFixtures extends Fixture
         $client = new Client();
         $client->setUsername('FirstClient');
         $client->setPassword($this->encoder->encodePassword($client, 'password'));
-        $client->setUuid(Uuid::uuid4());
         $client->setEmail('first.client@mail.com');
 
         $manager->persist($client);
@@ -47,7 +46,6 @@ class GuestFixtures extends Fixture
         // create users linked by the client
         for ($i = 0; $i < 10; ++$i) {
             $user = new User();
-            $user->setUuid(Uuid::uuid4());
             $user->setEmail(sprintf('user%d@mail.com', $i));
             $user->setPassword(sha1($user->getUuid()));
             $user->setFirstname(sprintf('firstname%d', $i));
@@ -61,7 +59,6 @@ class GuestFixtures extends Fixture
         $client = new Client();
         $client->setUsername('SecondClient');
         $client->setPassword($this->encoder->encodePassword($client, 'password'));
-        $client->setUuid(Uuid::uuid4());
         $client->setEmail('second.client@mail.com');
 
         $manager->persist($client);
