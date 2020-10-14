@@ -5,7 +5,7 @@ namespace App\Controller;
 use App\Entity\Client;
 use App\Entity\User;
 use App\Form\AppFormFactoryInterface;
-use App\Service\ErrorBadRequestService;
+use App\Service\BodyRequestServiceInterface;
 use App\Service\UserService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -113,34 +113,14 @@ class UserByClientController extends AbstractController
         AppFormFactoryInterface $appFormFactory,
         SerializerInterface $serializer,
         ValidatorInterface $validator,
-        DecoderInterface $decoder
+        DecoderInterface $decoder,
+        BodyRequestServiceInterface $bodyRequestService
     ): JsonResponse {
         // check data body
         $data =  $decoder->decode($request->getContent(), 'json');
         $validProperties = ['email', 'lastname', 'firstname', 'password'];
-        $dataProperties = array_keys($data);
-        $errorBadRequest = new ErrorBadRequestService($serializer);
-
-        $error = false;
-        foreach ($dataProperties as $value) {
-            if (!in_array($value, $validProperties, true)) {
-                $error = true;
-                $errorBadRequest->addBodyValueToArray('messages', 'Bad Request : The data name {' . (string) $value . '} is not valid.');
-            }
-        }
-        
-        $missingProperties = array_diff($validProperties, $dataProperties);
-        if (!empty($missingProperties)) {
-            $error = true;
-            foreach ($missingProperties as $value) {
-                $errorBadRequest->addBodyValueToArray('messages', 'Bad Request : The data name {' . (string) $value . '} is missing');
-            }
-        }
-
-        if (!empty($error)) {
-            $errorBadRequest->addBodyArray('valid_properties', $validProperties);
-
-            return $errorBadRequest->returnErrorJsonResponse();
+        if (!$bodyRequestService->isValid($data, $validProperties)) {
+            return $bodyRequestService->getErrorBadRequest()->returnErrorJsonResponse();
         }
 
         // process data body
