@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Client;
 use App\Entity\User;
 use App\Form\AppFormFactoryInterface;
+use App\Service\ErrorBadRequestService;
 use App\Service\UserService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -118,31 +119,28 @@ class UserByClientController extends AbstractController
         $data =  $decoder->decode($request->getContent(), 'json');
         $validProperties = ['email', 'lastname', 'firstname', 'password'];
         $dataProperties = array_keys($data);
-        $result['code'] = 0;
+        $errorBadRequest = new ErrorBadRequestService($serializer);
+
+        $error = false;
         foreach ($dataProperties as $value) {
             if (!in_array($value, $validProperties, true)) {
-                $result['code'] = JsonResponse::HTTP_BAD_REQUEST;
-                $result['messages'][] = 'Bad Request : The data name {' . $value . '} is not valid.';
+                $error = true;
+                $errorBadRequest->addBodyValueToArray('messages', 'Bad Request : The data name {' . (string) $value . '} is not valid.');
             }
         }
         
         $missingProperties = array_diff($validProperties, $dataProperties);
         if (!empty($missingProperties)) {
-            $result['code'] = JsonResponse::HTTP_BAD_REQUEST;
+            $error = true;
             foreach ($missingProperties as $value) {
-                $result['messages'][] = 'Bad Request : The data name {' . $value . '} is missing';
+                $errorBadRequest->addBodyValueToArray('messages', 'Bad Request : The data name {' . (string) $value . '} is missing');
             }
         }
 
-        if ($result['code'] === JsonResponse::HTTP_BAD_REQUEST) {
-            $result['valid_properties'] = $validProperties;
+        if (!empty($error)) {
+            $errorBadRequest->addBodyArray('valid_properties', $validProperties);
 
-            return new JsonResponse(
-                $serializer->serialize($result, 'json'),
-                JsonResponse::HTTP_BAD_REQUEST,
-                [],
-                true
-            );
+            return $errorBadRequest->returnErrorJsonResponse();
         }
 
         // process data body
