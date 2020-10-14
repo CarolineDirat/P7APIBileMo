@@ -139,8 +139,6 @@ class UserByClientController extends AbstractController
                 true
             );            
         }
-        $user->setClient($client);
-        $user->setPassword(password_hash($user->getPassword(), PASSWORD_BCRYPT));
 
         $errors = $validator->validate($user);
 
@@ -160,6 +158,9 @@ class UserByClientController extends AbstractController
             );
             
         }
+
+        $user->setClient($client);
+        $user->setPassword(password_hash($user->getPassword(), PASSWORD_BCRYPT));
 
         $em = $this->getDoctrine()->getManager();
         $em->persist($user);
