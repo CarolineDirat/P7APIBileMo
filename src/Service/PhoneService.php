@@ -33,9 +33,9 @@ class PhoneService implements PhoneServiceInterface
     /**
      * __construct.
      *
-     * @param PhoneRepository     $phoneRepository
-     * @param SerializerInterface $serializer
-     * @param ConstantsIni        $constantsIni
+     * @param PhoneRepository            $phoneRepository
+     * @param SerializerInterface        $serializer
+     * @param PaginationServiceInterface $paginationService
      */
     public function __construct(
         PhoneRepository $phoneRepository,

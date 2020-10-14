@@ -33,9 +33,9 @@ class UserService implements UserServiceInterface
     /**
      * __construct.
      *
-     * @param PhoneRepository     $phoneRepository
-     * @param SerializerInterface $serializer
-     * @param ConstantsIni        $constantsIni
+     * @param UserRepository             $userRepository,
+     * @param SerializerInterface        $serializer
+     * @param PaginationServiceInterface $paginationService
      */
     public function __construct(
         UserRepository $userRepository,
