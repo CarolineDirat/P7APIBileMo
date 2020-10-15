@@ -112,11 +112,11 @@ class UserByClientController extends AbstractController
     ): JsonResponse {
         return $userService->processPostUserByClient($client, $request);
     }
-    
+
     /**
      * put
-     * To edit a user linked by a client
-     * 
+     * To edit a user linked by a client.
+     *
      * @Route(
      *     path="/{user_uuid}",
      *     name="collection_put",
@@ -124,10 +124,10 @@ class UserByClientController extends AbstractController
      * )
      *
      * @ParamConverter("user", options={"mapping": {"user_uuid": "uuid"}})
-     * 
-     * @param Client $client
-     * @param User $user
-     * @param Request $request
+     *
+     * @param Client              $client
+     * @param User                $user
+     * @param Request             $request
      * @param UserByClientService $userService
      *
      * @return JsonResponse
@@ -138,7 +138,6 @@ class UserByClientController extends AbstractController
         Request $request,
         UserByClientService $userService
     ): JsonResponse {
-        
         if ($user->getClient() !== $client) {
             throw new AccessDeniedHttpException(
                 'You cannot access to the user by this client.',

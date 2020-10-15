@@ -71,7 +71,7 @@ class PaginationService implements PaginationServiceInterface
      * @param int                  $page
      * @param int                  $limit
      * @param array<string, mixed> $context Options normalizer/encoders have to access
-     * 
+     *
      * @throws NotFoundHttpException
      *
      * @return string

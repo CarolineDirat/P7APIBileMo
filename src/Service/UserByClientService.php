@@ -69,9 +69,9 @@ class UserByClientService implements UserByClientServiceInterface
      * @var ManagerRegistry
      */
     private ManagerRegistry $managerRegistry;
-    
+
     /**
-     * validator
+     * validator.
      *
      * @var ValidatorInterface
      */
@@ -132,8 +132,8 @@ class UserByClientService implements UserByClientServiceInterface
     /**
      * processPostUserByClient.
      *
-     * @param Client             $client
-     * @param Request            $request
+     * @param Client  $client
+     * @param Request $request
      *
      * @return JsonResponse
      */
@@ -247,7 +247,7 @@ class UserByClientService implements UserByClientServiceInterface
 
         $em = $this->managerRegistry->getManager();
         $em->flush();
-        
+
         return new JsonResponse(
             $this->serializer->serialize($user, 'json', ['groups' => 'get']),
             JsonResponse::HTTP_OK,
@@ -271,7 +271,7 @@ class UserByClientService implements UserByClientServiceInterface
         $users = $this->userRepository->findBy(['client' => $client]);
         foreach ($users as $value) {
             if (
-                $value->getEmail() === $user->getEmail() && 
+                $value->getEmail() === $user->getEmail() &&
                 $value->getId() !== $user->getId()
             ) {
                 throw new AccessDeniedHttpException(
