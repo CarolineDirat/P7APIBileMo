@@ -4,7 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Client;
 use App\Entity\User;
-use App\Service\UserByClientService;
+use App\Service\UserByClientServiceInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -28,15 +28,15 @@ class UserByClientController extends AbstractController
      *     stateless=true
      * )
      *
-     * @param Client              $client
-     * @param UserByClientService $userService,
-     * @param Request             $request
+     * @param Client                       $client
+     * @param UserByClientServiceInterface $userService,
+     * @param Request                      $request
      *
      * @return JsonResponse
      */
     public function collection(
         Client $client,
-        UserByClientService $userService,
+        UserByClientServiceInterface $userService,
         Request $request
     ): JsonResponse {
         return new JsonResponse(
@@ -60,9 +60,9 @@ class UserByClientController extends AbstractController
      *
      * @ParamConverter("user", options={"mapping": {"user_uuid": "uuid"}})
      *
-     * @param Client              $client
-     * @param User                $user
-     * @param SerializerInterface $serializer
+     * @param Client                       $client
+     * @param User                         $user
+     * @param SerializerInterfaceInterface $serializer
      *
      * @throws AccessDeniedHttpException
      *
@@ -99,16 +99,16 @@ class UserByClientController extends AbstractController
      *     methods={"POST"},
      * )
      *
-     * @param Client              $client
-     * @param Request             $request
-     * @param UserByClientService $userService
+     * @param Client                       $client
+     * @param Request                      $request
+     * @param UserByClientServiceInterface $userService
      *
      * @return JsonResponse
      */
     public function post(
         Client $client,
         Request $request,
-        UserByClientService $userService
+        UserByClientServiceInterface $userService
     ): JsonResponse {
         return $userService->processPostUserByClient($client, $request);
     }
@@ -125,10 +125,10 @@ class UserByClientController extends AbstractController
      *
      * @ParamConverter("user", options={"mapping": {"user_uuid": "uuid"}})
      *
-     * @param Client              $client
-     * @param User                $user
-     * @param Request             $request
-     * @param UserByClientService $userService
+     * @param Client                       $client
+     * @param User                         $user
+     * @param Request                      $request
+     * @param UserByClientServiceInterface $userService
      *
      * @return JsonResponse
      */
@@ -136,7 +136,7 @@ class UserByClientController extends AbstractController
         Client $client,
         User $user,
         Request $request,
-        UserByClientService $userService
+        UserByClientServiceInterface $userService
     ): JsonResponse {
         if ($user->getClient() !== $client) {
             throw new AccessDeniedHttpException(
@@ -147,5 +147,35 @@ class UserByClientController extends AbstractController
         }
 
         return $userService->processPutUserByClient($client, $user, $request);
+    }
+
+    /**
+     * delete
+     * To delete a user linked by a client.
+     *
+     * @Route(
+     *     path="/{user_uuid}",
+     *     name="collection_delete",
+     *     methods={"DELETE"}
+     * )
+     *
+     * @ParamConverter("user", options={"mapping": {"user_uuid": "uuid"}})
+     *
+     * @param Client $client
+     * @param User   $user
+     *
+     * @return JsonResponse
+     */
+    public function delete(Client $client, User $user, UserByClientServiceInterface $userService): JsonResponse
+    {
+        if ($user->getClient() !== $client) {
+            throw new AccessDeniedHttpException(
+                'You cannot access to the user by this client.',
+                null,
+                JsonResponse::HTTP_FORBIDDEN
+            );
+        }
+
+        return $userService->processDeleteUserByClient($user);
     }
 }
