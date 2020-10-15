@@ -27,9 +27,8 @@ interface UserByClientServiceInterface
      *
      * @param Client             $client
      * @param Request            $request
-     * @param ValidatorInterface $validator
      *
      * @return JsonResponse
      */
-    public function processPostUserByClient(Client $client, Request $request, ValidatorInterface $validator): JsonResponse;
+    public function processPostUserByClient(Client $client, Request $request): JsonResponse;
 }

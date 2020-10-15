@@ -8,6 +8,7 @@ use App\Form\AppFormFactoryInterface;
 use App\Repository\UserRepository;
 use App\Service\ErrorResponse\InternalServerErrorResponse;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Bundle\MakerBundle\Validator;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
@@ -67,6 +68,13 @@ class UserByClientService implements UserByClientServiceInterface
      * @var ManagerRegistry
      */
     private ManagerRegistry $managerRegistry;
+    
+    /**
+     * validator
+     *
+     * @var ValidatorInterface
+     */
+    private ValidatorInterface $validator;
 
     /**
      * __construct.
@@ -86,7 +94,8 @@ class UserByClientService implements UserByClientServiceInterface
         DecoderInterface $decoder,
         BodyRequestServiceInterface $bodyRequestService,
         AppFormFactoryInterface $appFormFactory,
-        ManagerRegistry $managerRegistry
+        ManagerRegistry $managerRegistry,
+        ValidatorInterface $validator
     ) {
         $this->userRepository = $userRepository;
         $this->serializer = $serializer;
@@ -95,6 +104,7 @@ class UserByClientService implements UserByClientServiceInterface
         $this->bodyRequestService = $bodyRequestService;
         $this->appFormFactory = $appFormFactory;
         $this->managerRegistry = $managerRegistry;
+        $this->validator = $validator;
     }
 
     /**
@@ -123,11 +133,10 @@ class UserByClientService implements UserByClientServiceInterface
      *
      * @param Client             $client
      * @param Request            $request
-     * @param ValidatorInterface $validator
      *
      * @return JsonResponse
      */
-    public function processPostUserByClient(Client $client, Request $request, ValidatorInterface $validator): JsonResponse
+    public function processPostUserByClient(Client $client, Request $request): JsonResponse
     {
         // check data body
         $data = $this->decoder->decode($request->getContent(), 'json');
@@ -149,7 +158,7 @@ class UserByClientService implements UserByClientServiceInterface
             return $internalServerError->returnErrorJsonResponse();
         }
 
-        $errors = $validator->validate($user);
+        $errors = $this->validator->validate($user);
         if (count($errors) > 0) {
             return new JsonResponse(
                 $this->serializer->serialize($errors, 'json'),

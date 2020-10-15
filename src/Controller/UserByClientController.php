@@ -102,7 +102,6 @@ class UserByClientController extends AbstractController
      *
      * @param Client              $client
      * @param Request             $request
-     * @param ValidatorInterface  $validator
      * @param UserByClientService $userService
      *
      * @return JsonResponse
@@ -110,9 +109,8 @@ class UserByClientController extends AbstractController
     public function post(
         Client $client,
         Request $request,
-        ValidatorInterface $validator,
         UserByClientService $userService
     ): JsonResponse {
-        return $userService->processPostUserByClient($client, $request, $validator);
+        return $userService->processPostUserByClient($client, $request);
     }
 }
