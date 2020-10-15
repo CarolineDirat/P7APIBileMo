@@ -8,7 +8,6 @@ use App\Service\PhoneServiceInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -37,7 +36,7 @@ class PhoneController extends AbstractController
     {
         return new JsonResponse(
             $phoneService->getSerializedPhone($phone),
-            Response::HTTP_OK,
+            JsonResponse::HTTP_OK,
             [],
             true
         );
@@ -63,7 +62,7 @@ class PhoneController extends AbstractController
     {
         return new JsonResponse(
             $phoneService->getSerializedPaginatedPhones($request),
-            Response::HTTP_OK,
+            JsonResponse::HTTP_OK,
             [],
             true
         );

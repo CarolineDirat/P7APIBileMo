@@ -9,7 +9,6 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
@@ -43,7 +42,7 @@ class UserByClientController extends AbstractController
     ): JsonResponse {
         return new JsonResponse(
             $userService->getSerializedPaginatedUsersByClient($client, $request),
-            Response::HTTP_OK,
+            JsonResponse::HTTP_OK,
             [],
             true
         );
@@ -85,7 +84,7 @@ class UserByClientController extends AbstractController
 
         return new JsonResponse(
             $serializer->serialize($user, 'json', ['groups' => 'get']),
-            Response::HTTP_OK,
+            JsonResponse::HTTP_OK,
             [],
             true
         );
