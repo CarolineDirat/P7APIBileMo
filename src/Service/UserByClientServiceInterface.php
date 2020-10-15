@@ -42,4 +42,14 @@ interface UserByClientServiceInterface
      * @return JsonResponse
      */
     public function processPutUserByClient(Client $client, User $user, Request $request): JsonResponse;
+
+    /**
+     * processDeleteUserByClient
+     * Delete a user linked by a client
+     *
+     * @param User $user
+     * 
+     * @return JsonResponse
+     */
+    public function processDeleteUserByClient(User $user): JsonResponse;
 }
