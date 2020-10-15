@@ -163,9 +163,11 @@ class UserByClientController extends AbstractController
         $users = $userRepository->findBy(['client' => $client]);
         foreach ($users as $value) {
             if ($value->getEmail() === $user->getEmail()) {
-                $forbiddenError = new ForbiddenErrorResponse($serializer);
-                $forbiddenError->addBodyValue('message', 'Forbidden. The email <'. $user->getEmail() .'> already exists.');
-                return $forbiddenError->returnErrorJsonResponse();
+                throw new AccessDeniedHttpException(
+                    'Forbidden. The email <'. $user->getEmail() .'> already exists.',
+                    null,
+                    JsonResponse::HTTP_FORBIDDEN
+                );
             }
         }
 
