@@ -6,6 +6,7 @@ use App\Entity\Client;
 use App\Entity\User;
 use App\Form\AppFormFactoryInterface;
 use App\Service\BodyRequestServiceInterface;
+use App\Service\ErrorResponse\InternalServerErrorResponse;
 use App\Service\UserService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -130,14 +131,9 @@ class UserByClientController extends AbstractController
         $form->submit($user);
 
         if (!($user instanceof User)) {
-            $result['code'] = JsonResponse::HTTP_INTERNAL_SERVER_ERROR;
-            $result['message'] = 'Internal Server Error. You can join us by email : bilemo@email.com';
-            return new JsonResponse(
-                $serializer->serialize($result, 'json'),
-                JsonResponse::HTTP_INTERNAL_SERVER_ERROR,
-                [],
-                true
-            );            
+            $internalServerError = new InternalServerErrorResponse($serializer);
+            $internalServerError->addBodyValue('message', 'Internal Server Error. You can join us by email : bilemo@email.com');
+            return $internalServerError->returnErrorJsonResponse();     
         }
 
         $errors = $validator->validate($user);
