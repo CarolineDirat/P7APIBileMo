@@ -3,9 +3,11 @@
 namespace App\Service;
 
 use App\Entity\Client;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-interface UserServiceInterface
+interface UserByClientServiceInterface
 {
     /**
      * getSerializedPaginatedUsersByClient
@@ -18,4 +20,16 @@ interface UserServiceInterface
      * @return string
      */
     public function getSerializedPaginatedUsersByClient(Client $client, Request $request): string;
+
+    /**
+     * processPostUserByClient
+     * After checks, add the user to the client.
+     *
+     * @param Client             $client
+     * @param Request            $request
+     * @param ValidatorInterface $validator
+     *
+     * @return JsonResponse
+     */
+    public function processPostUserByClient(Client $client, Request $request, ValidatorInterface $validator): JsonResponse;
 }

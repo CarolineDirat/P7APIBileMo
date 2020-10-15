@@ -5,8 +5,10 @@ namespace App\Entity;
 use App\Repository\UserRepository;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
+use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
@@ -32,9 +34,18 @@ class User
     private UuidInterface $uuid;
 
     /**
-     * @ORM\Column(type="string", length=200, name="bm_email", unique=true)
+     * @ORM\Column(type="string", length=200, name="bm_email")
      *
      * @Groups({"get"})
+     *
+     * @Assert\NotBlank
+     * @Assert\Length(
+     *      min = 3,
+     *      max = 200,
+     *      minMessage = "This value is too long. Your email must be at least {{ limit }} characters long",
+     *      maxMessage = "This value is too short. Your email cannot be longer than {{ limit }} characters",
+     * )
+     * @Assert\Email(message = "The email '{{ value }}' is not a valid email.")
      *
      * @var string email
      */
@@ -43,7 +54,15 @@ class User
     /**
      * @ORM\Column(type="string", length=255, name="bm_password")
      *
-     * @var string password
+     * @Assert\NotBlank
+     * @Assert\Length(
+     *      min = 8,
+     *      max = 255,
+     *      minMessage = "This value is too short. Your password must be at least {{ limit }} characters long",
+     *      maxMessage = "This value is too long. Your password cannot be longer than {{ limit }} characters",
+     * )
+     *
+     * @var string password The hashing password
      */
     private string $password;
 
@@ -51,6 +70,14 @@ class User
      * @ORM\Column(type="string", length=45, name="bm_firstname")
      *
      * @Groups({"get"})
+     *
+     * @Assert\NotBlank
+     * @Assert\Length(
+     *      min = 2,
+     *      max = 45,
+     *      minMessage = "This value is too long. Your first name must be at least {{ limit }} characters long",
+     *      maxMessage = "This value is too short. Your first name cannot be longer than {{ limit }} characters",
+     * )
      *
      * @var string firstname
      */
@@ -60,6 +87,14 @@ class User
      * @ORM\Column(type="string", length=45, name="bm_lastname")
      *
      * @Groups({"get"})
+     *
+     * @Assert\NotBlank
+     * @Assert\Length(
+     *      min = 2,
+     *      max = 45,
+     *      minMessage = "This value is too long. Your last name must be at least {{ limit }} characters long",
+     *      maxMessage = "This value is too short. Your last name cannot be longer than {{ limit }} characters",
+     * )
      *
      * @var string lastname
      */
@@ -98,6 +133,20 @@ class User
     {
         $this->createdAt = new DateTimeImmutable();
         $this->updatedAt = new DateTimeImmutable();
+        $this->uuid = Uuid::uuid4();
+    }
+
+    /**
+     * isPasswordSafe
+     * Check if password is different from the first name or the last name.
+     *
+     * @Assert\IsTrue(message="The password cannot match your first name or your last name")
+     *
+     * @return bool
+     */
+    public function isPasswordSafe(): bool
+    {
+        return $this->firstname !== $this->password && $this->lastname !== $this->password;
     }
 
     /**

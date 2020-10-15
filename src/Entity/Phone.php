@@ -155,6 +155,7 @@ class Phone
     {
         $this->createdAt = new DateTimeImmutable();
         $this->updatedAt = new DateTimeImmutable();
+        $this->uuid = Uuid::uuid4();
     }
 
     /**
@@ -181,7 +182,6 @@ class Phone
         $this->setBatteryCapacity($data['battery_capacity']);
         $this->setWirelessCharging($data['wireless_charging']);
         $this->setWeight($data['weight']);
-        $this->setUuid(Uuid::uuid4());
         $this->setSize($size);
         $this->setScreen($screen);
 

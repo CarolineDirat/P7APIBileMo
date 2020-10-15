@@ -21,6 +21,15 @@ class UserRepository extends ServiceEntityRepository
         parent::__construct($registry, User::class);
     }
 
+    /**
+     * getPaginatedUsersByClient.
+     *
+     * @param Client $client
+     * @param int    $page
+     * @param int    $limit
+     *
+     * @return Paginator<User>
+     */
     public function getPaginatedUsersByClient(Client $client, int $page, int $limit): Paginator
     {
         return new Paginator(

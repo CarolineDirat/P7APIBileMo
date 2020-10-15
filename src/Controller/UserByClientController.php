@@ -4,16 +4,15 @@ namespace App\Controller;
 
 use App\Entity\Client;
 use App\Entity\User;
-use App\Repository\UserRepository;
-use App\Service\UserService;
+use App\Service\UserByClientService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
  * UserByClientController.
@@ -24,26 +23,26 @@ class UserByClientController extends AbstractController
 {
     /**
      * @Route(
-     *     "/",
+     *     path="",
      *     name="collection_get",
      *     methods={"GET"},
      *     stateless=true
      * )
      *
      * @param Client              $client
-     * @param UserRepository      $userRepository
-     * @param SerializerInterface $serializer
+     * @param UserByClientService $userService,
+     * @param Request             $request
      *
      * @return JsonResponse
      */
     public function collection(
         Client $client,
-        UserService $userService,
+        UserByClientService $userService,
         Request $request
     ): JsonResponse {
         return new JsonResponse(
             $userService->getSerializedPaginatedUsersByClient($client, $request),
-            Response::HTTP_OK,
+            JsonResponse::HTTP_OK,
             [],
             true
         );
@@ -54,7 +53,7 @@ class UserByClientController extends AbstractController
      * Get details of one user linked by a client.
      *
      * @Route(
-     *     "/{user_uuid}",
+     *     path="/{user_uuid}",
      *     name="item_get",
      *     methods={"GET"},
      *     stateless=true
@@ -65,6 +64,8 @@ class UserByClientController extends AbstractController
      * @param Client              $client
      * @param User                $user
      * @param SerializerInterface $serializer
+     *
+     * @throws AccessDeniedHttpException
      *
      * @return JsonResponse
      */
@@ -77,15 +78,41 @@ class UserByClientController extends AbstractController
             throw new AccessDeniedHttpException(
                 'You cannot access to the user by this client.',
                 null,
-                Response::HTTP_FORBIDDEN
+                JsonResponse::HTTP_FORBIDDEN
             );
         }
 
         return new JsonResponse(
             $serializer->serialize($user, 'json', ['groups' => 'get']),
-            Response::HTTP_OK,
+            JsonResponse::HTTP_OK,
             [],
             true
         );
+    }
+
+    /**
+     * post
+     * To add a user linked by a client.
+     *
+     * @Route(
+     *     path="",
+     *     name="collection_post",
+     *     methods={"POST"},
+     * )
+     *
+     * @param Client              $client
+     * @param Request             $request
+     * @param ValidatorInterface  $validator
+     * @param UserByClientService $userService
+     *
+     * @return JsonResponse
+     */
+    public function post(
+        Client $client,
+        Request $request,
+        ValidatorInterface $validator,
+        UserByClientService $userService
+    ): JsonResponse {
+        return $userService->processPostUserByClient($client, $request, $validator);
     }
 }
