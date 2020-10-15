@@ -120,7 +120,7 @@ class UserByClientController extends AbstractController
         $data =  $decoder->decode($request->getContent(), 'json');
         $validProperties = ['email', 'lastname', 'firstname', 'password'];
         if (!$bodyRequestService->isValid($data, $validProperties)) {
-            return $bodyRequestService->getErrorBadRequest()->returnErrorJsonResponse();
+            return $bodyRequestService->getBadRequestError()->returnErrorJsonResponse();
         }
 
         // process data body

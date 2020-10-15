@@ -22,5 +22,5 @@ interface BodyRequestServiceInterface
      *
      * @return  ErrorResponseInterface
      */ 
-    public function getErrorBadRequest(): ErrorResponseInterface;
+    public function getBadRequestError(): ErrorResponseInterface;
 }

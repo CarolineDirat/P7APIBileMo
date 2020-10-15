@@ -16,12 +16,12 @@ class BodyRequestService implements BodyRequestServiceInterface
     private SerializerInterface $serializer;
     
     /**
-     * errorBadRequest
+     * badRequestError
      * Object that define code and body of the json response for a bad request error
      *
      * @var ErrorResponseInterface
      */
-    private ErrorResponseInterface $errorBadRequest;
+    private ErrorResponseInterface $badRequestError;
     
     /**
      * __construct
@@ -32,7 +32,7 @@ class BodyRequestService implements BodyRequestServiceInterface
     public function __construct(SerializerInterface $serializer)
     {
         $this->serializer = $serializer;
-        $this->errorBadRequest = new BadRequestErrorResponse($this->serializer);
+        $this->badRequestError = new BadRequestErrorResponse($this->serializer);
     }
         
     /**
@@ -52,7 +52,7 @@ class BodyRequestService implements BodyRequestServiceInterface
         foreach ($dataProperties as $value) {
             if (!in_array($value, $validProperties, true)) {
                 $error = false;
-                $this->errorBadRequest->addBodyValueToArray('messages', 'Bad Request : The data name {' . (string) $value . '} is not valid.');
+                $this->badRequestError->addBodyValueToArray('messages', 'Bad Request : The data name {' . (string) $value . '} is not valid.');
             }
         }
         
@@ -60,12 +60,12 @@ class BodyRequestService implements BodyRequestServiceInterface
         if (!empty($missingProperties)) {
             $error = false;
             foreach ($missingProperties as $value) {
-                $this->errorBadRequest->addBodyValueToArray('messages', 'Bad Request : The data name {' . (string) $value . '} is missing');
+                $this->badRequestError->addBodyValueToArray('messages', 'Bad Request : The data name {' . (string) $value . '} is missing');
             }
         }
 
         if (empty($error)) {
-            $this->errorBadRequest->addBodyArray('valid_properties', $validProperties);
+            $this->badRequestError->addBodyArray('valid_properties', $validProperties);
         }
 
         return $error;
@@ -76,8 +76,8 @@ class BodyRequestService implements BodyRequestServiceInterface
      *
      * @return ErrorResponseInterface
      */ 
-    public function getErrorBadRequest(): ErrorResponseInterface
+    public function getBadRequestError(): ErrorResponseInterface
     {
-        return $this->errorBadRequest;
+        return $this->badRequestError;
     }
 }
