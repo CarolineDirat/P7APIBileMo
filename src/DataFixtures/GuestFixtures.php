@@ -6,7 +6,6 @@ use App\Entity\Client;
 use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
-use Ramsey\Uuid\Uuid;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 /**
@@ -47,7 +46,7 @@ class GuestFixtures extends Fixture
         for ($i = 0; $i < 10; ++$i) {
             $user = new User();
             $user->setEmail(sprintf('user%d@mail.com', $i));
-            $user->setPassword(sha1($user->getUuid()));
+            $user->setPassword(password_hash($user->getPassword(), PASSWORD_BCRYPT));
             $user->setFirstname(sprintf('firstname%d', $i));
             $user->setLastname(sprintf('lastname%d', $i));
             $user->setClient($client);
