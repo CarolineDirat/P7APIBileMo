@@ -5,7 +5,9 @@ namespace App\Controller;
 use App\Entity\Client;
 use App\Entity\User;
 use App\Form\AppFormFactoryInterface;
+use App\Repository\UserRepository;
 use App\Service\BodyRequestServiceInterface;
+use App\Service\ErrorResponse\ForbiddenErrorResponse;
 use App\Service\ErrorResponse\InternalServerErrorResponse;
 use App\Service\UserService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
@@ -115,7 +117,8 @@ class UserByClientController extends AbstractController
         SerializerInterface $serializer,
         ValidatorInterface $validator,
         DecoderInterface $decoder,
-        BodyRequestServiceInterface $bodyRequestService
+        BodyRequestServiceInterface $bodyRequestService,
+        UserRepository $userRepository
     ): JsonResponse {
         // check data body
         $data =  $decoder->decode($request->getContent(), 'json');
@@ -153,6 +156,17 @@ class UserByClientController extends AbstractController
                 true
             );
             
+        }
+
+        // email property must be unique in users list linked by a client
+        // else return forbidden error (403)
+        $users = $userRepository->findBy(['client' => $client]);
+        foreach ($users as $value) {
+            if ($value->getEmail() === $user->getEmail()) {
+                $forbiddenError = new ForbiddenErrorResponse($serializer);
+                $forbiddenError->addBodyValue('message', 'Forbidden. The email <'. $user->getEmail() .'> already exists.');
+                return $forbiddenError->returnErrorJsonResponse();
+            }
         }
 
         $user->setClient($client);
