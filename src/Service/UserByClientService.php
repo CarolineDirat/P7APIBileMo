@@ -136,7 +136,11 @@ class UserByClientService implements UserByClientServiceInterface
             return $this->bodyRequestService->getBadRequestError()->returnErrorJsonResponse();
         }
 
-        $user = $this->dataToUser($request, 'post-user');
+        // deserialize data body
+        $user = $this->serializer->deserialize($request->getContent(), User::class, 'json');
+
+        $form = $this->appFormFactory->create('post-user', $user, ['csrf_protection' => false]);
+        $form->submit($user);
 
         if (!($user instanceof User)) {
             $internalServerError = new InternalServerErrorResponse($this->serializer);
@@ -193,25 +197,5 @@ class UserByClientService implements UserByClientServiceInterface
                 );
             }
         }
-    }
-    
-    /**
-     * dataToUser
-     * Deserialize data body request and hydrate user from corresponding form
-     *
-     * @param Request $request
-     * @param string  $formName name of form in AppFormFactory
-     * 
-     * @return User
-     */
-    public function dataToUser(Request $request, string $formName): User
-    {
-        // deserialize data body
-        $user = $this->serializer->deserialize($request->getContent(), User::class, 'json');
-
-        $form = $this->appFormFactory->create($formName, $user, ['csrf_protection' => false]);
-        $form->submit($user);
-
-        return $user;
     }
 }
