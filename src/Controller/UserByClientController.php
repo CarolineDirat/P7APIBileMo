@@ -65,7 +65,7 @@ class UserByClientController extends AbstractController
      * @param Client              $client
      * @param User                $user
      * @param SerializerInterface $serializer
-     * 
+     *
      * @throws AccessDeniedHttpException
      *
      * @return JsonResponse
@@ -91,22 +91,21 @@ class UserByClientController extends AbstractController
         );
     }
 
-        
     /**
      * post
-     * To add a user linked by a client
-     * 
+     * To add a user linked by a client.
+     *
      * @Route(
-     *      path="",
-     *      name="collection_post",
-     *      methods={"POST"},
+     *     path="",
+     *     name="collection_post",
+     *     methods={"POST"},
      * )
      *
      * @param Client              $client
      * @param Request             $request
      * @param ValidatorInterface  $validator
      * @param UserByClientService $userService
-     * 
+     *
      * @return JsonResponse
      */
     public function post(

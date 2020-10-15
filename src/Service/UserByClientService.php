@@ -39,30 +39,30 @@ class UserByClientService implements UserByClientServiceInterface
      * @var PaginationServiceInterface
      */
     private PaginationServiceInterface $paginationService;
-    
+
     /**
-     * decoder
+     * decoder.
      *
      * @var DecoderInterface
      */
     private DecoderInterface $decoder;
-    
+
     /**
-     * bodyRequestService
+     * bodyRequestService.
      *
      * @var BodyRequestServiceInterface
      */
     private BodyRequestServiceInterface $bodyRequestService;
-    
+
     /**
-     * appFormFactory
+     * appFormFactory.
      *
      * @var AppFormFactoryInterface
      */
     private AppFormFactoryInterface $appFormFactory;
-    
+
     /**
-     * managerRegistry
+     * managerRegistry.
      *
      * @var ManagerRegistry
      */
@@ -78,7 +78,6 @@ class UserByClientService implements UserByClientServiceInterface
      * @param BodyRequestServiceInterface $bodyRequestService
      * @param AppFormFactoryInterface     $appFormFactory
      * @param ManagerRegistry             $managerRegistry
-     * 
      */
     public function __construct(
         UserRepository $userRepository,
@@ -118,12 +117,12 @@ class UserByClientService implements UserByClientServiceInterface
 
         return $this->paginationService->getSerializedPaginatedData($users, $page, $limit, ['groups' => 'get']);
     }
-    
+
     /**
-     * processPostUserByClient
-     * 
-     * @param Client $client
-     * @param Request $request
+     * processPostUserByClient.
+     *
+     * @param Client             $client
+     * @param Request            $request
      * @param ValidatorInterface $validator
      *
      * @return JsonResponse
@@ -131,7 +130,7 @@ class UserByClientService implements UserByClientServiceInterface
     public function processPostUserByClient(Client $client, Request $request, ValidatorInterface $validator): JsonResponse
     {
         // check data body
-        $data =  $this->decoder->decode($request->getContent(), 'json');
+        $data = $this->decoder->decode($request->getContent(), 'json');
         $validProperties = self::POST_VALID_PROPERTIES;
         if (!$this->bodyRequestService->isValid($data, $validProperties)) {
             return $this->bodyRequestService->getBadRequestError()->returnErrorJsonResponse();
@@ -146,7 +145,8 @@ class UserByClientService implements UserByClientServiceInterface
         if (!($user instanceof User)) {
             $internalServerError = new InternalServerErrorResponse($this->serializer);
             $internalServerError->addBodyValue('message', 'Internal Server Error. You can join us by email : bilemo@email.com');
-            return $internalServerError->returnErrorJsonResponse();     
+
+            return $internalServerError->returnErrorJsonResponse();
         }
 
         $errors = $validator->validate($user);
@@ -168,21 +168,21 @@ class UserByClientService implements UserByClientServiceInterface
         $em->flush();
 
         return new JsonResponse(
-            $this->serializer->serialize($user, 'json', ['groups' => 'get']), 
+            $this->serializer->serialize($user, 'json', ['groups' => 'get']),
             JsonResponse::HTTP_CREATED,
             [],
             true
         );
     }
-    
+
     /**
      * emailIsValid
      * email property must be unique in users list linked by a client
-     * else throw forbidden error (403)
-     * 
+     * else throw forbidden error (403).
+     *
      * @param Client $client
      * @param User   $user
-     * 
+     *
      * @throws AccessDeniedHttpException
      */
     public function emailIsValid(Client $client, User $user): void
@@ -191,7 +191,7 @@ class UserByClientService implements UserByClientServiceInterface
         foreach ($users as $value) {
             if ($value->getEmail() === $user->getEmail()) {
                 throw new AccessDeniedHttpException(
-                    'Forbidden. The email <'. $user->getEmail() .'> already exists.',
+                    'Forbidden. The email <'.$user->getEmail().'> already exists.',
                     null,
                     JsonResponse::HTTP_FORBIDDEN
                 );

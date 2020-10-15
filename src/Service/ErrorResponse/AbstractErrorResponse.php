@@ -7,31 +7,31 @@ use Symfony\Component\Serializer\SerializerInterface;
 
 abstract class AbstractErrorResponse implements ErrorResponseInterface
 {
-     /**
+    /**
      * code
-     * error code HTTP : 4XX
+     * error code HTTP : 4XX.
      *
      * @var int
      */
     protected int $code = 0;
-    
+
     /**
      * body
-     * array of the body content of an error as JsonResponse
+     * array of the body content of an error as JsonResponse.
      *
      * @var array<string, mixed>
      */
     protected array $body = [];
 
     /**
-     * serializer
+     * serializer.
      *
      * @var SerializerInterface
      */
     private SerializerInterface $serializer;
-    
+
     /**
-     * __construct
+     * __construct.
      *
      * @param SerializerInterface $serializer
      */
@@ -44,7 +44,7 @@ abstract class AbstractErrorResponse implements ErrorResponseInterface
 
     /**
      * returnErrorJsonResponse
-     * Return a JsonResponse with
+     * Return a JsonResponse with.
      *
      * @return JsonResponse
      */
@@ -59,10 +59,10 @@ abstract class AbstractErrorResponse implements ErrorResponseInterface
     }
 
     /**
-     * Get mixed>
+     * Get mixed>.
      *
-     * @return  array<string, mixed>
-     */ 
+     * @return array<string, mixed>
+     */
     public function getBody()
     {
         return $this->body;
@@ -70,13 +70,13 @@ abstract class AbstractErrorResponse implements ErrorResponseInterface
 
     /**
      * addBodyArray
-     * Add a data (string : array) to the body response 
+     * Add a data (string : array) to the body response.
      *
-     * @param string $key
+     * @param string              $key
      * @param array<mixed, mixed> $value
      *
-     * @return  self
-     */ 
+     * @return self
+     */
     public function addBodyArray(string $key, array $value): self
     {
         $this->body[$key] = $value;
@@ -86,27 +86,27 @@ abstract class AbstractErrorResponse implements ErrorResponseInterface
 
     /**
      * addBodyValueToArray
-     * Add a data (string[] : string) to the body response 
+     * Add a data (string[] : string) to the body response.
      *
      * @param string $key
      * @param string $value
      *
-     * @return  self
-     */ 
+     * @return self
+     */
     public function addBodyValueToArray(string $key, string $value): self
     {
         $this->body[$key][] = $value;
 
         return $this;
     }
-    
+
     /**
      * addBodyValue
-     * Add a data (string : string) to the body response 
-     * 
-     * @param  string $key
-     * @param  string $value
-     * 
+     * Add a data (string : string) to the body response.
+     *
+     * @param string $key
+     * @param string $value
+     *
      * @return self
      */
     public function addBodyValue(string $key, string $value): self
@@ -117,22 +117,22 @@ abstract class AbstractErrorResponse implements ErrorResponseInterface
     }
 
     /**
-     * Get error code HTTP : 4XX
+     * Get error code HTTP : 4XX.
      *
-     * @return  int
-     */ 
+     * @return int
+     */
     public function getCode()
     {
         return $this->code;
     }
 
     /**
-     * Set error code HTTP : 4XX
+     * Set error code HTTP : 4XX.
      *
-     * @param  int  $code  error code HTTP : 4XX
+     * @param int $code error code HTTP : 4XX
      *
-     * @return  self
-     */ 
+     * @return self
+     */
     public function setCode(int $code): self
     {
         $this->code = $code;

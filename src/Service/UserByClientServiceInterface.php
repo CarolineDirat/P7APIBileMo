@@ -23,10 +23,10 @@ interface UserByClientServiceInterface
 
     /**
      * processPostUserByClient
-     * After checks, add the user to the client
-     * 
-     * @param Client $client
-     * @param Request $request
+     * After checks, add the user to the client.
+     *
+     * @param Client             $client
+     * @param Request            $request
      * @param ValidatorInterface $validator
      *
      * @return JsonResponse

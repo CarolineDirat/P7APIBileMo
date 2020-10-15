@@ -37,7 +37,7 @@ class User
      * @ORM\Column(type="string", length=200, name="bm_email")
      *
      * @Groups({"get"})
-     * 
+     *
      * @Assert\NotBlank
      * @Assert\Length(
      *      min = 3,
@@ -53,7 +53,7 @@ class User
 
     /**
      * @ORM\Column(type="string", length=255, name="bm_password")
-     * 
+     *
      * @Assert\NotBlank
      * @Assert\Length(
      *      min = 8,
@@ -70,7 +70,7 @@ class User
      * @ORM\Column(type="string", length=45, name="bm_firstname")
      *
      * @Groups({"get"})
-     * 
+     *
      * @Assert\NotBlank
      * @Assert\Length(
      *      min = 2,
@@ -87,7 +87,7 @@ class User
      * @ORM\Column(type="string", length=45, name="bm_lastname")
      *
      * @Groups({"get"})
-     * 
+     *
      * @Assert\NotBlank
      * @Assert\Length(
      *      min = 2,
@@ -139,9 +139,9 @@ class User
     /**
      * isPasswordSafe
      * Check if password is different from the first name or the last name.
-     * 
+     *
      * @Assert\IsTrue(message="The password cannot match your first name or your last name")
-     * 
+     *
      * @return bool
      */
     public function isPasswordSafe(): bool

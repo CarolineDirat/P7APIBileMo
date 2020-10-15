@@ -10,13 +10,13 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class UserType extends AbstractType
-{    
+{
     /**
      * buildForm
      * This method is called for each type in the hierarchy starting from the top most type. Type extensions can further modify the form.
      *
-     * @param FormBuilderInterface<User>  $builder
-     * @param array<string, mixed> $options
+     * @param FormBuilderInterface<User> $builder
+     * @param array<string, mixed>       $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
@@ -27,7 +27,7 @@ class UserType extends AbstractType
             ->add('lastname', TextType::class)
         ;
     }
-    
+
     /**
      * configureOptions
      * Configures the options for this type.

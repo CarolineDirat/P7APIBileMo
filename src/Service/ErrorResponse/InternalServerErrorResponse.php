@@ -5,9 +5,9 @@ namespace App\Service\ErrorResponse;
 use Symfony\Component\Serializer\SerializerInterface;
 
 class InternalServerErrorResponse extends AbstractErrorResponse
-{    
+{
     /**
-     * __construct
+     * __construct.
      *
      * @param SerializerInterface $serializer
      */
