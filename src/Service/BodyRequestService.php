@@ -52,7 +52,7 @@ class BodyRequestService implements BodyRequestServiceInterface
         foreach ($dataProperties as $value) {
             if (!in_array($value, $validProperties, true)) {
                 $error = false;
-                $this->badRequestError->addBodyValueToArray('messages', 'Bad Request : The data name {' . (string) $value . '} is not valid.');
+                $this->badRequestError->addBodyValueToArray('message', 'Bad Request : The data name {' . (string) $value . '} is not valid.');
             }
         }
         
@@ -60,7 +60,7 @@ class BodyRequestService implements BodyRequestServiceInterface
         if (!empty($missingProperties)) {
             $error = false;
             foreach ($missingProperties as $value) {
-                $this->badRequestError->addBodyValueToArray('messages', 'Bad Request : The data name {' . (string) $value . '} is missing');
+                $this->badRequestError->addBodyValueToArray('message', 'Bad Request : The data name {' . (string) $value . '} is missing');
             }
         }
 
