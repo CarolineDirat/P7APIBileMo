@@ -2,7 +2,7 @@
 
 namespace App\Service;
 
-use Symfony\Component\HttpFoundation\JsonResponse;
+use App\Service\ErrorResponse\ErrorResponseInterface;
 
 interface BodyRequestServiceInterface
 {
@@ -20,7 +20,7 @@ interface BodyRequestServiceInterface
     /**
      * Get object that define code and body of the json response for a bad request error
      *
-     * @return  ErrorBadRequestService
+     * @return  ErrorResponseInterface
      */ 
-    public function getErrorBadRequest(): ErrorBadRequestService;
+    public function getErrorBadRequest(): ErrorResponseInterface;
 }

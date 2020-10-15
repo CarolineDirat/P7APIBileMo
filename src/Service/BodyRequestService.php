@@ -2,8 +2,9 @@
 
 namespace App\Service;
 
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Serializer\SerializerInterface;
+use App\Service\ErrorResponse\BadRequestErrorResponse;
+use App\Service\ErrorResponse\ErrorResponseInterface;
 
 class BodyRequestService implements BodyRequestServiceInterface
 {    
@@ -18,9 +19,9 @@ class BodyRequestService implements BodyRequestServiceInterface
      * errorBadRequest
      * Object that define code and body of the json response for a bad request error
      *
-     * @var ErrorBadRequestService
+     * @var ErrorResponseInterface
      */
-    private ErrorBadRequestService $errorBadRequest;
+    private ErrorResponseInterface $errorBadRequest;
     
     /**
      * __construct
@@ -31,7 +32,7 @@ class BodyRequestService implements BodyRequestServiceInterface
     public function __construct(SerializerInterface $serializer)
     {
         $this->serializer = $serializer;
-        $this->errorBadRequest = new ErrorBadRequestService($this->serializer);
+        $this->errorBadRequest = new BadRequestErrorResponse($this->serializer);
     }
         
     /**
@@ -73,9 +74,9 @@ class BodyRequestService implements BodyRequestServiceInterface
     /**
      * Get object that define code and body of the json response for a bad request error
      *
-     * @return ErrorBadRequestService
+     * @return ErrorResponseInterface
      */ 
-    public function getErrorBadRequest(): ErrorBadRequestService
+    public function getErrorBadRequest(): ErrorResponseInterface
     {
         return $this->errorBadRequest;
     }

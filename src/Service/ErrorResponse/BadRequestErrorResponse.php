@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Service;
+namespace App\Service\ErrorResponse;
 
 use Symfony\Component\Serializer\SerializerInterface;
 
-class ErrorBadRequestService extends AbstractErrorService
+class BadRequestErrorResponse extends AbstractErrorResponse
 {    
     /**
      * __construct

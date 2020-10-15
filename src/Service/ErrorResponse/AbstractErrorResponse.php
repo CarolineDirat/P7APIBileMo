@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Service;
+namespace App\Service\ErrorResponse;
 
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Serializer\SerializerInterface;
 
-abstract class AbstractErrorService implements ErrorServiceInterface
+abstract class AbstractErrorResponse implements ErrorResponseInterface
 {
      /**
      * code

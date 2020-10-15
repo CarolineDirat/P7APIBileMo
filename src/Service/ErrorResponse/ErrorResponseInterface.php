@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Service;
+namespace App\Service\ErrorResponse;
 
 use Symfony\Component\HttpFoundation\JsonResponse;
 
-interface ErrorServiceInterface
+interface ErrorResponseInterface
 {
     /**
      * returnErrorJsonResponse
