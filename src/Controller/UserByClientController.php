@@ -12,7 +12,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
  * UserByClientController.
@@ -102,7 +101,6 @@ class UserByClientController extends AbstractController
      *
      * @param Client              $client
      * @param Request             $request
-     * @param ValidatorInterface  $validator
      * @param UserByClientService $userService
      *
      * @return JsonResponse
@@ -110,9 +108,44 @@ class UserByClientController extends AbstractController
     public function post(
         Client $client,
         Request $request,
-        ValidatorInterface $validator,
         UserByClientService $userService
     ): JsonResponse {
-        return $userService->processPostUserByClient($client, $request, $validator);
+        return $userService->processPostUserByClient($client, $request);
+    }
+
+    /**
+     * put
+     * To edit a user linked by a client.
+     *
+     * @Route(
+     *     path="/{user_uuid}",
+     *     name="collection_put",
+     *     methods={"PUT"}
+     * )
+     *
+     * @ParamConverter("user", options={"mapping": {"user_uuid": "uuid"}})
+     *
+     * @param Client              $client
+     * @param User                $user
+     * @param Request             $request
+     * @param UserByClientService $userService
+     *
+     * @return JsonResponse
+     */
+    public function put(
+        Client $client,
+        User $user,
+        Request $request,
+        UserByClientService $userService
+    ): JsonResponse {
+        if ($user->getClient() !== $client) {
+            throw new AccessDeniedHttpException(
+                'You cannot access to the user by this client.',
+                null,
+                JsonResponse::HTTP_FORBIDDEN
+            );
+        }
+
+        return $userService->processPutUserByClient($client, $user, $request);
     }
 }

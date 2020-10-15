@@ -26,7 +26,7 @@ class AppFormFactory implements AppFormFactoryInterface
     public function create(string $name, object $entity, array $options = []): ?FormInterface
     {
         $formTypes = [
-            'post-user' => UserType::class,
+            'user' => UserType::class,
         ];
 
         $formType = $formTypes[$name];

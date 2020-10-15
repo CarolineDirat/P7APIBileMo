@@ -71,7 +71,7 @@ class PaginationService implements PaginationServiceInterface
      * @param int                  $page
      * @param int                  $limit
      * @param array<string, mixed> $context Options normalizer/encoders have to access
-     * 
+     *
      * @throws NotFoundHttpException
      *
      * @return string
@@ -79,6 +79,17 @@ class PaginationService implements PaginationServiceInterface
     public function getSerializedPaginatedData(Paginator $data, int $page, int $limit, array $context): string
     {
         $pages = ceil($data->count() / $limit);
+
+        if (0 === (int) $pages) {
+            $result['data'] = 'You don\'t have users yet';
+            $result['meta'] = ['current_page' => 1, 'number_per_page' => $limit, 'total_pages' => $pages];
+
+            return $this->serializer->serialize(
+                $result,
+                'json',
+                $context
+            );
+        }
 
         if ($page > $pages) {
             throw new NotFoundHttpException(

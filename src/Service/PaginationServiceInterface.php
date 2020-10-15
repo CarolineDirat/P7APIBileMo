@@ -28,7 +28,7 @@ interface PaginationServiceInterface
      * @param int                  $page
      * @param int                  $limit   Number of data per page
      * @param array<string, mixed> $context Options normalizer/encoders have to access
-     * 
+     *
      * @throws NotFoundHttpException
      *
      * @return string

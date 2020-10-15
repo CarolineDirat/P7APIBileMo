@@ -7,17 +7,21 @@ use App\Entity\User;
 use App\Form\AppFormFactoryInterface;
 use App\Repository\UserRepository;
 use App\Service\ErrorResponse\InternalServerErrorResponse;
+use DateTimeImmutable;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\Serializer\Encoder\DecoderInterface;
+use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class UserByClientService implements UserByClientServiceInterface
 {
-    const POST_VALID_PROPERTIES = ['email', 'lastname', 'firstname', 'password'];
+    const VALID_PROPERTIES = ['email', 'lastname', 'firstname', 'password'];
+    const PUT_METHOD = 'PUT';
+    const POST_METHOD = 'POST';
 
     /**
      * phoneRepository.
@@ -69,6 +73,13 @@ class UserByClientService implements UserByClientServiceInterface
     private ManagerRegistry $managerRegistry;
 
     /**
+     * validator.
+     *
+     * @var ValidatorInterface
+     */
+    private ValidatorInterface $validator;
+
+    /**
      * __construct.
      *
      * @param UserRepository              $userRepository,
@@ -86,7 +97,8 @@ class UserByClientService implements UserByClientServiceInterface
         DecoderInterface $decoder,
         BodyRequestServiceInterface $bodyRequestService,
         AppFormFactoryInterface $appFormFactory,
-        ManagerRegistry $managerRegistry
+        ManagerRegistry $managerRegistry,
+        ValidatorInterface $validator
     ) {
         $this->userRepository = $userRepository;
         $this->serializer = $serializer;
@@ -95,6 +107,7 @@ class UserByClientService implements UserByClientServiceInterface
         $this->bodyRequestService = $bodyRequestService;
         $this->appFormFactory = $appFormFactory;
         $this->managerRegistry = $managerRegistry;
+        $this->validator = $validator;
     }
 
     /**
@@ -121,58 +134,28 @@ class UserByClientService implements UserByClientServiceInterface
     /**
      * processPostUserByClient.
      *
-     * @param Client             $client
-     * @param Request            $request
-     * @param ValidatorInterface $validator
+     * @param Client  $client
+     * @param Request $request
      *
      * @return JsonResponse
      */
-    public function processPostUserByClient(Client $client, Request $request, ValidatorInterface $validator): JsonResponse
+    public function processPostUserByClient(Client $client, Request $request): JsonResponse
     {
-        // check data body
-        $data = $this->decoder->decode($request->getContent(), 'json');
-        $validProperties = self::POST_VALID_PROPERTIES;
-        if (!$this->bodyRequestService->isValid($data, $validProperties)) {
-            return $this->bodyRequestService->getBadRequestError()->returnErrorJsonResponse();
-        }
+        return $this->processUserByClient($client, $request, self::POST_METHOD);
+    }
 
-        // deserialize data body
-        $user = $this->serializer->deserialize($request->getContent(), User::class, 'json');
-
-        $form = $this->appFormFactory->create('post-user', $user, ['csrf_protection' => false]);
-        $form->submit($user);
-
-        if (!($user instanceof User)) {
-            $internalServerError = new InternalServerErrorResponse($this->serializer);
-            $internalServerError->addBodyValue('message', 'Internal Server Error. You can join us by email : bilemo@email.com');
-
-            return $internalServerError->returnErrorJsonResponse();
-        }
-
-        $errors = $validator->validate($user);
-        if (count($errors) > 0) {
-            return new JsonResponse(
-                $this->serializer->serialize($errors, 'json'),
-                JsonResponse::HTTP_BAD_REQUEST,
-                [],
-                true
-            );
-        }
-
-        $this->emailIsValid($client, $user);
-        $user->setClient($client);
-        $user->setPassword(password_hash($user->getPassword(), PASSWORD_BCRYPT));
-
-        $em = $this->managerRegistry->getManager();
-        $em->persist($user);
-        $em->flush();
-
-        return new JsonResponse(
-            $this->serializer->serialize($user, 'json', ['groups' => 'get']),
-            JsonResponse::HTTP_CREATED,
-            [],
-            true
-        );
+    /**
+     * processPutUserByClient.
+     *
+     * @param Client  $client
+     * @param User    $user
+     * @param Request $request
+     *
+     * @return JsonResponse
+     */
+    public function processPutUserByClient(Client $client, User $user, Request $request): JsonResponse
+    {
+        return $this->processUserByClient($client, $request, self::PUT_METHOD, $user);
     }
 
     /**
@@ -185,7 +168,7 @@ class UserByClientService implements UserByClientServiceInterface
      *
      * @throws AccessDeniedHttpException
      */
-    public function emailIsValid(Client $client, User $user): void
+    public function emailPostIsValid(Client $client, User $user): void
     {
         $users = $this->userRepository->findBy(['client' => $client]);
         foreach ($users as $value) {
@@ -197,5 +180,99 @@ class UserByClientService implements UserByClientServiceInterface
                 );
             }
         }
+    }
+
+    /**
+     * emailPutIsValid
+     * email property must be unique in users list linked by a client
+     * else throw forbidden error (403).
+     *
+     * @param Client $client
+     * @param User   $user
+     *
+     * @throws AccessDeniedHttpException
+     */
+    public function emailPutIsValid(Client $client, User $user): void
+    {
+        $users = $this->userRepository->findBy(['client' => $client]);
+        foreach ($users as $value) {
+            if (
+                $value->getEmail() === $user->getEmail() &&
+                $value->getId() !== $user->getId()
+            ) {
+                throw new AccessDeniedHttpException(
+                    'Forbidden. The email <'.$user->getEmail().'> already exists.',
+                    null,
+                    JsonResponse::HTTP_FORBIDDEN
+                );
+            }
+        }
+    }
+
+    /**
+     * processUserByClient.
+     *
+     * @param Client    $client
+     * @param Request   $request
+     * @param string    $method
+     * @param null|User $user
+     *
+     * @return JsonResponse
+     */
+    public function processUserByClient(Client $client, Request $request, string $method, ?User $user = null): JsonResponse
+    {
+        // check data body
+        $data = $this->decoder->decode($request->getContent(), 'json');
+        $validProperties = self::VALID_PROPERTIES;
+        if (!$this->bodyRequestService->isValid($data, $validProperties)) {
+            return $this->bodyRequestService->getBadRequestError()->returnErrorJsonResponse();
+        }
+
+        // deserialize data body
+        $user = ('POST' === $method) ?
+            $this->serializer->deserialize($request->getContent(), User::class, 'json') :
+            $this->serializer->deserialize($request->getContent(), User::class, 'json', [AbstractNormalizer::OBJECT_TO_POPULATE => $user]);
+
+        $form = $this->appFormFactory->create('user', $user, ['csrf_protection' => false]);
+        $form->submit($user);
+
+        if (!($user instanceof User)) {
+            $internalServerError = new InternalServerErrorResponse($this->serializer);
+            $internalServerError->addBodyValue('message', 'Internal Server Error. You can join us by email : bilemo@email.com');
+
+            return $internalServerError->returnErrorJsonResponse();
+        }
+
+        $errors = $this->validator->validate($user);
+        if (count($errors) > 0) {
+            return new JsonResponse(
+                $this->serializer->serialize($errors, 'json'),
+                JsonResponse::HTTP_BAD_REQUEST,
+                [],
+                true
+            );
+        }
+
+        if ('PUT' === $method) {
+            $this->emailPutIsValid($client, $user);
+            $user->setUpdatedAt(new DateTimeImmutable());
+        }
+
+        $em = $this->managerRegistry->getManager();
+        $user->setPassword(password_hash($user->getPassword(), PASSWORD_BCRYPT));
+
+        if ('POST' === $method) {
+            $this->emailPostIsValid($client, $user);
+            $user->setClient($client);
+            $em->persist($user);
+        }
+        $em->flush();
+
+        return new JsonResponse(
+            $this->serializer->serialize($user, 'json', ['groups' => 'get']),
+            JsonResponse::HTTP_OK,
+            [],
+            true
+        );
     }
 }

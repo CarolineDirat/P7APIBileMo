@@ -3,9 +3,9 @@
 namespace App\Service;
 
 use App\Entity\Client;
+use App\Entity\User;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 interface UserByClientServiceInterface
 {
@@ -25,11 +25,21 @@ interface UserByClientServiceInterface
      * processPostUserByClient
      * After checks, add the user to the client.
      *
-     * @param Client             $client
-     * @param Request            $request
-     * @param ValidatorInterface $validator
+     * @param Client  $client
+     * @param Request $request
      *
      * @return JsonResponse
      */
-    public function processPostUserByClient(Client $client, Request $request, ValidatorInterface $validator): JsonResponse;
+    public function processPostUserByClient(Client $client, Request $request): JsonResponse;
+
+    /**
+     * processPutUserByClient.
+     *
+     * @param Client  $client
+     * @param User    $user
+     * @param Request $request
+     *
+     * @return JsonResponse
+     */
+    public function processPutUserByClient(Client $client, User $user, Request $request): JsonResponse
 }
