@@ -3,8 +3,8 @@
 namespace App\Service;
 
 use Doctrine\ORM\Tools\Pagination\Paginator;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Serializer\SerializerInterface;
@@ -71,6 +71,8 @@ class PaginationService implements PaginationServiceInterface
      * @param int                  $page
      * @param int                  $limit
      * @param array<string, mixed> $context Options normalizer/encoders have to access
+     * 
+     * @throws NotFoundHttpException
      *
      * @return string
      */
@@ -82,7 +84,7 @@ class PaginationService implements PaginationServiceInterface
             throw new NotFoundHttpException(
                 'The asked page n°'.$page." doesn't exist. The maximum number of pages is ".$pages.'.',
                 null,
-                Response::HTTP_BAD_REQUEST
+                JsonResponse::HTTP_BAD_REQUEST
             );
         }
 

@@ -4,6 +4,7 @@ namespace App\Service;
 
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 interface PaginationServiceInterface
 {
@@ -27,6 +28,8 @@ interface PaginationServiceInterface
      * @param int                  $page
      * @param int                  $limit   Number of data per page
      * @param array<string, mixed> $context Options normalizer/encoders have to access
+     * 
+     * @throws NotFoundHttpException
      *
      * @return string
      */
