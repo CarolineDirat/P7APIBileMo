@@ -80,6 +80,17 @@ class PaginationService implements PaginationServiceInterface
     {
         $pages = ceil($data->count() / $limit);
 
+        if (0 === (int) $pages) {
+            $result['data'] = 'You don\'t have users yet';
+            $result['meta'] = ['current_page' => 1, 'number_per_page' => $limit, 'total_pages' => $pages];
+
+            return $this->serializer->serialize(
+                $result,
+                'json',
+                $context
+            );
+        }
+
         if ($page > $pages) {
             throw new NotFoundHttpException(
                 'The asked page n°'.$page." doesn't exist. The maximum number of pages is ".$pages.'.',
