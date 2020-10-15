@@ -58,8 +58,8 @@ class User
      * @Assert\Length(
      *      min = 8,
      *      max = 255,
-     *      minMessage = "This value is too long. Your password must be at least {{ limit }} characters long",
-     *      maxMessage = "This value is too short. Your password cannot be longer than {{ limit }} characters",
+     *      minMessage = "This value is too short. Your password must be at least {{ limit }} characters long",
+     *      maxMessage = "This value is too long. Your password cannot be longer than {{ limit }} characters",
      * )
      *
      * @var string password The hashing password
