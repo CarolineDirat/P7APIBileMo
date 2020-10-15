@@ -41,5 +41,5 @@ interface UserByClientServiceInterface
      *
      * @return JsonResponse
      */
-    public function processPutUserByClient(Client $client, User $user, Request $request): JsonResponse
+    public function processPutUserByClient(Client $client, User $user, Request $request): JsonResponse;
 }
