@@ -144,21 +144,20 @@ class UserByClientService implements UserByClientServiceInterface
         return $this->processUserByClient($client, $request, self::POST_METHOD);
     }
 
-    
     /**
-     * processPutUserByClient
+     * processPutUserByClient.
      *
-     * @param Client $client
-     * @param User $user
-     * @param Request  $request
-     * 
+     * @param Client  $client
+     * @param User    $user
+     * @param Request $request
+     *
      * @return JsonResponse
      */
     public function processPutUserByClient(Client $client, User $user, Request $request): JsonResponse
     {
         return $this->processUserByClient($client, $request, self::PUT_METHOD, $user);
     }
-    
+
     /**
      * emailIsValid
      * email property must be unique in users list linked by a client
@@ -209,15 +208,15 @@ class UserByClientService implements UserByClientServiceInterface
             }
         }
     }
-    
+
     /**
-     * processUserByClient
+     * processUserByClient.
      *
      * @param Client    $client
      * @param Request   $request
      * @param string    $method
      * @param null|User $user
-     * 
+     *
      * @return JsonResponse
      */
     public function processUserByClient(Client $client, Request $request, string $method, ?User $user = null): JsonResponse
