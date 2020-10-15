@@ -148,4 +148,41 @@ class UserByClientController extends AbstractController
 
         return $userService->processPutUserByClient($client, $user, $request);
     }
+
+    /**
+     * delete
+     * To delete a user linked by a client.
+     *
+     * @Route(
+     *     path="/{user_uuid}",
+     *     name="collection_delete",
+     *     methods={"DELETE"}
+     * )
+     *
+     * @ParamConverter("user", options={"mapping": {"user_uuid": "uuid"}})
+     *
+     * @param Client              $client
+     * @param User                $user
+     *
+     * @return JsonResponse
+     */
+    public function delete(Client $client, User $user): JsonResponse
+    {
+        if ($user->getClient() !== $client) {
+            throw new AccessDeniedHttpException(
+                'You cannot access to the user by this client.',
+                null,
+                JsonResponse::HTTP_FORBIDDEN
+            );
+        }
+
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($user);
+        $em->flush();
+        
+        return new JsonResponse(
+            null,
+            JsonResponse::HTTP_NO_CONTENT
+        );
+    }
 }
