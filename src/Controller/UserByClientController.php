@@ -60,8 +60,8 @@ class UserByClientController extends AbstractController
      *
      * @ParamConverter("user", options={"mapping": {"user_uuid": "uuid"}})
      *
-     * @param Client              $client
-     * @param User                $user
+     * @param Client                       $client
+     * @param User                         $user
      * @param SerializerInterfaceInterface $serializer
      *
      * @throws AccessDeniedHttpException
@@ -99,8 +99,8 @@ class UserByClientController extends AbstractController
      *     methods={"POST"},
      * )
      *
-     * @param Client              $client
-     * @param Request             $request
+     * @param Client                       $client
+     * @param Request                      $request
      * @param UserByClientServiceInterface $userService
      *
      * @return JsonResponse
@@ -125,9 +125,9 @@ class UserByClientController extends AbstractController
      *
      * @ParamConverter("user", options={"mapping": {"user_uuid": "uuid"}})
      *
-     * @param Client              $client
-     * @param User                $user
-     * @param Request             $request
+     * @param Client                       $client
+     * @param User                         $user
+     * @param Request                      $request
      * @param UserByClientServiceInterface $userService
      *
      * @return JsonResponse
@@ -161,8 +161,8 @@ class UserByClientController extends AbstractController
      *
      * @ParamConverter("user", options={"mapping": {"user_uuid": "uuid"}})
      *
-     * @param Client              $client
-     * @param User                $user
+     * @param Client $client
+     * @param User   $user
      *
      * @return JsonResponse
      */

@@ -275,13 +275,13 @@ class UserByClientService implements UserByClientServiceInterface
             true
         );
     }
-    
+
     /**
      * processDeleteUserByClient
-     * Delete a user linked by a client
+     * Delete a user linked by a client.
      *
      * @param User $user
-     * 
+     *
      * @return JsonResponse
      */
     public function processDeleteUserByClient(User $user): JsonResponse
@@ -289,7 +289,7 @@ class UserByClientService implements UserByClientServiceInterface
         $em = $this->managerRegistry->getManager();
         $em->remove($user);
         $em->flush();
-        
+
         return new JsonResponse(
             null,
             JsonResponse::HTTP_NO_CONTENT

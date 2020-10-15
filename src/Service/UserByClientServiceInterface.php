@@ -45,10 +45,10 @@ interface UserByClientServiceInterface
 
     /**
      * processDeleteUserByClient
-     * Delete a user linked by a client
+     * Delete a user linked by a client.
      *
      * @param User $user
-     * 
+     *
      * @return JsonResponse
      */
     public function processDeleteUserByClient(User $user): JsonResponse;
