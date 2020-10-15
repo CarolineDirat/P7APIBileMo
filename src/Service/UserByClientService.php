@@ -7,7 +7,7 @@ use App\Repository\UserRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Serializer\SerializerInterface;
 
-class UserService implements UserServiceInterface
+class UserByClientService implements UserByClientServiceInterface
 {
     /**
      * phoneRepository.

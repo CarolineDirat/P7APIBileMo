@@ -9,7 +9,7 @@ use App\Repository\UserRepository;
 use App\Service\BodyRequestServiceInterface;
 use App\Service\ErrorResponse\ForbiddenErrorResponse;
 use App\Service\ErrorResponse\InternalServerErrorResponse;
-use App\Service\UserService;
+use App\Service\UserByClientService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -36,15 +36,15 @@ class UserByClientController extends AbstractController
      *     stateless=true
      * )
      *
-     * @param Client      $client
-     * @param UserService $userService,
-     * @param Request     $request
+     * @param Client              $client
+     * @param UserByClientService $userService,
+     * @param Request             $request
      *
      * @return JsonResponse
      */
     public function collection(
         Client $client,
-        UserService $userService,
+        UserByClientService $userService,
         Request $request
     ): JsonResponse {
         return new JsonResponse(
@@ -83,7 +83,7 @@ class UserByClientController extends AbstractController
             throw new AccessDeniedHttpException(
                 'You cannot access to the user by this client.',
                 null,
-                Response::HTTP_FORBIDDEN
+                JsonResponse::HTTP_FORBIDDEN
             );
         }
 

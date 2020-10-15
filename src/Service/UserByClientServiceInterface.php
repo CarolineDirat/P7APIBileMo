@@ -5,7 +5,7 @@ namespace App\Service;
 use App\Entity\Client;
 use Symfony\Component\HttpFoundation\Request;
 
-interface UserServiceInterface
+interface UserByClientServiceInterface
 {
     /**
      * getSerializedPaginatedUsersByClient
