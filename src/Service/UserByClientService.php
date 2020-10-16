@@ -19,9 +19,9 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class UserByClientService implements UserByClientServiceInterface
 {
-    const VALID_PROPERTIES = ['email', 'lastname', 'firstname', 'password'];
-    const PUT_METHOD = 'PUT';
-    const POST_METHOD = 'POST';
+    private const VALID_PROPERTIES = ['email', 'lastname', 'firstname', 'password'];
+    private const PUT_METHOD = 'PUT';
+    private const POST_METHOD = 'POST';
 
     /**
      * phoneRepository.
