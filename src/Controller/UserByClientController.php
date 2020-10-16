@@ -4,13 +4,12 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Service\UserByClientServiceInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 /**
  * UserByClientController.
@@ -32,10 +31,8 @@ class UserByClientController extends AbstractController
      *
      * @return JsonResponse
      */
-    public function collection(
-        UserByClientServiceInterface $userService,
-        Request $request
-    ): JsonResponse {
+    public function collection(Request $request, UserByClientServiceInterface $userService): JsonResponse
+    {
         return new JsonResponse(
             $userService->getSerializedPaginatedUsersByClient($this->getUser(), $request),
             JsonResponse::HTTP_OK,
@@ -62,10 +59,8 @@ class UserByClientController extends AbstractController
      *
      * @return JsonResponse
      */
-    public function item(
-        User $user,
-        SerializerInterface $serializer
-    ): JsonResponse {        
+    public function item(User $user, SerializerInterface $serializer): JsonResponse
+    {
         return new JsonResponse(
             $serializer->serialize($user, 'json', ['groups' => 'get']),
             JsonResponse::HTTP_OK,
@@ -89,10 +84,8 @@ class UserByClientController extends AbstractController
      *
      * @return JsonResponse
      */
-    public function post(
-        Request $request,
-        UserByClientServiceInterface $userService
-    ): JsonResponse {
+    public function post(Request $request, UserByClientServiceInterface $userService): JsonResponse
+    {
         return $userService->processPostUserByClient($this->getUser(), $request);
     }
 
@@ -105,7 +98,7 @@ class UserByClientController extends AbstractController
      *     name="collection_put",
      *     methods={"PUT"}
      * )
-     * 
+     *
      * @isGranted("client", subject="user", message="Access Denied. You can only access your own users.")
      *
      * @param User                         $user
@@ -131,10 +124,11 @@ class UserByClientController extends AbstractController
      *     name="collection_delete",
      *     methods={"DELETE"}
      * )
-     * 
+     *
      * @isGranted("client", subject="user", message="Access Denied. You can only access your own users.")
      *
-     * @param User   $user
+     * @param User                         $user
+     * @param UserByClientServiceInterface $userService
      *
      * @return JsonResponse
      */
