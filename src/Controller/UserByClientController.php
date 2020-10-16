@@ -62,7 +62,7 @@ class UserByClientController extends AbstractController
      *
      * @param Client                       $client
      * @param User                         $user
-     * @param SerializerInterfaceInterface $serializer
+     * @param SerializerInterface $serializer
      *
      * @throws AccessDeniedHttpException
      *
