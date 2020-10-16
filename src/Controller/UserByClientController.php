@@ -35,7 +35,7 @@ class UserByClientController extends AbstractController
     {
         return new JsonResponse(
             $userService->getSerializedPaginatedUsersByClient($this->getUser(), $request),
-            JsonResponse::HTTP_OK,
+            JsonResponse::HTTP_PARTIAL_CONTENT,
             [],
             true
         );
