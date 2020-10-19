@@ -43,7 +43,7 @@ class RefreshTokenManager extends BaseRefreshTokenManager
     public function __construct(ObjectManager $om, $class)
     {
         $this->objectManager = $om;
-        $this->repository = $om->getRepository($class);
+        $this->repository = $om->getRepository($class); /** @phpstan-ignore-line */
         $metadata = $om->getClassMetadata($class);
         $this->class = $metadata->getName();
     }
