@@ -11,11 +11,11 @@
 
 namespace App\Doctrine;
 
-use Doctrine\Persistence\ObjectManager;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\Persistence\ObjectManager;
 use Gesdinet\JWTRefreshTokenBundle\Entity\RefreshTokenRepository;
-use Gesdinet\JWTRefreshTokenBundle\Model\RefreshTokenManager as BaseRefreshTokenManager;
 use Gesdinet\JWTRefreshTokenBundle\Model\RefreshTokenInterface;
+use Gesdinet\JWTRefreshTokenBundle\Model\RefreshTokenManager as BaseRefreshTokenManager;
 
 class RefreshTokenManager extends BaseRefreshTokenManager
 {
@@ -55,7 +55,7 @@ class RefreshTokenManager extends BaseRefreshTokenManager
      */
     public function get($refreshToken)
     {
-        return $this->repository->findOneBy(array('refreshToken' => $refreshToken));
+        return $this->repository->findOneBy(['refreshToken' => $refreshToken]);
     }
 
     /**
@@ -65,7 +65,7 @@ class RefreshTokenManager extends BaseRefreshTokenManager
      */
     public function getLastFromUsername($username)
     {
-        return $this->repository->findOneBy(array('username' => $username), array('valid' => 'DESC'));
+        return $this->repository->findOneBy(['username' => $username], ['valid' => 'DESC']);
     }
 
     /**
