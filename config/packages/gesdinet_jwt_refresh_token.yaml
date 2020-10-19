@@ -1,0 +1,3 @@
+gesdinet_jwt_refresh_token:
+    ttl_update: true # This will reset the token TTL each time you ask a refresh.
+

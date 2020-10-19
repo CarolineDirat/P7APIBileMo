@@ -45,3 +45,8 @@ services:
             - { type: 'Symfony\Component\HttpKernel\Exception\NotFoundHttpException' }
         tags:
             - { name: app.normalizer }
+    
+    gesdinet.jwtrefreshtoken.refresh_token_manager:
+        class: App\Doctrine\RefreshTokenManager
+        public: true
+        arguments: [ '@doctrine.orm.default_entity_manager', 'Gesdinet\JWTRefreshTokenBundle\Entity\RefreshToken']
