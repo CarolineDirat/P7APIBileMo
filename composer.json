@@ -12,6 +12,7 @@
         "doctrine/orm": "^2.7",
         "gesdinet/jwt-refresh-token-bundle": "^0.9.1",
         "lexik/jwt-authentication-bundle": "^2.8",
+        "nelmio/api-doc-bundle": "^4.0",
         "phpdocumentor/reflection-docblock": "^5.2",
         "ramsey/uuid-doctrine": "^1.6",
         "sensio/framework-extra-bundle": "^5.6",
