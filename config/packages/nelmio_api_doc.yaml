@@ -1,9 +1,24 @@
 nelmio_api_doc:
+    models: { use_jms: false }
     documentation:
         info:
-            title: My App
-            description: This is an awesome app!
+            title: BileMoAPI
+            description: This is an awesome API REST for BileMo!
             version: 1.0.0
+        components:
+            securitySchemes:
+                Bearer:
+                    type: http
+                    scheme: bearer
+                    bearerFormat: JWT
+        security:
+            - Bearer: []
+
     areas: # to filter documented areas
         path_patterns:
-            - ^/api(?!/doc$) # Accepts routes under /api except /api/doc
+            - ^/api(?!(/doc|/doc.json)$) # Accepts routes under /api except /api/doc
+        #host_patterns:
+        #    - ^/api
+    
+    
+    
