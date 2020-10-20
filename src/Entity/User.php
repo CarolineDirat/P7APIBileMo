@@ -9,6 +9,7 @@ use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
+use OpenApi\Annotations as OA;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
@@ -28,6 +29,8 @@ class User
      * @ORM\Column(type="uuid_binary", unique=true, name="bm_uuid")
      *
      * @Groups({"get"})
+     * 
+     * @OA\Property(type="string",  maxLength=36, minLength=36, description="The unique identifier of the user.")
      *
      * @var UuidInterface uuid
      */
@@ -46,6 +49,8 @@ class User
      *      maxMessage = "This value is too short. Your email cannot be longer than {{ limit }} characters",
      * )
      * @Assert\Email(message = "The email '{{ value }}' is not a valid email.")
+     * 
+     * @OA\Property(description="The user email.")
      *
      * @var string email
      */
@@ -78,6 +83,8 @@ class User
      *      minMessage = "This value is too long. Your first name must be at least {{ limit }} characters long",
      *      maxMessage = "This value is too short. Your first name cannot be longer than {{ limit }} characters",
      * )
+     * 
+     * @OA\Property(description="The user first name.")
      *
      * @var string firstname
      */
@@ -92,9 +99,11 @@ class User
      * @Assert\Length(
      *      min = 2,
      *      max = 45,
-     *      minMessage = "This value is too long. Your last name must be at least {{ limit }} characters long",
-     *      maxMessage = "This value is too short. Your last name cannot be longer than {{ limit }} characters",
+     *      minMessage = "This value is too short. Your last name must be at least {{ limit }} characters long",
+     *      maxMessage = "This value is too long. Your last name cannot be longer than {{ limit }} characters",
      * )
+     * 
+     * @OA\Property(description="The user last name.")
      *
      * @var string lastname
      */
@@ -104,6 +113,8 @@ class User
      * @ORM\Column(type="datetime_immutable", name="bm_created_at")
      *
      * @Groups({"get"})
+     * 
+     * @OA\Property(description="The date of creation of the user.")
      *
      * @var DateTimeImmutable createdAt
      */
@@ -113,6 +124,8 @@ class User
      * @ORM\Column(type="datetime_immutable", name="bm_updated_at")
      *
      * @Groups({"get"})
+     * 
+     * @OA\Property(description="The date of updating of the user.")
      *
      * @var DateTimeImmutable updatedAt
      */
