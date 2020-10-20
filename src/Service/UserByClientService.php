@@ -268,9 +268,11 @@ class UserByClientService implements UserByClientServiceInterface
         }
         $em->flush();
 
+        $code = 'POST' === $method ? JsonResponse::HTTP_CREATED : JsonResponse::HTTP_OK;
+
         return new JsonResponse(
             $this->serializer->serialize($user, 'json', ['groups' => 'get']),
-            JsonResponse::HTTP_OK,
+            $code,
             [],
             true
         );
