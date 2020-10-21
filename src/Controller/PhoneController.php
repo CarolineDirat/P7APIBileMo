@@ -68,7 +68,7 @@ class PhoneController extends AbstractController
      * @return JsonResponse
      */
     public function item(Phone $phone, PhoneService $phoneService): JsonResponse
-    {
+    {        
         return new JsonResponse(
             $phoneService->getSerializedPhone($phone),
             JsonResponse::HTTP_PARTIAL_CONTENT,

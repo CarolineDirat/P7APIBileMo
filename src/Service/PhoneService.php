@@ -58,30 +58,16 @@ class PhoneService implements PhoneServiceInterface
      */
     public function getSerializedPhone(Phone $phone): string
     {
+        $phone->setScreen($phone->getScreen());
+        $phone->setSize($phone->getSize());
+        
         $phone = $this->serializer->serialize(
             $phone,
             'json',
-            [
-                'circular_reference_handler' => function (object $object) {
-                    return $object->getId();
-                },
-            ]
+            ['groups' => 'get_phone']
         );
 
-        // after circular reference handling, there are some useless elements in linked objects
-        $phone = json_decode($phone, true);
-        unset($phone['id']); // delete useless id key
-        foreach ($phone as $key => $value) {
-            if (is_array($value)) {
-                // delete useless id key (always first property)
-                array_shift($value);
-                // delete 4 last useless keys : "phone", "__initializer__", "__cloner__", "__isInitialized__"
-                array_splice($value, -4);
-                $phone[$key] = $value;
-            }
-        }
-
-        return json_encode($phone);
+        return $phone;
     }
 
     /**
