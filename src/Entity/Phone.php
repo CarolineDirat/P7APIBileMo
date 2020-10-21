@@ -5,6 +5,8 @@ namespace App\Entity;
 use App\Repository\PhoneRepository;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
+use Nelmio\ApiDocBundle\Annotation\Model;
+use OpenApi\Annotations as OA;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -27,7 +29,9 @@ class Phone
      * @var null|UuidInterface
      *
      * @ORM\Column(type="uuid_binary", unique=true, name="bm_uuid")
-     * @Groups("collection")
+     * @Groups({"collection", "get_phone"})
+     *
+     * @OA\Property(type="string", maxLength=36, minLength=36, description="The unique identifier of the phone.")
      */
     private ?UuidInterface $uuid;
 
@@ -35,6 +39,9 @@ class Phone
      * @var DateTimeImmutable date of creation of the phone
      *
      * @ORM\Column(type="datetime_immutable", name="bm_created_at")
+     * @Groups({"get_phone"})
+     *
+     * @OA\Property(description="The date of creation of the phone.")
      */
     private DateTimeImmutable $createdAt;
 
@@ -42,6 +49,9 @@ class Phone
      * @var DateTimeImmutable date of updating of the phone
      *
      * @ORM\Column(type="datetime_immutable", name="bm_updated_at")
+     * @Groups({"get_phone"})
+     *
+     * @OA\Property(description="The date of updating of the phone.")
      */
     private DateTimeImmutable $updatedAt;
 
@@ -49,7 +59,9 @@ class Phone
      * @var string constructor of the phone
      *
      * @ORM\Column(type="string", length=55, name="bm_constructor")
-     * @Groups("collection")
+     * @Groups({"collection", "get_phone"})
+     *
+     * @OA\Property(type="string", maxLength=55, description="The name of the phone constructor.")
      */
     private string $constructor;
 
@@ -57,7 +69,9 @@ class Phone
      * @var string name of the phone
      *
      * @ORM\Column(type="string", length=55, name="bm_name")
-     * @Groups("collection")
+     * @Groups({"collection", "get_phone"})
+     *
+     * @OA\Property(type="string", maxLength=55, description="The name of the phone.")
      */
     private string $name;
 
@@ -65,7 +79,9 @@ class Phone
      * @var float price of the phone, in euros
      *
      * @ORM\Column(type="float", name="bm_priceEuro")
-     * @Groups("collection")
+     * @Groups({"collection", "get_phone"})
+     *
+     * @OA\Property(type="number", description="The phone price.")
      */
     private float $priceEuro;
 
@@ -73,6 +89,9 @@ class Phone
      * @var null|string system
      *
      * @ORM\Column(type="string", length=45, nullable=true, name="bm_system")
+     * @Groups({"get_phone"})
+     *
+     * @OA\Property(type="string", maxLength=45, description="The operating system of the phone.")
      */
     private ?string $system;
 
@@ -80,6 +99,9 @@ class Phone
      * @var null|string user interface
      *
      * @ORM\Column(type="string", length=45, nullable=true, name="bm_user_interface")
+     * @Groups({"get_phone"})
+     *
+     * @OA\Property(type="string", maxLength=45, description="The user interface of the phone.")
      */
     private ?string $userInterface;
 
@@ -87,6 +109,9 @@ class Phone
      * @var null|string processor
      *
      * @ORM\Column(type="string", length=45, nullable=true, name="bm_processor")
+     * @Groups({"get_phone"})
+     *
+     * @OA\Property(type="string", maxLength=45, description="The processor of the phone.")
      */
     private ?string $processor;
 
@@ -94,6 +119,9 @@ class Phone
      * @var null|string RAM
      *
      * @ORM\Column(type="string", length=6, nullable=true, name="bm_ram")
+     * @Groups({"get_phone"})
+     *
+     * @OA\Property(type="string", maxLength=6, description="The RAM of the phone.")
      */
     private ?string $ram;
 
@@ -101,6 +129,9 @@ class Phone
      * @var null|string capacity
      *
      * @ORM\Column(type="string", length=10, nullable=true, name="bm_capacity")
+     * @Groups({"get_phone"})
+     *
+     * @OA\Property(type="string", maxLength=10, description="The phone storage capacity.")
      */
     private ?string $capacity;
 
@@ -108,6 +139,9 @@ class Phone
      * @var null|string DAS indice
      *
      * @ORM\Column(type="string", length=15, nullable=true, name="bm_das")
+     * @Groups({"get_phone"})
+     *
+     * @OA\Property(type="string", maxLength=15, description="The specific absorption rate of the phone.")
      */
     private ?string $das;
 
@@ -115,6 +149,9 @@ class Phone
      * @var null|string capacity of the battery
      *
      * @ORM\Column(type="string", length=10, nullable=true, name="bm_battery_capacity")
+     * @Groups({"get_phone"})
+     *
+     * @OA\Property(type="string", maxLength=10, description="The battery capacity of the phone.")
      */
     private ?string $batteryCapacity;
 
@@ -122,6 +159,9 @@ class Phone
      * @var null|bool if the battery can wireless charging
      *
      * @ORM\Column(type="boolean", nullable=true, name="bm_wireless_charging")
+     * @Groups({"get_phone"})
+     *
+     * @OA\Property(type="string", description="Whether the phone can be charged wirelessly.")
      */
     private ?bool $wirelessCharging;
 
@@ -129,12 +169,18 @@ class Phone
      * @var null|string weight of the phone
      *
      * @ORM\Column(type="string", length=10, nullable=true, name="bm_weight")
+     * @Groups({"get_phone"})
+     *
+     * @OA\Property(type="string", maxLength=10, description="The weight of the phone.")
      */
     private ?string $weight;
 
     /**
      * @ORM\OneToOne(targetEntity=Size::class, mappedBy="phone", cascade={"persist", "remove"}, orphanRemoval=true)
      * @ORM\JoinColumn(referencedColumnName="bm_id", name="size_bm_id", onDelete="SET NULL")
+     * @Groups({"get_phone"})
+     *
+     * @OA\Property(ref=@Model(type=Size::class), description="Phone size informations.")
      *
      * @var null|Size phone dimensions
      */
@@ -143,6 +189,9 @@ class Phone
     /**
      * @ORM\OneToOne(targetEntity=Screen::class, mappedBy="phone", cascade={"persist", "remove"}, orphanRemoval=true)
      * @ORM\JoinColumn(referencedColumnName="bm_id", name="screen_bm_id", onDelete="SET NULL")
+     * @Groups({"get_phone"})
+     *
+     * @OA\Property(ref=@Model(type=Screen::class), description="Phone screen informations.")
      *
      * @var null|Screen screen corresponding to the phone
      */

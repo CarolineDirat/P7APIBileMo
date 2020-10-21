@@ -93,7 +93,7 @@ class PaginationService implements PaginationServiceInterface
 
         if ($page > $pages) {
             throw new NotFoundHttpException(
-                'The asked page n°'.$page." doesn't exist. The maximum number of pages is ".$pages.'.',
+                'The required page n°'.$page." doesn't exist. The maximum number of pages is ".$pages.'.',
                 null,
                 JsonResponse::HTTP_BAD_REQUEST
             );
