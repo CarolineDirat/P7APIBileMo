@@ -22,9 +22,6 @@ class NotFoundHttpExceptionNormalizer extends AbstractExceptionNormalizer
         if ('App\\Entity\\User object not found by the @ParamConverter annotation.' === $message) {
             $message = 'User not found';
         }
-        if ('App\\Entity\\Client object not found by the @ParamConverter annotation.' === $message) {
-            $message = 'Client not found';
-        }
 
         $result['body'] = [
             'code' => Response::HTTP_NOT_FOUND,
