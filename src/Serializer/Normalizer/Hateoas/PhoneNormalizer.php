@@ -6,7 +6,7 @@ use App\Entity\Phone;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
-class PhoneNormalizer extends AbstractHateoasNormalizer implements NormalizerInterface
+class PhoneNormalizer extends HateoasNormalizer implements NormalizerInterface
 {    
     /**
      * normalize : add ['_links']['self', 'list']['href'] to a phone data (HATEOAS)

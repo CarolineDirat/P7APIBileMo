@@ -5,7 +5,7 @@ namespace App\Serializer\Normalizer\Hateoas;
 use App\Entity\User;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
-class UserNormalizer extends AbstractHateoasNormalizer implements NormalizerInterface
+class UserNormalizer extends HateoasNormalizer implements NormalizerInterface
 {    
     /**
      * normalize : add ['_links']['self','modify','delete', 'list', 'create'] to a user data (HATEOAS)

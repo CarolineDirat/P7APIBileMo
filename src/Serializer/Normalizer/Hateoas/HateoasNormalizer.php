@@ -5,12 +5,12 @@ namespace App\Serializer\Normalizer\Hateoas;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 
-abstract class AbstractHateoasNormalizer
+abstract class HateoasNormalizer implements HateoasNormalizerInterface
 {
-    protected const GET_METHOD = 'GET';
-    protected const PUT_METHOD = 'PUT';
-    protected const POST_METHOD = 'POST';
-    protected const DELETE_METHOD = 'DELETE';
+    const GET_METHOD = 'GET';
+    const PUT_METHOD = 'PUT';
+    const POST_METHOD = 'POST';
+    const DELETE_METHOD = 'DELETE';
     
     /**
      * router
