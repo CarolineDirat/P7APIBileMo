@@ -230,6 +230,11 @@ class UserByClientController extends AbstractController
      *     description="Returns the created user (without its password).",
      *     @Model(type=User::class, groups={"get"})
      * )
+     * 
+     * @OA\Response(
+     *     response=403,
+     *     description="Forbidden. The email 'email' already exists."
+     * )
      *
      * @OA\Response(
      *     response=400,
