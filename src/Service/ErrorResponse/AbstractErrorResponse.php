@@ -5,7 +5,7 @@ namespace App\Service\ErrorResponse;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Serializer\SerializerInterface;
 
-abstract class AbstractErrorResponse implements ErrorResponseInterface
+class AbstractErrorResponse implements ErrorResponseInterface
 {
     /**
      * code
@@ -31,15 +31,23 @@ abstract class AbstractErrorResponse implements ErrorResponseInterface
     private SerializerInterface $serializer;
 
     /**
+     * errorHateoas
+     *
+     * @var ErrorHateoas
+     */
+    protected ErrorHateoas $errorHateoas;
+
+    /**
      * __construct.
      *
      * @param SerializerInterface $serializer
      */
-    public function __construct(SerializerInterface $serializer, int $code)
+    public function __construct(SerializerInterface $serializer, int $code, ErrorHateoas $errorHateoas)
     {
         $this->serializer = $serializer;
         $this->code = $code;
         $this->body['code'] = $this->code;
+        $this->errorHateoas = $errorHateoas;
     }
 
     /**
@@ -51,7 +59,7 @@ abstract class AbstractErrorResponse implements ErrorResponseInterface
     public function returnErrorJsonResponse(): JsonResponse
     {
         return new JsonResponse(
-            $this->serializer->serialize($this->body, 'json'),
+            $this->serializer->serialize($this->errorHateoas->addErrorHateoas($this->body), 'json'),
             $this->code,
             [],
             true

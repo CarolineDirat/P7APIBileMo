@@ -11,8 +11,8 @@ class ForbiddenErrorResponse extends AbstractErrorResponse
      *
      * @param SerializerInterface $serializer
      */
-    public function __construct(SerializerInterface $serializer)
+    public function __construct(SerializerInterface $serializer, ErrorHateoas $errorHateoas)
     {
-        parent::__construct($serializer, 403);
+        parent::__construct($serializer, 403, $errorHateoas);
     }
 }

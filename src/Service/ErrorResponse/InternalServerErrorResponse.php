@@ -11,8 +11,8 @@ class InternalServerErrorResponse extends AbstractErrorResponse
      *
      * @param SerializerInterface $serializer
      */
-    public function __construct(SerializerInterface $serializer)
+    public function __construct(SerializerInterface $serializer, ErrorHateoas $errorHateoas)
     {
-        parent::__construct($serializer, 500);
+        parent::__construct($serializer, 500, $errorHateoas);
     }
 }

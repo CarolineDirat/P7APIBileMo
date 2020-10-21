@@ -28,6 +28,8 @@ class NotFoundHttpExceptionNormalizer extends AbstractExceptionNormalizer
             'message' => $message,
         ];
 
+        $result['body'] = $this->errorHateoas->addErrorHateoas($result['body']);
+
         return $result;
     }
 }

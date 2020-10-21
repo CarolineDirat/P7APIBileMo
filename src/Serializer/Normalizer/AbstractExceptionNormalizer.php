@@ -2,6 +2,7 @@
 
 namespace App\Serializer\Normalizer;
 
+use App\Service\ErrorResponse\ErrorHateoas;
 use Throwable;
 
 /**
@@ -16,15 +17,23 @@ abstract class AbstractExceptionNormalizer implements ExceptionNormalizerInterfa
      * @var string[]
      */
     protected array $exceptionTypes;
+    
+    /**
+     * errorHateoas
+     *
+     * @var ErrorHateoas
+     */
+    protected ErrorHateoas $errorHateoas;
 
     /**
      * __construct.
      *
      * @param string[] $exceptionTypes
      */
-    public function __construct(array $exceptionTypes)
+    public function __construct(array $exceptionTypes, ErrorHateoas $errorHateoas)
     {
         $this->exceptionTypes = $exceptionTypes;
+        $this->errorHateoas = $errorHateoas;
     }
 
     public function supports(Throwable $exception): bool

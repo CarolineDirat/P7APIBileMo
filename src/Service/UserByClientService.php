@@ -19,9 +19,9 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class UserByClientService implements UserByClientServiceInterface
 {
-    private const VALID_PROPERTIES = ['email', 'lastname', 'firstname', 'password'];
-    private const PUT_METHOD = 'PUT';
-    private const POST_METHOD = 'POST';
+    const VALID_PROPERTIES = ['email', 'lastname', 'firstname', 'password'];
+    const PUT_METHOD = 'PUT';
+    const POST_METHOD = 'POST';
 
     /**
      * phoneRepository.
@@ -78,6 +78,13 @@ class UserByClientService implements UserByClientServiceInterface
      * @var ValidatorInterface
      */
     private ValidatorInterface $validator;
+    
+    /**
+     * internalServerError
+     *
+     * @var InternalServerErrorResponse
+     */
+    private InternalServerErrorResponse $internalServerError;
 
     /**
      * __construct.
@@ -89,6 +96,8 @@ class UserByClientService implements UserByClientServiceInterface
      * @param BodyRequestServiceInterface $bodyRequestService
      * @param AppFormFactoryInterface     $appFormFactory
      * @param ManagerRegistry             $managerRegistry
+     * @param ValidatorInterface          $validator
+     * @param InternalServerErrorResponse $internalServerError
      */
     public function __construct(
         UserRepository $userRepository,
@@ -98,7 +107,8 @@ class UserByClientService implements UserByClientServiceInterface
         BodyRequestServiceInterface $bodyRequestService,
         AppFormFactoryInterface $appFormFactory,
         ManagerRegistry $managerRegistry,
-        ValidatorInterface $validator
+        ValidatorInterface $validator,
+        InternalServerErrorResponse $internalServerError
     ) {
         $this->userRepository = $userRepository;
         $this->serializer = $serializer;
@@ -108,6 +118,7 @@ class UserByClientService implements UserByClientServiceInterface
         $this->appFormFactory = $appFormFactory;
         $this->managerRegistry = $managerRegistry;
         $this->validator = $validator;
+        $this->internalServerError = $internalServerError;
     }
 
     /**
@@ -237,10 +248,9 @@ class UserByClientService implements UserByClientServiceInterface
         $form->submit($user);
 
         if (!($user instanceof User)) {
-            $internalServerError = new InternalServerErrorResponse($this->serializer);
-            $internalServerError->addBodyValue('message', 'Internal Server Error. You can join us by email : bilemo@email.com');
+            $this->internalServerError->addBodyValue('message', 'Internal Server Error. You can join us by email : bilemo@email.com');
 
-            return $internalServerError->returnErrorJsonResponse();
+            return $this->internalServerError->returnErrorJsonResponse();
         }
 
         $errors = $this->validator->validate($user);

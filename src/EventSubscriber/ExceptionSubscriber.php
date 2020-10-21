@@ -3,6 +3,7 @@
 namespace App\EventSubscriber;
 
 use App\Serializer\Normalizer\ExceptionNormalizerInterface;
+use App\Service\ErrorResponse\ErrorHateoas;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -29,10 +30,18 @@ class ExceptionSubscriber implements EventSubscriberInterface
      * @var ExceptionNormalizerInterface[]
      */
     private array $normalizers = [];
+    
+    /**
+     * errorHateoas
+     *
+     * @var ErrorHateoas
+     */
+    private ErrorHateoas $errorHateoas;
 
-    public function __construct(SerializerInterface $serializer)
+    public function __construct(SerializerInterface $serializer, ErrorHateoas $errorHateoas)
     {
         $this->serializer = $serializer;
+        $this->errorHateoas = $errorHateoas;
     }
 
     /**
@@ -62,6 +71,8 @@ class ExceptionSubscriber implements EventSubscriberInterface
                 'code' => empty($code) ? Response::HTTP_BAD_REQUEST : $code,
                 'message' => $event->getThrowable()->getMessage(),
             ];
+
+            $result['body'] = $this->errorHateoas->addErrorHateoas($result['body']);
         }
 
         $body = $this->serializer->serialize($result['body'], 'json');

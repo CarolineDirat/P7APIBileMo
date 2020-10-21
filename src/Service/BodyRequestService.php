@@ -28,10 +28,10 @@ class BodyRequestService implements BodyRequestServiceInterface
      *
      * @param SerializerInterface $serializer
      */
-    public function __construct(SerializerInterface $serializer)
+    public function __construct(SerializerInterface $serializer, BadRequestErrorResponse $badRequestError)
     {
         $this->serializer = $serializer;
-        $this->badRequestError = new BadRequestErrorResponse($this->serializer);
+        $this->badRequestError = $badRequestError;
     }
 
     /**
@@ -61,10 +61,6 @@ class BodyRequestService implements BodyRequestServiceInterface
             foreach ($missingProperties as $value) {
                 $this->badRequestError->addBodyValueToArray('message', 'Bad Request : The data name {'.(string) $value.'} is missing');
             }
-        }
-
-        if (empty($error)) {
-            $this->badRequestError->addBodyArray('valid_properties', $validProperties);
         }
 
         return $error;
