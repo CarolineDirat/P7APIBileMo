@@ -4,8 +4,8 @@ namespace App\Entity;
 
 use App\Repository\SizeRepository;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Serializer\Annotation\Groups;
 use OpenApi\Annotations as OA;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=SizeRepository::class)
@@ -24,7 +24,7 @@ class Size
     /**
      * @ORM\Column(type="string", length=10, name="bm_width")
      * @Groups({"get_phone"})
-     * 
+     *
      * @OA\Property(type="string", maxLength=10, description="The phone width.")
      *
      * @var null|string
@@ -34,7 +34,7 @@ class Size
     /**
      * @ORM\Column(type="string", length=10, name="bm_height")
      * @Groups({"get_phone"})
-     * 
+     *
      * @OA\Property(type="string", maxLength=10, description="The phone height.")
      *
      * @var null|string height
@@ -44,7 +44,7 @@ class Size
     /**
      * @ORM\Column(type="string", length=10, name="bm_thickness")
      * @Groups({"get_phone"})
-     * 
+     *
      * @OA\Property(type="string", maxLength=10, description="The phone thickness.")
      *
      * @var null|string thickness

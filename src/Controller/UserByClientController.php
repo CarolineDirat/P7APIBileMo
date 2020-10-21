@@ -6,13 +6,13 @@ use App\Entity\User;
 use App\Service\UserByClientServiceInterface;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use Nelmio\ApiDocBundle\Annotation\Security;
+use OpenApi\Annotations as OA;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
-use OpenApi\Annotations as OA;
 
 /**
  * UserByClientController.
@@ -23,14 +23,14 @@ class UserByClientController extends AbstractController
 {
     /**
      * collection - Get paged users belonging to the authenticated client.
-     * 
+     *
      * @Route(
      *     path="",
      *     name="collection_get",
      *     methods={"GET"},
      *     stateless=true
      * )
-     * 
+     *
      * @OA\Parameter(
      *     name="page",
      *     in="query",
@@ -43,34 +43,34 @@ class UserByClientController extends AbstractController
      *     description="The number of users per page. Its default value and its maximum value come from constants.ini file: [users]['number_per_page']=5 and [users]['limi_max']=100. ",
      *     @OA\Schema(type="integer", default=5, maximum=100, minimum=1)
      * )
-     * 
+     *
      * @OA\Response(
      *     response=206,
      *     description="Returns the page n°'page' of 'limit' users.",
      *     @OA\JsonContent(
-     *        type="array",
-     *        maxItems=100,
-     *        @OA\Items(ref=@Model(type=User::class, groups={"get"}))
+     *         type="array",
+     *         maxItems=100,
+     *         @OA\Items(ref=@Model(type=User::class, groups={"get"}))
      *     )
      * )
-     * 
+     *
      * @OA\Response(
      *     response=404,
      *     description="When required page doesn't exist: The required page n°'page' doesn't exist. The maximum number of pages is x."
      * )
-     * 
+     *
      * @OA\Response(
      *     response=400,
      *     description="The query parameters 'page' and 'limit' must be integers and not null. || A Token was not found in the TokenStorage."
      * )
-     * 
+     *
      * @OA\Response(
      *     response=401,
      *     description="Invalid JWT Token. || Expired JWT Token."
      * )
-     * 
+     *
      * @Security(name="Bearer")
-     * 
+     *
      * @OA\Tag(name="Users")
      *
      * @param UserByClientServiceInterface $userService,
@@ -97,42 +97,42 @@ class UserByClientController extends AbstractController
      *     methods={"GET"},
      *     stateless=true
      * )
-     * 
+     *
      * @OA\Parameter(
      *     name="uuid",
      *     in="path",
      *     description="The unique identifier of the user.",
      *     @OA\Schema(type="string", maxLength=36, minLength=36)
      * )
-     * 
+     *
      * @OA\Response(
      *     response=200,
      *     description="Returns a user by its uuid",
      *     @Model(type=User::class, groups={"get"})
      * )
-     * 
+     *
      * @OA\Response(
      *     response=404,
      *     description="User not found."
      * )
-     * 
+     *
      * @OA\Response(
      *     response=403,
      *     description="Access Denied. You can only access to your own users."
      * )
-     * 
+     *
      * @OA\Response(
      *     response=400,
      *     description="A Token was not found in the TokenStorage."
      * )
-     * 
+     *
      * @OA\Response(
      *     response=401,
      *     description="Invalid JWT Token. || Expired JWT Token."
      * )
-     * 
+     *
      * @Security(name="Bearer")
-     * 
+     *
      * @OA\Tag(name="Users")
      *
      * @isGranted("client", subject="user", message="Access Denied. You can only access your own users.")
@@ -160,7 +160,7 @@ class UserByClientController extends AbstractController
      *     name="collection_post",
      *     methods={"POST"},
      * )
-     * 
+     *
      * @OA\RequestBody(
      *     request="UserArray",
      *     description="List of user properties.",
@@ -198,25 +198,25 @@ class UserByClientController extends AbstractController
      *         )
      *     )
      * )
-     * 
+     *
      * @OA\Response(
      *     response=201,
      *     description="Returns the created user (without its password).",
      *     @Model(type=User::class, groups={"get"})
      * )
-     * 
+     *
      * @OA\Response(
      *     response=400,
      *     description="A Token was not found in the TokenStorage. || Syntax Error. || The data name 'property' is not valid. || The data name 'property' is missing."
      * )
-     * 
+     *
      * @OA\Response(
      *     response=401,
      *     description="Invalid JWT Token. || Expired JWT Token."
      * )
-     * 
+     *
      * @Security(name="Bearer")
-     * 
+     *
      * @OA\Tag(name="Users")
      *
      * @param Request                      $request
@@ -237,14 +237,14 @@ class UserByClientController extends AbstractController
      *     name="collection_put",
      *     methods={"PUT"}
      * )
-     * 
+     *
      * @OA\Parameter(
      *     name="uuid",
      *     in="path",
      *     description="The unique identifier of the user.",
      *     @OA\Schema(type="string", maxLength=36, minLength=36)
      * )
-     * 
+     *
      * @OA\RequestBody(
      *     request="UserArray",
      *     description="List of user properties.",
@@ -282,35 +282,35 @@ class UserByClientController extends AbstractController
      *         )
      *     )
      * )
-     * 
+     *
      * @OA\Response(
      *     response=200,
      *     description="Returns the updated user (without its password).",
      *     @Model(type=User::class, groups={"get"})
      * )
-     * 
+     *
      * @OA\Response(
      *     response=404,
      *     description="User not found."
      * )
-     * 
+     *
      * @OA\Response(
      *     response=403,
      *     description="Access Denied. You can only access to your own users."
      * )
-     * 
+     *
      * @OA\Response(
      *     response=400,
      *     description="A Token was not found in the TokenStorage. || Syntax Error. || The data name 'property' is not valid. || The data name 'property' is missing."
      * )
-     * 
+     *
      * @OA\Response(
      *     response=401,
      *     description="Invalid JWT Token. || Expired JWT Token."
      * )
-     * 
+     *
      * @Security(name="Bearer")
-     * 
+     *
      * @OA\Tag(name="Users")
      *
      * @isGranted("client", subject="user", message="Access Denied. You can only access your own users.")
@@ -337,41 +337,41 @@ class UserByClientController extends AbstractController
      *     name="collection_delete",
      *     methods={"DELETE"}
      * )
-     * 
+     *
      * @OA\Parameter(
      *     name="uuid",
      *     in="path",
      *     description="The unique identifier of the user.",
      *     @OA\Schema(type="string", maxLength=36, minLength=36)
      * )
-     * 
+     *
      * @OA\Response(
      *     response=204,
      *     description="Returns no content.",
      * )
-     * 
+     *
      * @OA\Response(
      *     response=404,
      *     description="User not found."
      * )
-     * 
+     *
      * @OA\Response(
      *     response=403,
      *     description="Access Denied. You can only access to your own users."
      * )
-     * 
+     *
      * @OA\Response(
      *     response=400,
      *     description="A Token was not found in the TokenStorage."
      * )
-     * 
+     *
      * @OA\Response(
      *     response=401,
      *     description="Invalid JWT Token. || Expired JWT Token."
      * )
-     * 
+     *
      * @Security(name="Bearer")
-     * 
+     *
      * @OA\Tag(name="Users")
      *
      * @isGranted("client", subject="user", message="Access Denied. You can only access your own users.")

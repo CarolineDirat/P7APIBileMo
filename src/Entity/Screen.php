@@ -4,9 +4,8 @@ namespace App\Entity;
 
 use App\Repository\ScreenRepository;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Serializer\Annotation\Groups;
 use OpenApi\Annotations as OA;
-
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=ScreenRepository::class)
@@ -25,7 +24,7 @@ class Screen
     /**
      * @ORM\Column(type="string", length=8, nullable=true, name="bm_size")
      * @Groups({"get_phone"})
-     * 
+     *
      * @OA\Property(type="string", maxLength=8, description="The size of the phone screen.")
      *
      * @var null|string screen size (diagonal)
@@ -35,7 +34,7 @@ class Screen
     /**
      * @ORM\Column(type="string", length=45, nullable=true, name="bm_technology")
      * @Groups({"get_phone"})
-     * 
+     *
      * @OA\Property(type="string", maxLength=45, description="The technology of the phone screen.")
      *
      * @var null|string sreen technology
@@ -45,7 +44,7 @@ class Screen
     /**
      * @ORM\Column(type="string", length=15, nullable=true, name="bm_definition")
      * @Groups({"get_phone"})
-     * 
+     *
      * @OA\Property(type="string", maxLength=15, description="The definition of the phone screen.")
      *
      * @var null|string screen definition (x*y px)
@@ -55,7 +54,7 @@ class Screen
     /**
      * @ORM\Column(type="string", length=8, nullable=true, name="bm_resolution")
      * @Groups({"get_phone"})
-     * 
+     *
      * @OA\Property(type="string", maxLength=8, description="The resolution of the phone screen.")
      *
      * @var null|string screen resolution (ppp)
@@ -65,7 +64,7 @@ class Screen
     /**
      * @ORM\Column(type="string", length=7, nullable=true, name="bm_refresh_rate")
      * @Groups({"get_phone"})
-     * 
+     *
      * @OA\Property(type="string", maxLength=7, description="The refresh rate of the phone screen.")
      *
      * @var null|string screen refresh rate (Hz)

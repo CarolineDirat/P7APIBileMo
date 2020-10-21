@@ -70,7 +70,7 @@ class PhoneService implements PhoneServiceInterface
 
         // after circular reference handling, there are some useless elements in linked objects
         $phone = json_decode($phone, true);
-        unset($phone['id']); // delete useless id key 
+        unset($phone['id']); // delete useless id key
         foreach ($phone as $key => $value) {
             if (is_array($value)) {
                 // delete useless id key (always first property)
