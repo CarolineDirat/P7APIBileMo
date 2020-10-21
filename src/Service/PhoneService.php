@@ -60,14 +60,12 @@ class PhoneService implements PhoneServiceInterface
     {
         $phone->setScreen($phone->getScreen());
         $phone->setSize($phone->getSize());
-        
-        $phone = $this->serializer->serialize(
+
+        return $this->serializer->serialize(
             $phone,
             'json',
             ['groups' => 'get_phone']
         );
-
-        return $phone;
     }
 
     /**
