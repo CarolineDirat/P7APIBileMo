@@ -47,10 +47,36 @@ class UserByClientController extends AbstractController
      * @OA\Response(
      *     response=206,
      *     description="Returns the page n°'page' of 'limit' users.",
-     *     @OA\JsonContent(
-     *         type="array",
-     *         maxItems=100,
-     *         @OA\Items(ref=@Model(type=User::class, groups={"get"}))
+     *     @OA\MediaType(
+     *         mediaType="application/json",
+     *         @OA\Schema(
+     *             type="object",
+     *             @OA\Property(
+     *                 property="data",
+     *                 type="array",
+     *                 maxItems=100,
+     *                 @OA\Items(ref=@Model(type=User::class, groups={"get"}))
+     *             ),
+     *             @OA\Property(
+     *                 property="meta",
+     *                 type="object",
+     *                 @OA\Property(
+     *                     property="current_page",
+     *                     description="The page number in data response",
+     *                     type="integer"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="number_per_page",
+     *                     description="The number per page of phones in data response",
+     *                     type="integer"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="total_page",
+     *                     description="The number total of pages for all phones in database",
+     *                     type="integer"
+     *                 )
+     *             )
+     *         )
      *     )
      * )
      *
