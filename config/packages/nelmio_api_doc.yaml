@@ -1,6 +1,9 @@
 nelmio_api_doc:
     models: { use_jms: false }
     documentation:
+        servers:
+          - url: '%env(APP_HOST_HTTP)%'
+            description: API over HTTP
         info:
             title: BileMoAPI
             description: This is an awesome API REST for BileMo!
