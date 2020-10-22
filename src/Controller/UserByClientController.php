@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Service\UserByClientServiceInterface;
+use App\Service\UserGetServiceInterface;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use Nelmio\ApiDocBundle\Annotation\Security;
 use OpenApi\Annotations as OA;
@@ -99,12 +100,12 @@ class UserByClientController extends AbstractController
      *
      * @OA\Tag(name="Users")
      *
-     * @param UserByClientServiceInterface $userService,
+     * @param UserGetServiceInterface $userService,
      * @param Request                      $request
      *
      * @return JsonResponse
      */
-    public function collection(Request $request, UserByClientServiceInterface $userService): JsonResponse
+    public function collection(Request $request, UserGetServiceInterface $userService): JsonResponse
     {
         return new JsonResponse(
             $userService->getSerializedPaginatedUsersByClient($this->getUser(), $request),
@@ -230,7 +231,7 @@ class UserByClientController extends AbstractController
      *     description="Returns the created user (without its password).",
      *     @Model(type=User::class, groups={"get"})
      * )
-     *
+     * 
      * @OA\Response(
      *     response=403,
      *     description="Forbidden. The email 'email' already exists."

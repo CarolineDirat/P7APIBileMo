@@ -134,27 +134,6 @@ class UserByClientService implements UserByClientServiceInterface
     }
 
     /**
-     * getSerializedPaginatedUsersByClient.
-     *
-     * @see UserServiceInterface
-     *
-     * @param Client  $client
-     * @param Request $request
-     *
-     * @return string
-     */
-    public function getSerializedPaginatedUsersByClient(Client $client, Request $request): string
-    {
-        $params = $this->paginationService->getQueryParameters($request, 'users');
-        $page = $params['page'];
-        $limit = $params['limit'];
-
-        $users = $this->userRepository->getPaginatedUsersByClient($client, $page, $limit);
-
-        return $this->paginationService->getSerializedPaginatedData($users, $page, $limit, ['groups' => 'get']);
-    }
-
-    /**
      * processPostUserByClient.
      *
      * @param Client  $client
