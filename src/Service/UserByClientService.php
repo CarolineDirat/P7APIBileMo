@@ -182,57 +182,6 @@ class UserByClientService implements UserByClientServiceInterface
     }
 
     /**
-     * emailIsValid
-     * email property must be unique in users list linked by a client
-     * else throw forbidden error (403).
-     *
-     * @param Client $client
-     * @param User   $user
-     *
-     * @throws AccessDeniedHttpException
-     */
-    public function emailPostIsValid(Client $client, User $user): void
-    {
-        $users = $this->userRepository->findBy(['client' => $client]);
-        foreach ($users as $value) {
-            if ($value->getEmail() === $user->getEmail()) {
-                throw new AccessDeniedHttpException(
-                    'Forbidden. The email <'.$user->getEmail().'> already exists.',
-                    null,
-                    JsonResponse::HTTP_FORBIDDEN
-                );
-            }
-        }
-    }
-
-    /**
-     * emailPutIsValid
-     * email property must be unique in users list linked by a client
-     * else throw forbidden error (403).
-     *
-     * @param Client $client
-     * @param User   $user
-     *
-     * @throws AccessDeniedHttpException
-     */
-    public function emailPutIsValid(Client $client, User $user): void
-    {
-        $users = $this->userRepository->findBy(['client' => $client]);
-        foreach ($users as $value) {
-            if (
-                $value->getEmail() === $user->getEmail() &&
-                $value->getId() !== $user->getId()
-            ) {
-                throw new AccessDeniedHttpException(
-                    'Forbidden. The email <'.$user->getEmail().'> already exists.',
-                    null,
-                    JsonResponse::HTTP_FORBIDDEN
-                );
-            }
-        }
-    }
-
-    /**
      * processUserByClient.
      *
      * @param Client    $client
@@ -294,6 +243,57 @@ class UserByClientService implements UserByClientServiceInterface
             [],
             true
         );
+    }
+
+    /**
+     * emailIsValid
+     * email property must be unique in users list linked by a client
+     * else throw forbidden error (403).
+     *
+     * @param Client $client
+     * @param User   $user
+     *
+     * @throws AccessDeniedHttpException
+     */
+    public function emailPostIsValid(Client $client, User $user): void
+    {
+        $users = $this->userRepository->findBy(['client' => $client]);
+        foreach ($users as $value) {
+            if ($value->getEmail() === $user->getEmail()) {
+                throw new AccessDeniedHttpException(
+                    'Forbidden. The email <'.$user->getEmail().'> already exists.',
+                    null,
+                    JsonResponse::HTTP_FORBIDDEN
+                );
+            }
+        }
+    }
+
+    /**
+     * emailPutIsValid
+     * email property must be unique in users list linked by a client
+     * else throw forbidden error (403).
+     *
+     * @param Client $client
+     * @param User   $user
+     *
+     * @throws AccessDeniedHttpException
+     */
+    public function emailPutIsValid(Client $client, User $user): void
+    {
+        $users = $this->userRepository->findBy(['client' => $client]);
+        foreach ($users as $value) {
+            if (
+                $value->getEmail() === $user->getEmail() &&
+                $value->getId() !== $user->getId()
+            ) {
+                throw new AccessDeniedHttpException(
+                    'Forbidden. The email <'.$user->getEmail().'> already exists.',
+                    null,
+                    JsonResponse::HTTP_FORBIDDEN
+                );
+            }
+        }
     }
 
     /**
