@@ -4,7 +4,7 @@ namespace App\Service\ErrorResponse;
 
 use Symfony\Component\Serializer\SerializerInterface;
 
-class ForbiddenErrorResponse extends AbstractErrorResponse
+class ForbiddenErrorResponse extends ErrorResponse
 {
     /**
      * __construct.

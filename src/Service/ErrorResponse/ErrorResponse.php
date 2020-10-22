@@ -5,7 +5,7 @@ namespace App\Service\ErrorResponse;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Serializer\SerializerInterface;
 
-class AbstractErrorResponse implements ErrorResponseInterface
+class ErrorResponse implements ErrorResponseInterface
 {
     const HTTP_BAD_REQUEST = 400;
     const HTTP_FORBIDDEN = 403;
