@@ -3,7 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
-use App\Service\UserByClientServiceInterface;
+use App\Service\UserDeleteServiceInterface;
 use App\Service\UserGetServiceInterface;
 use App\Service\UserModifyServiceInterface;
 use Nelmio\ApiDocBundle\Annotation\Model;
@@ -410,11 +410,11 @@ class UserByClientController extends AbstractController
      * @isGranted("client", subject="user", message="Access Denied. You can only access your own users.")
      *
      * @param User                         $user
-     * @param UserByClientServiceInterface $userService
+     * @param UserDeleteServiceInterface $userService
      *
      * @return JsonResponse
      */
-    public function delete(User $user, UserByClientServiceInterface $userService): JsonResponse
+    public function delete(User $user, UserDeleteServiceInterface $userService): JsonResponse
     {
         return $userService->processDeleteUserByClient($user);
     }

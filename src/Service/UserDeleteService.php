@@ -6,7 +6,7 @@ use App\Entity\User;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
-class UserByClientService implements UserByClientServiceInterface
+class UserDeleteService implements UserDeleteServiceInterface
 {
 
     /**

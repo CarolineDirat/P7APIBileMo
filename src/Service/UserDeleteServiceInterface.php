@@ -5,7 +5,7 @@ namespace App\Service;
 use App\Entity\User;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
-interface UserByClientServiceInterface
+interface UserDeleteServiceInterface
 {
     /**
      * processDeleteUserByClient
