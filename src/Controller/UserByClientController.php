@@ -102,7 +102,7 @@ class UserByClientController extends AbstractController
      * @OA\Tag(name="Users")
      *
      * @param UserGetServiceInterface $userService,
-     * @param Request                      $request
+     * @param Request                 $request
      *
      * @return JsonResponse
      */
@@ -232,7 +232,7 @@ class UserByClientController extends AbstractController
      *     description="Returns the created user (without its password).",
      *     @Model(type=User::class, groups={"get"})
      * )
-     * 
+     *
      * @OA\Response(
      *     response=403,
      *     description="Forbidden. The email 'email' already exists."
@@ -252,7 +252,7 @@ class UserByClientController extends AbstractController
      *
      * @OA\Tag(name="Users")
      *
-     * @param Request                      $request
+     * @param Request                    $request
      * @param UserModifyServiceInterface $userService
      *
      * @return JsonResponse
@@ -348,8 +348,8 @@ class UserByClientController extends AbstractController
      *
      * @isGranted("client", subject="user", message="Access Denied. You can only access your own users.")
      *
-     * @param User                         $user
-     * @param Request                      $request
+     * @param User                       $user
+     * @param Request                    $request
      * @param UserModifyServiceInterface $userService
      *
      * @return JsonResponse
@@ -409,7 +409,7 @@ class UserByClientController extends AbstractController
      *
      * @isGranted("client", subject="user", message="Access Denied. You can only access your own users.")
      *
-     * @param User                         $user
+     * @param User                       $user
      * @param UserDeleteServiceInterface $userService
      *
      * @return JsonResponse

@@ -25,8 +25,8 @@ class UserGetService implements UserGetServiceInterface
     /**
      * __construct.
      *
-     * @param UserRepository              $userRepository,
-     * @param PaginationServiceInterface  $paginationService
+     * @param UserRepository             $userRepository,
+     * @param PaginationServiceInterface $paginationService
      */
     public function __construct(
         UserRepository $userRepository,

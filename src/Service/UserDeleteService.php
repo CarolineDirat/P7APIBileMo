@@ -8,7 +8,6 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 
 class UserDeleteService implements UserDeleteServiceInterface
 {
-
     /**
      * managerRegistry.
      *
@@ -16,11 +15,10 @@ class UserDeleteService implements UserDeleteServiceInterface
      */
     private ManagerRegistry $managerRegistry;
 
-
     /**
      * __construct.
      *
-     * @param ManagerRegistry             $managerRegistry
+     * @param ManagerRegistry $managerRegistry
      */
     public function __construct(
         ManagerRegistry $managerRegistry
