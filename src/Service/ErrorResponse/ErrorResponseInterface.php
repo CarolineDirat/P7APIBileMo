@@ -46,4 +46,20 @@ interface ErrorResponseInterface
      * @return self
      */
     public function addBodyValueToArray(string $key, string $value): self;
+
+    /**
+     * Get error code HTTP : 4XX.
+     *
+     * @return int
+     */
+    public function getCode(): int;
+
+    /**
+     * Set error code HTTP : 4XX.
+     *
+     * @param int $code error code HTTP : 4XX
+     *
+     * @return self
+     */
+    public function setCode(int $code): self;
 }

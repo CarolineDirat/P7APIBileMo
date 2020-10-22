@@ -13,6 +13,6 @@ class BadRequestErrorResponse extends AbstractErrorResponse
      */
     public function __construct(SerializerInterface $serializer, ErrorHateoas $errorHateoas)
     {
-        parent::__construct($serializer, 400, $errorHateoas);
+        parent::__construct($serializer, self::HTTP_BAD_REQUEST, $errorHateoas);
     }
 }

@@ -7,6 +7,10 @@ use Symfony\Component\Serializer\SerializerInterface;
 
 class AbstractErrorResponse implements ErrorResponseInterface
 {
+    const HTTP_BAD_REQUEST = 400;
+    const HTTP_FORBIDDEN = 403;
+    const HTTP_SERVER = 500;
+    
     /**
      * code
      * error code HTTP : 4XX.
@@ -53,13 +57,24 @@ class AbstractErrorResponse implements ErrorResponseInterface
     /**
      * returnErrorJsonResponse
      * Return a JsonResponse with.
+     * 
+     * @param bool $hateoas True if body response already contains hateaos links. False by default.
      *
      * @return JsonResponse
      */
-    public function returnErrorJsonResponse(): JsonResponse
+    public function returnErrorJsonResponse(bool $hateoas = false): JsonResponse
     {
+        if (!$hateoas) {
+            return new JsonResponse(
+                $this->serializer->serialize($this->errorHateoas->addErrorHateoas($this->body), 'json'),
+                $this->code,
+                [],
+                true
+            );
+        }
+        
         return new JsonResponse(
-            $this->serializer->serialize($this->errorHateoas->addErrorHateoas($this->body), 'json'),
+            $this->serializer->serialize($this->body, 'json'),
             $this->code,
             [],
             true
@@ -71,7 +86,7 @@ class AbstractErrorResponse implements ErrorResponseInterface
      *
      * @return array<string, mixed>
      */
-    public function getBody()
+    public function getBody(): array
     {
         return $this->body;
     }
@@ -129,7 +144,7 @@ class AbstractErrorResponse implements ErrorResponseInterface
      *
      * @return int
      */
-    public function getCode()
+    public function getCode(): int
     {
         return $this->code;
     }

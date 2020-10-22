@@ -6,6 +6,7 @@ use App\Entity\Client;
 use App\Entity\User;
 use App\Form\AppFormFactoryInterface;
 use App\Repository\UserRepository;
+use App\Serializer\Normalizer\Hateoas\HateoasNormalizer;
 use App\Service\ErrorResponse\InternalServerErrorResponse;
 use DateTimeImmutable;
 use Doctrine\Persistence\ManagerRegistry;
@@ -15,6 +16,8 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\Serializer\Encoder\DecoderInterface;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\Validator\Constraints\Json;
+use Symfony\Component\Validator\ConstraintViolationList;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class UserByClientService implements UserByClientServiceInterface
@@ -85,6 +88,13 @@ class UserByClientService implements UserByClientServiceInterface
      * @var InternalServerErrorResponse
      */
     private InternalServerErrorResponse $internalServerError;
+    
+    /**
+     * hateoasNormalizer
+     *
+     * @var HateoasNormalizer
+     */
+    private HateoasNormalizer $hateoasNormalizer;
 
     /**
      * __construct.
@@ -98,6 +108,7 @@ class UserByClientService implements UserByClientServiceInterface
      * @param ManagerRegistry             $managerRegistry
      * @param ValidatorInterface          $validator
      * @param InternalServerErrorResponse $internalServerError
+     * @param HateoasNormalizer           $hateoasNormalizer
      */
     public function __construct(
         UserRepository $userRepository,
@@ -108,7 +119,8 @@ class UserByClientService implements UserByClientServiceInterface
         AppFormFactoryInterface $appFormFactory,
         ManagerRegistry $managerRegistry,
         ValidatorInterface $validator,
-        InternalServerErrorResponse $internalServerError
+        InternalServerErrorResponse $internalServerError,
+        HateoasNormalizer $hateoasNormalizer
     ) {
         $this->userRepository = $userRepository;
         $this->serializer = $serializer;
@@ -119,6 +131,7 @@ class UserByClientService implements UserByClientServiceInterface
         $this->managerRegistry = $managerRegistry;
         $this->validator = $validator;
         $this->internalServerError = $internalServerError;
+        $this->hateoasNormalizer = $hateoasNormalizer;
     }
 
     /**
@@ -254,13 +267,9 @@ class UserByClientService implements UserByClientServiceInterface
         }
 
         $errors = $this->validator->validate($user);
+        
         if (count($errors) > 0) {
-            return new JsonResponse(
-                $this->serializer->serialize($errors, 'json'),
-                JsonResponse::HTTP_BAD_REQUEST,
-                [],
-                true
-            );
+            return $this->errorsValidationJsonResponse($method, $errors, $user);
         }
 
         if ('PUT' === $method) {
@@ -286,6 +295,27 @@ class UserByClientService implements UserByClientServiceInterface
             [],
             true
         );
+    }
+
+    public function errorsValidationJsonResponse(string $method, ConstraintViolationList $errors, User $user): JsonResponse
+    {
+        $errors = \json_decode($this->serializer->serialize($errors, 'json'), true);
+        unset($errors['type']);
+        unset($errors['detail']);
+
+        $route = 'POST' === $method ? 'api_users_by_client_collection_post' : 'api_users_by_client_collection_put' ;
+        $parameter = 'PUT' === $method ? ['uuid' => $user->getUuid()] : [];
+
+        $hateoas = [];
+        $hateoas = $this->hateoasNormalizer->addRel($hateoas, 'user_'.strtolower($method), $method, $route, $parameter);
+        $hateoas['_links']['user_'.strtolower($method)]['request_body'] = UserByClientService::VALID_PROPERTIES;
+
+        $badRequest = $this->bodyRequestService->getBadRequestError();
+        $badRequest->addBodyValue('code', $badRequest->getCode());
+        $badRequest->addBodyArray('message', $errors);
+        $badRequest->addBodyArray('_links', $hateoas);
+
+        return $badRequest->returnErrorJsonResponse(true);
     }
 
     /**
