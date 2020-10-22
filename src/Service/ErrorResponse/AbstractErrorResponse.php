@@ -10,7 +10,7 @@ class AbstractErrorResponse implements ErrorResponseInterface
     const HTTP_BAD_REQUEST = 400;
     const HTTP_FORBIDDEN = 403;
     const HTTP_SERVER = 500;
-    
+
     /**
      * code
      * error code HTTP : 4XX.
@@ -28,18 +28,18 @@ class AbstractErrorResponse implements ErrorResponseInterface
     protected array $body = [];
 
     /**
+     * errorHateoas.
+     *
+     * @var ErrorHateoas
+     */
+    protected ErrorHateoas $errorHateoas;
+
+    /**
      * serializer.
      *
      * @var SerializerInterface
      */
     private SerializerInterface $serializer;
-
-    /**
-     * errorHateoas
-     *
-     * @var ErrorHateoas
-     */
-    protected ErrorHateoas $errorHateoas;
 
     /**
      * __construct.
@@ -57,7 +57,7 @@ class AbstractErrorResponse implements ErrorResponseInterface
     /**
      * returnErrorJsonResponse
      * Return a JsonResponse corresponding to the error with its body.
-     * 
+     *
      * @param bool $hateoas True if body response already contains hateaos links. False by default.
      *
      * @return JsonResponse
@@ -72,7 +72,7 @@ class AbstractErrorResponse implements ErrorResponseInterface
                 true
             );
         }
-        
+
         return new JsonResponse(
             $this->serializer->serialize($this->body, 'json'),
             $this->code,

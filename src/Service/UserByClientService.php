@@ -80,16 +80,16 @@ class UserByClientService implements UserByClientServiceInterface
      * @var ValidatorInterface
      */
     private ValidatorInterface $validator;
-    
+
     /**
-     * internalServerError
+     * internalServerError.
      *
      * @var InternalServerErrorResponse
      */
     private InternalServerErrorResponse $internalServerError;
-    
+
     /**
-     * hateoasNormalizer
+     * hateoasNormalizer.
      *
      * @var HateoasNormalizer
      */
@@ -266,7 +266,7 @@ class UserByClientService implements UserByClientServiceInterface
         }
 
         $errors = $this->validator->validate($user);
-        
+
         if (count($errors) > 0) {
             return $this->errorsValidationJsonResponse($method, $errors, $user);
         }
@@ -295,23 +295,22 @@ class UserByClientService implements UserByClientServiceInterface
             true
         );
     }
-    
+
     /**
-     * errorsValidationJsonResponse
+     * errorsValidationJsonResponse.
      *
-     * @param string                                    $method
-     * @param ConstraintViolationListInterface<object>  $errors
-     * @param User                                      $user
-     * 
+     * @param string                                   $method
+     * @param ConstraintViolationListInterface<object> $errors
+     * @param User                                     $user
+     *
      * @return JsonResponse
      */
     public function errorsValidationJsonResponse(string $method, ConstraintViolationListInterface $errors, User $user): JsonResponse
     {
         $errors = \json_decode($this->serializer->serialize($errors, 'json'), true);
-        unset($errors['type']);
-        unset($errors['detail']);
+        unset($errors['type'], $errors['detail']);
 
-        $route = 'POST' === $method ? 'api_users_by_client_collection_post' : 'api_users_by_client_collection_put' ;
+        $route = 'POST' === $method ? 'api_users_by_client_collection_post' : 'api_users_by_client_collection_put';
         $parameter = 'PUT' === $method ? ['uuid' => $user->getUuid()] : [];
 
         $hateoas = [];

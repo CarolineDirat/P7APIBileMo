@@ -30,9 +30,9 @@ class ExceptionSubscriber implements EventSubscriberInterface
      * @var ExceptionNormalizerInterface[]
      */
     private array $normalizers = [];
-    
+
     /**
-     * errorHateoas
+     * errorHateoas.
      *
      * @var ErrorHateoas
      */

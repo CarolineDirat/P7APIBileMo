@@ -7,30 +7,29 @@ use App\Service\UserByClientService;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class ErrorHateoas
-{    
+{
     /**
-     * router
+     * router.
      *
      * @var UrlGeneratorInterface
      */
     private UrlGeneratorInterface $router;
-    
+
     /**
-     * __construct
+     * __construct.
      *
-     * @param UrlGeneratorInterface  $router
+     * @param UrlGeneratorInterface $router
      */
     public function __construct(UrlGeneratorInterface $router)
     {
         $this->router = $router;
     }
 
-
     /**
-     * addErrorHateoas : add _links to an array corresponding to an error response
+     * addErrorHateoas : add _links to an array corresponding to an error response.
      *
-     * @param  array<string, mixed> $body
-     * 
+     * @param array<string, mixed> $body
+     *
      * @return array<string, mixed>
      */
     public function addErrorHateoas(array $body): array
@@ -47,11 +46,11 @@ class ErrorHateoas
 
         $body['_links']['login']['href'] = $this->router->generate('api_login_check');
         $body['_links']['login']['method'] = HateoasNormalizer::POST_METHOD;
-        $body['_links']['login']['request_body'] = ["username" => "string", "password" => "string"];
+        $body['_links']['login']['request_body'] = ['username' => 'string', 'password' => 'string'];
 
         $body['_links']['refresh_token']['href'] = $this->router->generate('gesdinet_jwt_refresh_token');
         $body['_links']['refresh_token']['method'] = HateoasNormalizer::POST_METHOD;
-        $body['_links']['refresh_token']['request_body'] = ['refresh_token' => "string"];
+        $body['_links']['refresh_token']['request_body'] = ['refresh_token' => 'string'];
 
         return $body;
     }

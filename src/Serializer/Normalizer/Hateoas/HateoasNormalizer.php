@@ -11,23 +11,23 @@ class HateoasNormalizer implements HateoasNormalizerInterface
     const PUT_METHOD = 'PUT';
     const POST_METHOD = 'POST';
     const DELETE_METHOD = 'DELETE';
-    
+
     /**
-     * router
+     * router.
      *
      * @var UrlGeneratorInterface
      */
     protected UrlGeneratorInterface $router;
 
     /**
-     * normalizer
+     * normalizer.
      *
      * @var ObjectNormalizer
      */
     protected ObjectNormalizer $normalizer;
-    
+
     /**
-     * __construct
+     * __construct.
      *
      * @param UrlGeneratorInterface $router
      * @param ObjectNormalizer      $normalizer
@@ -37,16 +37,16 @@ class HateoasNormalizer implements HateoasNormalizerInterface
         $this->router = $router;
         $this->normalizer = $normalizer;
     }
-    
+
     /**
-     * addRel : add a property $rel[href, method] to $data['_links'] 
+     * addRel : add a property $rel[href, method] to $data['_links'].
      *
-     * @param  array<string, mixed> $data
-     * @param  string $rel
-     * @param  string $method
-     * @param  string $route
-     * @param  array<string, mixed> $parameter
-     * 
+     * @param array<string, mixed> $data
+     * @param string               $rel
+     * @param string               $method
+     * @param string               $route
+     * @param array<string, mixed> $parameter
+     *
      * @return array<string, mixed>
      */
     public function addRel(array $data, string $rel, string $method, string $route, array $parameter = []): array

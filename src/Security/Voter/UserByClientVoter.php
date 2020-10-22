@@ -16,6 +16,20 @@ class UserByClientVoter extends Voter
     ];
 
     /**
+     * isOwner
+     * Return true if the user belongs to the Client.
+     *
+     * @param UserInterface $client
+     * @param User          $user
+     *
+     * @return bool
+     */
+    public function isOwner(UserInterface $client, User $user): bool
+    {
+        return $user->getClient() === $client;
+    }
+
+    /**
      * supports.
      *
      * @param string $attribute
@@ -56,19 +70,5 @@ class UserByClientVoter extends Voter
         }
 
         return false;
-    }
-
-    /**
-     * isOwner
-     * Return true if the user belongs to the Client.
-     *
-     * @param UserInterface $client
-     * @param User          $user
-     *
-     * @return bool
-     */
-    public function isOwner(UserInterface $client, User $user): bool
-    {
-        return $user->getClient() === $client;
     }
 }

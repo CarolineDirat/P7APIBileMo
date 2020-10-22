@@ -17,9 +17,9 @@ abstract class AbstractExceptionNormalizer implements ExceptionNormalizerInterfa
      * @var string[]
      */
     protected array $exceptionTypes;
-    
+
     /**
-     * errorHateoas
+     * errorHateoas.
      *
      * @var ErrorHateoas
      */
