@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Service\UserByClientServiceInterface;
 use App\Service\UserGetServiceInterface;
+use App\Service\UserModifyServiceInterface;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use Nelmio\ApiDocBundle\Annotation\Security;
 use OpenApi\Annotations as OA;
@@ -252,11 +253,11 @@ class UserByClientController extends AbstractController
      * @OA\Tag(name="Users")
      *
      * @param Request                      $request
-     * @param UserByClientServiceInterface $userService
+     * @param UserModifyServiceInterface $userService
      *
      * @return JsonResponse
      */
-    public function post(Request $request, UserByClientServiceInterface $userService): JsonResponse
+    public function post(Request $request, UserModifyServiceInterface $userService): JsonResponse
     {
         return $userService->processPostUserByClient($this->getUser(), $request);
     }
@@ -349,14 +350,14 @@ class UserByClientController extends AbstractController
      *
      * @param User                         $user
      * @param Request                      $request
-     * @param UserByClientServiceInterface $userService
+     * @param UserModifyServiceInterface $userService
      *
      * @return JsonResponse
      */
     public function put(
         User $user,
         Request $request,
-        UserByClientServiceInterface $userService
+        UserModifyServiceInterface $userService
     ): JsonResponse {
         return $userService->processPutUserByClient($this->getUser(), $user, $request);
     }
