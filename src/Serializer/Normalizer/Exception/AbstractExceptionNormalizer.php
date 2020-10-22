@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Serializer\Normalizer;
+namespace App\Serializer\Normalizer\Exception;
 
 use App\Service\ErrorResponse\ErrorHateoas;
 use Throwable;

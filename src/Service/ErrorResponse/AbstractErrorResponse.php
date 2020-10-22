@@ -56,7 +56,7 @@ class AbstractErrorResponse implements ErrorResponseInterface
 
     /**
      * returnErrorJsonResponse
-     * Return a JsonResponse with.
+     * Return a JsonResponse corresponding to the error with its body.
      * 
      * @param bool $hateoas True if body response already contains hateaos links. False by default.
      *

@@ -16,8 +16,7 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\Serializer\Encoder\DecoderInterface;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Serializer\SerializerInterface;
-use Symfony\Component\Validator\Constraints\Json;
-use Symfony\Component\Validator\ConstraintViolationList;
+use Symfony\Component\Validator\ConstraintViolationListInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class UserByClientService implements UserByClientServiceInterface
@@ -296,8 +295,17 @@ class UserByClientService implements UserByClientServiceInterface
             true
         );
     }
-
-    public function errorsValidationJsonResponse(string $method, ConstraintViolationList $errors, User $user): JsonResponse
+    
+    /**
+     * errorsValidationJsonResponse
+     *
+     * @param string                                    $method
+     * @param ConstraintViolationListInterface<object>  $errors
+     * @param User                                      $user
+     * 
+     * @return JsonResponse
+     */
+    public function errorsValidationJsonResponse(string $method, ConstraintViolationListInterface $errors, User $user): JsonResponse
     {
         $errors = \json_decode($this->serializer->serialize($errors, 'json'), true);
         unset($errors['type']);
@@ -311,7 +319,7 @@ class UserByClientService implements UserByClientServiceInterface
         $hateoas['_links']['user_'.strtolower($method)]['request_body'] = UserByClientService::VALID_PROPERTIES;
 
         $badRequest = $this->bodyRequestService->getBadRequestError();
-        $badRequest->addBodyValue('code', $badRequest->getCode());
+        $badRequest->addBodyValue('code', (string) $badRequest->getCode());
         $badRequest->addBodyArray('message', $errors);
         $badRequest->addBodyArray('_links', $hateoas);
 
