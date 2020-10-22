@@ -17,7 +17,7 @@ class ErrorResponse implements ErrorResponseInterface
      *
      * @var int
      */
-    protected int $code = 0;
+    private int $code = 0;
 
     /**
      * body
@@ -25,14 +25,14 @@ class ErrorResponse implements ErrorResponseInterface
      *
      * @var array<string, mixed>
      */
-    protected array $body = [];
+    private array $body = [];
 
     /**
      * errorHateoas.
      *
      * @var ErrorHateoas
      */
-    protected ErrorHateoas $errorHateoas;
+    private ErrorHateoas $errorHateoas;
 
     /**
      * serializer.
