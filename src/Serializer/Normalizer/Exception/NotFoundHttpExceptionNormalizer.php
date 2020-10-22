@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Serializer\Normalizer;
+namespace App\Serializer\Normalizer\Exception;
 
 use Symfony\Component\HttpFoundation\Response;
 use Throwable;
@@ -22,14 +22,13 @@ class NotFoundHttpExceptionNormalizer extends AbstractExceptionNormalizer
         if ('App\\Entity\\User object not found by the @ParamConverter annotation.' === $message) {
             $message = 'User not found';
         }
-        if ('App\\Entity\\Client object not found by the @ParamConverter annotation.' === $message) {
-            $message = 'Client not found';
-        }
 
         $result['body'] = [
             'code' => Response::HTTP_NOT_FOUND,
             'message' => $message,
         ];
+
+        $result['body'] = $this->errorHateoas->addErrorHateoas($result['body']);
 
         return $result;
     }

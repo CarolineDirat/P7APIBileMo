@@ -2,7 +2,6 @@
 
 namespace App\Security\Voter;
 
-use App\Entity\Client;
 use App\Entity\User;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
@@ -15,6 +14,20 @@ class UserByClientVoter extends Voter
     private const ATTRIBUTES = [
         self::CLIENT,
     ];
+
+    /**
+     * isOwner
+     * Return true if the user belongs to the Client.
+     *
+     * @param UserInterface $client
+     * @param User          $user
+     *
+     * @return bool
+     */
+    public function isOwner(UserInterface $client, User $user): bool
+    {
+        return $user->getClient() === $client;
+    }
 
     /**
      * supports.
@@ -57,19 +70,5 @@ class UserByClientVoter extends Voter
         }
 
         return false;
-    }
-
-    /**
-     * isOwner
-     * Return true if the user belongs to the Client.
-     *
-     * @param UserInterface $client
-     * @param User          $user
-     *
-     * @return bool
-     */
-    public function isOwner(UserInterface $client, User $user): bool
-    {
-        return $user->getClient() === $client;
     }
 }

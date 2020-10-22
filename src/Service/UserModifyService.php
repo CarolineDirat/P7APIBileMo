@@ -6,6 +6,7 @@ use App\Entity\Client;
 use App\Entity\User;
 use App\Form\AppFormFactoryInterface;
 use App\Repository\UserRepository;
+use App\Serializer\Normalizer\Hateoas\HateoasNormalizer;
 use App\Service\ErrorResponse\InternalServerErrorResponse;
 use DateTimeImmutable;
 use Doctrine\Persistence\ManagerRegistry;
@@ -15,13 +16,14 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\Serializer\Encoder\DecoderInterface;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\Validator\ConstraintViolationListInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-class UserByClientService implements UserByClientServiceInterface
+class UserModifyService implements UserModifyServiceInterface
 {
-    private const VALID_PROPERTIES = ['email', 'lastname', 'firstname', 'password'];
-    private const PUT_METHOD = 'PUT';
-    private const POST_METHOD = 'POST';
+    const VALID_PROPERTIES = ['email', 'lastname', 'firstname', 'password'];
+    const PUT_METHOD = 'PUT';
+    const POST_METHOD = 'POST';
 
     /**
      * phoneRepository.
@@ -36,13 +38,6 @@ class UserByClientService implements UserByClientServiceInterface
      * @var SerializerInterface;
      */
     private SerializerInterface $serializer;
-
-    /**
-     * constantsIni.
-     *
-     * @var PaginationServiceInterface
-     */
-    private PaginationServiceInterface $paginationService;
 
     /**
      * decoder.
@@ -80,55 +75,52 @@ class UserByClientService implements UserByClientServiceInterface
     private ValidatorInterface $validator;
 
     /**
+     * internalServerError.
+     *
+     * @var InternalServerErrorResponse
+     */
+    private InternalServerErrorResponse $internalServerError;
+
+    /**
+     * hateoasNormalizer.
+     *
+     * @var HateoasNormalizer
+     */
+    private HateoasNormalizer $hateoasNormalizer;
+
+    /**
      * __construct.
      *
      * @param UserRepository              $userRepository,
      * @param SerializerInterface         $serializer
-     * @param PaginationServiceInterface  $paginationService
      * @param DecoderInterface            $decoder
      * @param BodyRequestServiceInterface $bodyRequestService
      * @param AppFormFactoryInterface     $appFormFactory
      * @param ManagerRegistry             $managerRegistry
+     * @param ValidatorInterface          $validator
+     * @param InternalServerErrorResponse $internalServerError
+     * @param HateoasNormalizer           $hateoasNormalizer
      */
     public function __construct(
         UserRepository $userRepository,
         SerializerInterface $serializer,
-        PaginationServiceInterface $paginationService,
         DecoderInterface $decoder,
         BodyRequestServiceInterface $bodyRequestService,
         AppFormFactoryInterface $appFormFactory,
         ManagerRegistry $managerRegistry,
-        ValidatorInterface $validator
+        ValidatorInterface $validator,
+        InternalServerErrorResponse $internalServerError,
+        HateoasNormalizer $hateoasNormalizer
     ) {
         $this->userRepository = $userRepository;
         $this->serializer = $serializer;
-        $this->paginationService = $paginationService;
         $this->decoder = $decoder;
         $this->bodyRequestService = $bodyRequestService;
         $this->appFormFactory = $appFormFactory;
         $this->managerRegistry = $managerRegistry;
         $this->validator = $validator;
-    }
-
-    /**
-     * getSerializedPaginatedUsersByClient.
-     *
-     * @see UserServiceInterface
-     *
-     * @param Client  $client
-     * @param Request $request
-     *
-     * @return string
-     */
-    public function getSerializedPaginatedUsersByClient(Client $client, Request $request): string
-    {
-        $params = $this->paginationService->getQueryParameters($request, 'users');
-        $page = $params['page'];
-        $limit = $params['limit'];
-
-        $users = $this->userRepository->getPaginatedUsersByClient($client, $page, $limit);
-
-        return $this->paginationService->getSerializedPaginatedData($users, $page, $limit, ['groups' => 'get']);
+        $this->internalServerError = $internalServerError;
+        $this->hateoasNormalizer = $hateoasNormalizer;
     }
 
     /**
@@ -156,6 +148,70 @@ class UserByClientService implements UserByClientServiceInterface
     public function processPutUserByClient(Client $client, User $user, Request $request): JsonResponse
     {
         return $this->processUserByClient($client, $request, self::PUT_METHOD, $user);
+    }
+
+    /**
+     * processUserByClient.
+     *
+     * @param Client    $client
+     * @param Request   $request
+     * @param string    $method
+     * @param null|User $user
+     *
+     * @return JsonResponse
+     */
+    public function processUserByClient(Client $client, Request $request, string $method, ?User $user = null): JsonResponse
+    {
+        // check data body
+        $data = $this->decoder->decode($request->getContent(), 'json');
+        $validProperties = self::VALID_PROPERTIES;
+        if (!$this->bodyRequestService->isValid($data, $validProperties)) {
+            return $this->bodyRequestService->getBadRequestError()->returnErrorJsonResponse();
+        }
+
+        // deserialize data body
+        $user = ('POST' === $method) ?
+            $this->serializer->deserialize($request->getContent(), User::class, 'json') :
+            $this->serializer->deserialize($request->getContent(), User::class, 'json', [AbstractNormalizer::OBJECT_TO_POPULATE => $user]);
+
+        $form = $this->appFormFactory->create('user', $user, ['csrf_protection' => false]);
+        $form->submit($user);
+
+        if (!($user instanceof User)) {
+            $this->internalServerError->addBodyValue('message', 'Internal Server Error. You can join us by email : bilemo@email.com');
+
+            return $this->internalServerError->returnErrorJsonResponse();
+        }
+
+        $errors = $this->validator->validate($user);
+
+        if (count($errors) > 0) {
+            return $this->errorsValidationJsonResponse($method, $errors, $user);
+        }
+
+        if ('PUT' === $method) {
+            $this->emailPutIsValid($client, $user);
+            $user->setUpdatedAt(new DateTimeImmutable());
+        }
+
+        $em = $this->managerRegistry->getManager();
+        $user->setPassword(password_hash($user->getPassword(), PASSWORD_BCRYPT));
+
+        if ('POST' === $method) {
+            $this->emailPostIsValid($client, $user);
+            $user->setClient($client);
+            $em->persist($user);
+        }
+        $em->flush();
+
+        $code = 'POST' === $method ? JsonResponse::HTTP_CREATED : JsonResponse::HTTP_OK;
+
+        return new JsonResponse(
+            $this->serializer->serialize($user, 'json', ['groups' => 'get']),
+            $code,
+            [],
+            true
+        );
     }
 
     /**
@@ -210,91 +266,31 @@ class UserByClientService implements UserByClientServiceInterface
     }
 
     /**
-     * processUserByClient.
+     * errorsValidationJsonResponse.
      *
-     * @param Client    $client
-     * @param Request   $request
-     * @param string    $method
-     * @param null|User $user
-     *
-     * @return JsonResponse
-     */
-    public function processUserByClient(Client $client, Request $request, string $method, ?User $user = null): JsonResponse
-    {
-        // check data body
-        $data = $this->decoder->decode($request->getContent(), 'json');
-        $validProperties = self::VALID_PROPERTIES;
-        if (!$this->bodyRequestService->isValid($data, $validProperties)) {
-            return $this->bodyRequestService->getBadRequestError()->returnErrorJsonResponse();
-        }
-
-        // deserialize data body
-        $user = ('POST' === $method) ?
-            $this->serializer->deserialize($request->getContent(), User::class, 'json') :
-            $this->serializer->deserialize($request->getContent(), User::class, 'json', [AbstractNormalizer::OBJECT_TO_POPULATE => $user]);
-
-        $form = $this->appFormFactory->create('user', $user, ['csrf_protection' => false]);
-        $form->submit($user);
-
-        if (!($user instanceof User)) {
-            $internalServerError = new InternalServerErrorResponse($this->serializer);
-            $internalServerError->addBodyValue('message', 'Internal Server Error. You can join us by email : bilemo@email.com');
-
-            return $internalServerError->returnErrorJsonResponse();
-        }
-
-        $errors = $this->validator->validate($user);
-        if (count($errors) > 0) {
-            return new JsonResponse(
-                $this->serializer->serialize($errors, 'json'),
-                JsonResponse::HTTP_BAD_REQUEST,
-                [],
-                true
-            );
-        }
-
-        if ('PUT' === $method) {
-            $this->emailPutIsValid($client, $user);
-            $user->setUpdatedAt(new DateTimeImmutable());
-        }
-
-        $em = $this->managerRegistry->getManager();
-        $user->setPassword(password_hash($user->getPassword(), PASSWORD_BCRYPT));
-
-        if ('POST' === $method) {
-            $this->emailPostIsValid($client, $user);
-            $user->setClient($client);
-            $em->persist($user);
-        }
-        $em->flush();
-
-        $code = 'POST' === $method ? JsonResponse::HTTP_CREATED : JsonResponse::HTTP_OK;
-
-        return new JsonResponse(
-            $this->serializer->serialize($user, 'json', ['groups' => 'get']),
-            $code,
-            [],
-            true
-        );
-    }
-
-    /**
-     * processDeleteUserByClient
-     * Delete a user linked by a client.
-     *
-     * @param User $user
+     * @param string                                   $method
+     * @param ConstraintViolationListInterface<object> $errors
+     * @param User                                     $user
      *
      * @return JsonResponse
      */
-    public function processDeleteUserByClient(User $user): JsonResponse
+    public function errorsValidationJsonResponse(string $method, ConstraintViolationListInterface $errors, User $user): JsonResponse
     {
-        $em = $this->managerRegistry->getManager();
-        $em->remove($user);
-        $em->flush();
+        $errors = \json_decode($this->serializer->serialize($errors, 'json'), true);
+        unset($errors['type'], $errors['detail']);
 
-        return new JsonResponse(
-            null,
-            JsonResponse::HTTP_NO_CONTENT
-        );
+        $route = 'POST' === $method ? 'api_users_by_client_collection_post' : 'api_users_by_client_collection_put';
+        $parameter = 'PUT' === $method ? ['uuid' => $user->getUuid()] : [];
+
+        $hateoas = [];
+        $hateoas = $this->hateoasNormalizer->addRel($hateoas, 'user_'.strtolower($method), $method, $route, $parameter);
+        $hateoas['_links']['user_'.strtolower($method)]['request_body'] = self::VALID_PROPERTIES;
+
+        $badRequest = $this->bodyRequestService->getBadRequestError();
+        $badRequest->addBodyValue('code', (string) $badRequest->getCode());
+        $badRequest->addBodyArray('message', $errors);
+        $badRequest->addBodyArray('_links', $hateoas);
+
+        return $badRequest->returnErrorJsonResponse(true);
     }
 }

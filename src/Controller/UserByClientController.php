@@ -3,7 +3,9 @@
 namespace App\Controller;
 
 use App\Entity\User;
-use App\Service\UserByClientServiceInterface;
+use App\Service\UserDeleteServiceInterface;
+use App\Service\UserGetServiceInterface;
+use App\Service\UserModifyServiceInterface;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use Nelmio\ApiDocBundle\Annotation\Security;
 use OpenApi\Annotations as OA;
@@ -47,10 +49,36 @@ class UserByClientController extends AbstractController
      * @OA\Response(
      *     response=206,
      *     description="Returns the page n°'page' of 'limit' users.",
-     *     @OA\JsonContent(
-     *         type="array",
-     *         maxItems=100,
-     *         @OA\Items(ref=@Model(type=User::class, groups={"get"}))
+     *     @OA\MediaType(
+     *         mediaType="application/json",
+     *         @OA\Schema(
+     *             type="object",
+     *             @OA\Property(
+     *                 property="data",
+     *                 type="array",
+     *                 maxItems=100,
+     *                 @OA\Items(ref=@Model(type=User::class, groups={"get"}))
+     *             ),
+     *             @OA\Property(
+     *                 property="meta",
+     *                 type="object",
+     *                 @OA\Property(
+     *                     property="current_page",
+     *                     description="The page number in data response",
+     *                     type="integer"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="number_per_page",
+     *                     description="The number per page of phones in data response",
+     *                     type="integer"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="total_page",
+     *                     description="The number total of pages for all phones in database",
+     *                     type="integer"
+     *                 )
+     *             )
+     *         )
      *     )
      * )
      *
@@ -73,12 +101,12 @@ class UserByClientController extends AbstractController
      *
      * @OA\Tag(name="Users")
      *
-     * @param UserByClientServiceInterface $userService,
-     * @param Request                      $request
+     * @param UserGetServiceInterface $userService,
+     * @param Request                 $request
      *
      * @return JsonResponse
      */
-    public function collection(Request $request, UserByClientServiceInterface $userService): JsonResponse
+    public function collection(Request $request, UserGetServiceInterface $userService): JsonResponse
     {
         return new JsonResponse(
             $userService->getSerializedPaginatedUsersByClient($this->getUser(), $request),
@@ -206,6 +234,11 @@ class UserByClientController extends AbstractController
      * )
      *
      * @OA\Response(
+     *     response=403,
+     *     description="Forbidden. The email 'email' already exists."
+     * )
+     *
+     * @OA\Response(
      *     response=400,
      *     description="A Token was not found in the TokenStorage. || Syntax Error. || The data name 'property' is not valid. || The data name 'property' is missing."
      * )
@@ -219,12 +252,12 @@ class UserByClientController extends AbstractController
      *
      * @OA\Tag(name="Users")
      *
-     * @param Request                      $request
-     * @param UserByClientServiceInterface $userService
+     * @param Request                    $request
+     * @param UserModifyServiceInterface $userService
      *
      * @return JsonResponse
      */
-    public function post(Request $request, UserByClientServiceInterface $userService): JsonResponse
+    public function post(Request $request, UserModifyServiceInterface $userService): JsonResponse
     {
         return $userService->processPostUserByClient($this->getUser(), $request);
     }
@@ -315,16 +348,16 @@ class UserByClientController extends AbstractController
      *
      * @isGranted("client", subject="user", message="Access Denied. You can only access your own users.")
      *
-     * @param User                         $user
-     * @param Request                      $request
-     * @param UserByClientServiceInterface $userService
+     * @param User                       $user
+     * @param Request                    $request
+     * @param UserModifyServiceInterface $userService
      *
      * @return JsonResponse
      */
     public function put(
         User $user,
         Request $request,
-        UserByClientServiceInterface $userService
+        UserModifyServiceInterface $userService
     ): JsonResponse {
         return $userService->processPutUserByClient($this->getUser(), $user, $request);
     }
@@ -376,12 +409,12 @@ class UserByClientController extends AbstractController
      *
      * @isGranted("client", subject="user", message="Access Denied. You can only access your own users.")
      *
-     * @param User                         $user
-     * @param UserByClientServiceInterface $userService
+     * @param User                       $user
+     * @param UserDeleteServiceInterface $userService
      *
      * @return JsonResponse
      */
-    public function delete(User $user, UserByClientServiceInterface $userService): JsonResponse
+    public function delete(User $user, UserDeleteServiceInterface $userService): JsonResponse
     {
         return $userService->processDeleteUserByClient($user);
     }

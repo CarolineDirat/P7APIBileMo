@@ -5,15 +5,19 @@ namespace App\Service\ErrorResponse;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Serializer\SerializerInterface;
 
-abstract class AbstractErrorResponse implements ErrorResponseInterface
+class ErrorResponse implements ErrorResponseInterface
 {
+    const HTTP_BAD_REQUEST = 400;
+    const HTTP_FORBIDDEN = 403;
+    const HTTP_SERVER = 500;
+
     /**
      * code
      * error code HTTP : 4XX.
      *
      * @var int
      */
-    protected int $code = 0;
+    private int $code = 0;
 
     /**
      * body
@@ -21,7 +25,14 @@ abstract class AbstractErrorResponse implements ErrorResponseInterface
      *
      * @var array<string, mixed>
      */
-    protected array $body = [];
+    private array $body = [];
+
+    /**
+     * errorHateoas.
+     *
+     * @var ErrorHateoas
+     */
+    private ErrorHateoas $errorHateoas;
 
     /**
      * serializer.
@@ -35,21 +46,33 @@ abstract class AbstractErrorResponse implements ErrorResponseInterface
      *
      * @param SerializerInterface $serializer
      */
-    public function __construct(SerializerInterface $serializer, int $code)
+    public function __construct(SerializerInterface $serializer, int $code, ErrorHateoas $errorHateoas)
     {
         $this->serializer = $serializer;
         $this->code = $code;
         $this->body['code'] = $this->code;
+        $this->errorHateoas = $errorHateoas;
     }
 
     /**
      * returnErrorJsonResponse
-     * Return a JsonResponse with.
+     * Return a JsonResponse corresponding to the error with its body.
+     *
+     * @param bool $hateoas True if body response already contains hateaos links. False by default.
      *
      * @return JsonResponse
      */
-    public function returnErrorJsonResponse(): JsonResponse
+    public function returnErrorJsonResponse(bool $hateoas = false): JsonResponse
     {
+        if (!$hateoas) {
+            return new JsonResponse(
+                $this->serializer->serialize($this->errorHateoas->addErrorHateoas($this->body), 'json'),
+                $this->code,
+                [],
+                true
+            );
+        }
+
         return new JsonResponse(
             $this->serializer->serialize($this->body, 'json'),
             $this->code,
@@ -63,7 +86,7 @@ abstract class AbstractErrorResponse implements ErrorResponseInterface
      *
      * @return array<string, mixed>
      */
-    public function getBody()
+    public function getBody(): array
     {
         return $this->body;
     }
@@ -121,7 +144,7 @@ abstract class AbstractErrorResponse implements ErrorResponseInterface
      *
      * @return int
      */
-    public function getCode()
+    public function getCode(): int
     {
         return $this->code;
     }
