@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Phone;
+use App\Service\Cache\PhoneCacheInterface;
 use App\Service\PhoneService;
 use App\Service\PhoneServiceInterface;
 use Nelmio\ApiDocBundle\Annotation\Model;
@@ -64,18 +65,22 @@ class PhoneController extends AbstractController
      *
      * @param Phone        $phone
      * @param PhoneService $phoneService
+     * @param Request      $request
      *
      * @return JsonResponse
      */
-    public function item(Phone $phone, PhoneService $phoneService): JsonResponse
+    public function item(Phone $phone, PhoneService $phoneService, Request $request, PhoneCacheInterface $phoneCache): JsonResponse
     {
-        return new JsonResponse(
+        $response = new JsonResponse(
             $phoneService->getSerializedPhone($phone),
-            JsonResponse::HTTP_PARTIAL_CONTENT,
+            JsonResponse::HTTP_OK,
             [],
             true
         );
+
+        return $phoneCache->phoneCacheableResponse($request, $response, $phone);
     }
+
 
     /**
      * collection : get a page of paginated phones.
@@ -151,10 +156,10 @@ class PhoneController extends AbstractController
      *     description="Invalid JWT Token. || Expired JWT Token."
      * )
      *
-     * @Security(name="Bearer")
-     *
      * @OA\Tag(name="Phones")
      *
+     * @Security(name="Bearer")
+     * 
      * @param PhoneServiceInterface $phoneService
      * @param Request               $request
      *
@@ -164,7 +169,7 @@ class PhoneController extends AbstractController
     {
         return new JsonResponse(
             $phoneService->getSerializedPaginatedPhones($request),
-            JsonResponse::HTTP_OK,
+            JsonResponse::HTTP_PARTIAL_CONTENT,
             [],
             true
         );

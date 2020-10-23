@@ -206,6 +206,16 @@ class Phone
         $this->updatedAt = new DateTimeImmutable();
         $this->uuid = Uuid::uuid4();
     }
+    
+    /**
+     * computeEtag
+     *
+     * @return string
+     */
+    public function computeEtag(): string
+    {
+        return md5($this->getUuid().$this->getUpdatedAt()->getTimestamp());
+    }
 
     /**
      * hydrate the Phone entity.
