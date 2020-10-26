@@ -46,7 +46,7 @@ class GuestFixtures extends Fixture
         for ($i = 0; $i < 10; ++$i) {
             $user = new User();
             $user->setEmail(sprintf('user%d@mail.com', $i));
-            $user->setPassword(password_hash($user->getPassword(), PASSWORD_BCRYPT));
+            $user->setPassword(password_hash('password', PASSWORD_BCRYPT));
             $user->setFirstname(sprintf('firstname%d', $i));
             $user->setLastname(sprintf('lastname%d', $i));
             $user->setClient($client);
