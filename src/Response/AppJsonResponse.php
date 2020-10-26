@@ -12,8 +12,8 @@ class AppJsonResponse extends JsonResponse
      * because of added quotation marks in $response->getEtag()
      * see dump($request->getETags()); -> 'etag' without quotation marks
      * see dd($response->getEtag()); -> '"etag"' with quotation marks
-     * so in_array($responseEtag, $etags) can never be true
-     * 
+     * so in_array($responseEtag, $etags) can never be true.
+     *
      * Determines if the Response validators (ETag, Last-Modified) match
      * a conditional value specified in the Request.
      *

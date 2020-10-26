@@ -206,9 +206,9 @@ class Phone
         $this->updatedAt = new DateTimeImmutable();
         $this->uuid = Uuid::uuid4();
     }
-    
+
     /**
-     * computeEtag
+     * computeEtag.
      *
      * @return string
      */

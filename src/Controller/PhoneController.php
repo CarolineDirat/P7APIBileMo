@@ -82,7 +82,6 @@ class PhoneController extends AbstractController
         return $phoneCache->phoneCacheableResponse($request, $response, $phone);
     }
 
-
     /**
      * collection : get a page of paginated phones.
      *
@@ -160,7 +159,7 @@ class PhoneController extends AbstractController
      * @OA\Tag(name="Phones")
      *
      * @Security(name="Bearer")
-     * 
+     *
      * @param PhoneServiceInterface $phoneService
      * @param Request               $request
      *
