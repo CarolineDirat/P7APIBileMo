@@ -208,6 +208,16 @@ class Phone
     }
 
     /**
+     * computeEtag.
+     *
+     * @return string
+     */
+    public function computeEtag(): string
+    {
+        return md5($this->getUuid().$this->getUpdatedAt()->getTimestamp());
+    }
+
+    /**
      * hydrate the Phone entity.
      *
      * @param array<string, mixed> $data   keys of $data are corresponding
