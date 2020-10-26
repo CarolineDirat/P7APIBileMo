@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Phone;
+use App\Response\AppJsonResponse;
 use App\Service\Cache\PhoneCacheInterface;
 use App\Service\PhoneService;
 use App\Service\PhoneServiceInterface;
@@ -67,11 +68,11 @@ class PhoneController extends AbstractController
      * @param PhoneService $phoneService
      * @param Request      $request
      *
-     * @return JsonResponse
+     * @return AppJsonResponse
      */
-    public function item(Phone $phone, PhoneService $phoneService, Request $request, PhoneCacheInterface $phoneCache): JsonResponse
+    public function item(Phone $phone, PhoneService $phoneService, Request $request, PhoneCacheInterface $phoneCache): AppJsonResponse
     {
-        $response = new JsonResponse(
+        $response = new AppJsonResponse(
             $phoneService->getSerializedPhone($phone),
             JsonResponse::HTTP_OK,
             [],

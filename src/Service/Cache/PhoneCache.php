@@ -3,10 +3,10 @@
 namespace App\Service\Cache;
 
 use App\Entity\Phone;
-use Symfony\Component\HttpFoundation\JsonResponse;
+use App\Response\AppJsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
-class PhoneCache extends Cache implements PhoneCacheInterface
+class PhoneCache implements PhoneCacheInterface
 {
         
     /**
@@ -18,29 +18,25 @@ class PhoneCache extends Cache implements PhoneCacheInterface
      * else return 200 OK with the JSON response of the phone
      *
      * @param Request  $request
-     * @param JsonResponse $response
+     * @param AppJsonResponse $response
      * @param Phone    $phone
      * 
-     * @return JsonResponse
+     * @return AppJsonResponse
      */
-    public function phoneCacheableResponse(Request $request, JsonResponse $response, Phone $phone): JsonResponse
+    public function phoneCacheableResponse(Request $request, AppJsonResponse $response, Phone $phone): AppJsonResponse
     {
         $response->setCache(
             [
                 'public' => true,
                 'no_cache' => true,
-                'max_age' => 5,
+                'max_age' => 86400,
                 'must_revalidate' => true,
             ]
         );
         $response->setEtag($phone->computeEtag());
         
         // Check that the Response is not modified for the given Request.
-        // I don't use $response->isNotModified($request), because it doesn't work,
-        // because of added quotation marks in $response->getEtag()
-        // see dump($request->getETags());
-        // see dd($response->getEtag());
-        if ($this->etagIsNotModified($request, $response)) {
+        if ($response->isNotModified($request)) {
             // return the 304 Response immediately
             return $response;
         }

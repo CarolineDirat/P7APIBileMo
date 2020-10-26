@@ -3,7 +3,7 @@
 namespace App\Service\Cache;
 
 use App\Entity\Phone;
-use Symfony\Component\HttpFoundation\JsonResponse;
+use App\Response\AppJsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
 interface PhoneCacheInterface
@@ -17,10 +17,10 @@ interface PhoneCacheInterface
      * else return 200 OK with the JSON response of the phone
      *
      * @param Request  $request
-     * @param JsonResponse $response
+     * @param AppJsonResponse $response
      * @param Phone    $phone
      * 
-     * @return JsonResponse
+     * @return AppJsonResponse
      */
-    public function phoneCacheableResponse(Request $request, JsonResponse $response, Phone $phone): JsonResponse;
+    public function phoneCacheableResponse(Request $request, AppJsonResponse $response, Phone $phone): AppJsonResponse;
 }
