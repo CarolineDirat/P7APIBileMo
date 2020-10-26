@@ -79,7 +79,7 @@ DATABASE_URL="mysql://db_user:db_password@127.0.0.1:3306/db_name?serverVersion=5
 --------
 5. Generate SSH key for [lexik/jwt-authentication-bundle](https://github.com/lexik/LexikJWTAuthenticationBundle/blob/master/Resources/doc/index.md#generate-the-ssh-keys)
 
-5.1. create config/jwt directory
+5.1. Create config/jwt directory
 ````
 mkdir -p config/jwt
 ````
@@ -88,6 +88,7 @@ mkdir -p config/jwt
 openssl genpkey -out config/jwt/private.pem -aes256 -algorithm rsa -pkeyopt rsa_keygen_bits:4096
 ````
 **Enter PEM pass phrase:** _write the value of JWT_PASSPHRASE, in .env.dev.local_
+
 **Verifying - Enter PEM pass phrase:** _write the value of JWT_PASSPHRASE, in .env.dev.local_
 
 5.3. Generate config/jwt/public.pem file (public key), with the following line command:
@@ -98,7 +99,8 @@ openssl pkey -in config/jwt/private.pem -out config/jwt/public.pem -pubout
 
 --------
 6. Now that your connection parameters are setup, Doctrine can **create** the db_name **database** for you:
-   > php bin/console doctrine:database:create
+
+> php bin/console doctrine:database:create
 
 That's create a database with the "db_name" which name you defined in DATABASE_URL value.
 
@@ -110,7 +112,8 @@ Then, you can [create the database **tables**/schema](https://symfony.com/doc/cu
 
 --------
 7. **Load initial data** (from src/DataFixtures.php) with line command:
-   > php bin/console doctrine:fixtures:load
+   
+> php bin/console doctrine:fixtures:load
 
 **Answer _yes_ to the question**: _Careful, database "db_name" will be purged. Do you want to continue? (yes/no) [no]:"_
 
