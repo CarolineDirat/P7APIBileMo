@@ -42,7 +42,7 @@ The following instructions guide you to install the project locally, on HTTP ser
 
 1. **Clone the project** from Github 
    At the root of your local serveur, with command line
-   > `git clone  https://github.com/CarolineDirat/P7APIBileMo.git` [**directory**]
+> `git clone  https://github.com/CarolineDirat/P7APIBileMo.git` [**directory**]
 
 **directory** is the name of a new directory to clone into. 
 If you don't use it, the project is cloned in *P7APIBileMo* directory. And we obtain for example: C:/wamp/www/P7APIBileMo
@@ -54,7 +54,7 @@ Be careful, virtualhost must point to the public directory
 
 --------
 3. At the root of the project directory, use composer to **load vendor** and **var** directories with:
-   > `composer install`
+> `composer install`
    
 --------
 4. **[Overriding Environment Values via .env.local](https://symfony.com/doc/current/configuration.html#overriding-environment-values-via-env-local)**
@@ -106,7 +106,7 @@ That's create a database with the "db_name" which name you defined in DATABASE_U
 
 Then, you can [create the database **tables**/schema](https://symfony.com/doc/current/doctrine.html#migrations-creating-the-database-tables-schema), with the following line command:
    
-   > php bin/console doctrine:migrations:migrate
+> php bin/console doctrine:migrations:migrate
 
 **Answer _yes_ to the question**: "_WARNING! You are about to execute a database migration that could result in schema changes and data loss. Are you sure you wish to continue?" (yes/no) [yes]:_"
 
