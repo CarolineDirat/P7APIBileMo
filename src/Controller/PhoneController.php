@@ -23,66 +23,6 @@ use Symfony\Component\Routing\Annotation\Route;
 class PhoneController extends AbstractController
 {
     /**
-     * item : get a phone by its uuid.
-     *
-     * @Route(
-     *     "/{uuid}",
-     *     name="item_get",
-     *     methods={"GET"},
-     *     stateless=true
-     * )
-     *
-     * @OA\Parameter(
-     *     name="uuid",
-     *     in="path",
-     *     description="The unique identifier of the phone.",
-     *     @OA\Schema(type="string", maxLength=36, minLength=36)
-     * )
-     *
-     * @OA\Response(
-     *     response=200,
-     *     description="Returns a phone by its uuid",
-     *     @Model(type=Phone::class, groups={"get_phone"})
-     * )
-     *
-     * @OA\Response(
-     *     response=404,
-     *     description="Phone not found"
-     * )
-     *
-     * @OA\Response(
-     *     response=400,
-     *     description="A Token was not found in the TokenStorage."
-     * )
-     *
-     * @OA\Response(
-     *     response=401,
-     *     description="Invalid JWT Token. || Expired JWT Token."
-     * )
-     *
-     * @Security(name="Bearer")
-     *
-     * @OA\Tag(name="Phones")
-     *
-     * @param Phone        $phone
-     * @param PhoneService $phoneService
-     * @param Request      $request
-     *
-     * @return AppJsonResponse
-     */
-    public function item(Phone $phone, PhoneService $phoneService, Request $request, PhoneCacheInterface $phoneCache): AppJsonResponse
-    {
-        $response = new AppJsonResponse(
-            $phoneService->getSerializedPhone($phone),
-            JsonResponse::HTTP_OK,
-            [],
-            true
-        );
-
-        return $phoneCache->phoneCacheableResponse($request, $response, $phone);
-    }
-
-    /**
      * collection : get a page of paginated phones.
      *
      * @Route(
@@ -173,5 +113,65 @@ class PhoneController extends AbstractController
             [],
             true
         );
+    }
+
+    /**
+     * item : get a phone by its uuid.
+     *
+     * @Route(
+     *     "/{uuid}",
+     *     name="item_get",
+     *     methods={"GET"},
+     *     stateless=true
+     * )
+     *
+     * @OA\Parameter(
+     *     name="uuid",
+     *     in="path",
+     *     description="The unique identifier of the phone.",
+     *     @OA\Schema(type="string", maxLength=36, minLength=36)
+     * )
+     *
+     * @OA\Response(
+     *     response=200,
+     *     description="Returns a phone by its uuid",
+     *     @Model(type=Phone::class, groups={"get_phone"})
+     * )
+     *
+     * @OA\Response(
+     *     response=404,
+     *     description="Phone not found"
+     * )
+     *
+     * @OA\Response(
+     *     response=400,
+     *     description="A Token was not found in the TokenStorage."
+     * )
+     *
+     * @OA\Response(
+     *     response=401,
+     *     description="Invalid JWT Token. || Expired JWT Token."
+     * )
+     *
+     * @Security(name="Bearer")
+     *
+     * @OA\Tag(name="Phones")
+     *
+     * @param Phone        $phone
+     * @param PhoneService $phoneService
+     * @param Request      $request
+     *
+     * @return AppJsonResponse
+     */
+    public function item(Phone $phone, PhoneService $phoneService, Request $request, PhoneCacheInterface $phoneCache): AppJsonResponse
+    {
+        $response = new AppJsonResponse(
+            $phoneService->getSerializedPhone($phone),
+            JsonResponse::HTTP_OK,
+            [],
+            true
+        );
+
+        return $phoneCache->phoneCacheableResponse($request, $response, $phone);
     }
 }
