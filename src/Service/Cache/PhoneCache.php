@@ -34,11 +34,8 @@ class PhoneCache implements PhoneCacheInterface
         );
         $response->setEtag($phone->computeEtag());
 
-        // Check that the Response is not modified for the given Request.
-        if ($response->isNotModified($request)) {
-            // return the 304 Response immediately
-            return $response;
-        }
+        // set response to 304 Response if the Response is not modified for the given Request.
+        $response->isNotModified($request);
 
         return $response;
     }
