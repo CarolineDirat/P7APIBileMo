@@ -165,13 +165,23 @@ class PhoneController extends AbstractController
      */
     public function item(Phone $phone, PhoneService $phoneService, Request $request, PhoneCacheInterface $phoneCache): AppJsonResponse
     {
-        $response = new AppJsonResponse(
-            $phoneService->getSerializedPhone($phone),
-            JsonResponse::HTTP_OK,
-            [],
-            true
-        );
+        $response = new AppJsonResponse([]);
+        $response->setEtag($phone->computeEtag());
+        // Check that the Response is not modified for the given Request
+        if ($response->isNotModified($request)) {
+            // return the 304 Response immediately
+            return $response;
+        }
 
-        return $phoneCache->phoneCacheableResponse($request, $response, $phone);
+        return $phoneCache->phoneCacheableResponse(
+            $request,
+            new AppJsonResponse(
+                $phoneService->getSerializedPhone($phone),
+                JsonResponse::HTTP_OK,
+                [],
+                true
+            ),
+            $phone
+        );
     }
 }
