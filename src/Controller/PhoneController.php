@@ -26,7 +26,7 @@ class PhoneController extends AbstractController
      * collection : get a page of paginated phones.
      *
      * @Route(
-     *     "/",
+     *     "",
      *     name="collection_get",
      *     methods={"GET"},
      *     stateless=true
