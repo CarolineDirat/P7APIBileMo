@@ -109,7 +109,7 @@ class PhoneController extends AbstractController
     public function collection(PhoneServiceInterface $phoneService, Request $request, PhoneCache $phoneCache): AppJsonResponse
     {
         $phones = $phoneService->getSerializedPaginatedPhones($request);
-        
+
         $response = new AppJsonResponse(
             $phones,
             AppJsonResponse::HTTP_PARTIAL_CONTENT,

@@ -10,7 +10,7 @@ class PhoneCache implements PhoneCacheInterface
 {
     /**
      * getCacheableResponse
-     * Set  Cache-Control and Etag headers,
+     * Set  Cache-Control and Etag headers.
      *
      * @param Request         $request
      * @param AppJsonResponse $response
@@ -32,7 +32,7 @@ class PhoneCache implements PhoneCacheInterface
 
         return $response;
     }
-    
+
     /**
      * phonesCacheableResponse
      * Set  Cache-Control and Etag headers,
@@ -41,10 +41,10 @@ class PhoneCache implements PhoneCacheInterface
      * Return 304 Not Modified if the response is not modified,
      * else return 200 OK with the JSON response of the phone
      *
-     * @param Request  $request
-     * @param AppJsonResponse  $response
-     * @param string  $etag
-     * 
+     * @param Request         $request
+     * @param AppJsonResponse $response
+     * @param string          $etag
+     *
      * @return AppJsonResponse
      */
     public function phonesCacheableResponse(Request $request, AppJsonResponse $response, string $etag): AppJsonResponse
