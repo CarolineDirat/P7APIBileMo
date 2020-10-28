@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Phone;
 use App\Response\AppJsonResponse;
+use App\Service\Cache\PhoneCache;
 use App\Service\Cache\PhoneCacheInterface;
 use App\Service\PhoneService;
 use App\Service\PhoneServiceInterface;
@@ -11,7 +12,6 @@ use Nelmio\ApiDocBundle\Annotation\Model;
 use Nelmio\ApiDocBundle\Annotation\Security;
 use OpenApi\Annotations as OA;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -102,17 +102,22 @@ class PhoneController extends AbstractController
      *
      * @param PhoneServiceInterface $phoneService
      * @param Request               $request
+     * @param PhoneCache            $phoneCache
      *
-     * @return JsonResponse
+     * @return AppJsonResponse
      */
-    public function collection(PhoneServiceInterface $phoneService, Request $request): JsonResponse
+    public function collection(PhoneServiceInterface $phoneService, Request $request, PhoneCache $phoneCache): AppJsonResponse
     {
-        return new JsonResponse(
-            $phoneService->getSerializedPaginatedPhones($request),
-            JsonResponse::HTTP_PARTIAL_CONTENT,
+        $phones = $phoneService->getSerializedPaginatedPhones($request);
+        
+        $response = new AppJsonResponse(
+            $phones,
+            AppJsonResponse::HTTP_PARTIAL_CONTENT,
             [],
             true
         );
+
+        return $phoneCache->phonesCacheableResponse($request, $response, md5($phones));
     }
 
     /**
@@ -177,7 +182,7 @@ class PhoneController extends AbstractController
             $request,
             new AppJsonResponse(
                 $phoneService->getSerializedPhone($phone),
-                JsonResponse::HTTP_OK,
+                AppJsonResponse::HTTP_OK,
                 [],
                 true
             ),
