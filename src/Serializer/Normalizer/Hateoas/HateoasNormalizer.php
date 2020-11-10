@@ -61,19 +61,4 @@ class HateoasNormalizer implements HateoasNormalizerInterface
 
         return $data;
     }
-
-    /**
-     * addRelDoc : add $data[_links]['api_doc'], link to get the api documentation in JSON format.
-     *
-     * @param array<string, mixed> $data normalized object
-     *
-     * @return array<string, mixed>
-     */
-    public function addRelDocJson(array $data): array
-    {
-        $data['_links']['api_doc']['href'] = 'api/doc.json';
-        $data['_links']['api_doc']['method'] = 'GET';
-
-        return $data;
-    }
 }
