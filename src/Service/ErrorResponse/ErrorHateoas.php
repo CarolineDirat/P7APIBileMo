@@ -3,7 +3,6 @@
 namespace App\Service\ErrorResponse;
 
 use App\Serializer\Normalizer\Hateoas\HateoasNormalizer;
-use App\Service\UserModifyService;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class ErrorHateoas
@@ -40,10 +39,6 @@ class ErrorHateoas
         $body['_links']['users']['href'] = $this->router->generate('api_users_by_client_collection_get');
         $body['_links']['users']['method'] = HateoasNormalizer::GET_METHOD;
 
-        $body['_links']['create_user']['href'] = $this->router->generate('api_users_by_client_collection_post');
-        $body['_links']['create_user']['method'] = HateoasNormalizer::POST_METHOD;
-        $body['_links']['create_user']['request_body'] = UserModifyService::VALID_PROPERTIES;
-
         $body['_links']['login']['href'] = $this->router->generate('api_login_check');
         $body['_links']['login']['method'] = HateoasNormalizer::POST_METHOD;
         $body['_links']['login']['request_body'] = ['username' => 'string', 'password' => 'string'];
@@ -51,6 +46,9 @@ class ErrorHateoas
         $body['_links']['refresh_token']['href'] = $this->router->generate('gesdinet_jwt_refresh_token');
         $body['_links']['refresh_token']['method'] = HateoasNormalizer::POST_METHOD;
         $body['_links']['refresh_token']['request_body'] = ['refresh_token' => 'string'];
+
+        $body['_links']['api_doc']['href'] = 'api/doc.json';
+        $body['_links']['api_doc']['method'] = 'GET';
 
         return $body;
     }
