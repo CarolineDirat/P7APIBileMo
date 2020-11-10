@@ -52,6 +52,9 @@ class ErrorHateoas
         $body['_links']['refresh_token']['method'] = HateoasNormalizer::POST_METHOD;
         $body['_links']['refresh_token']['request_body'] = ['refresh_token' => 'string'];
 
+        $body['_links']['api_doc']['href'] = 'api/doc.json';
+        $body['_links']['api_doc']['method'] = 'GET';
+
         return $body;
     }
 }

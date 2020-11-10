@@ -28,7 +28,9 @@ class UserNormalizer extends HateoasNormalizer implements NormalizerInterface
 
         $data = $this->addRel($data, 'list', self::GET_METHOD, 'api_users_by_client_collection_get');
 
-        return $this->addRel($data, 'create', self::POST_METHOD, 'api_users_by_client_collection_post');
+        $data = $this->addRel($data, 'create', self::POST_METHOD, 'api_users_by_client_collection_post');
+
+        return $this->addRelDocJson($data);
     }
 
     /**

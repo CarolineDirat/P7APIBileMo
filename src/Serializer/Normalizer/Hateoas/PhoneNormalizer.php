@@ -21,8 +21,9 @@ class PhoneNormalizer extends HateoasNormalizer implements NormalizerInterface
         $data = $this->normalizer->normalize($object, $format, $context);
 
         $data = $this->addRel($data, 'self', self::GET_METHOD, 'api_phones_item_get', ['uuid' => $object->getUuid()]);
+        $data = $this->addRel($data, 'list', self::GET_METHOD, 'api_phones_collection_get');
 
-        return $this->addRel($data, 'list', self::GET_METHOD, 'api_phones_collection_get');
+        return $this->addRelDocJson($data);
     }
 
     /**
